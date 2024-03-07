@@ -1,39 +1,58 @@
 'use client';
 
-import Image from 'next/image';
-import loginPage from '../../public/images/login-page.jpeg';
-import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-  const router = useRouter();
-  const handleRegisterClick = () => {
-    router.push('/register');
-  };
-  return (
-    <div className="flex h-screen flex-col items-center justify-center bg-blue-100">
-      <Image
-        src={loginPage}
-        alt="login-page"
-        className="h-[68%] w-[200%] object-cover object-right"
-      />
-
-      <div className="mt-6 h-[30%] w-full max-w-screen-sm text-center">
-        <h1 className="text-blue-text mb-6 px-5 text-left text-xl font-bold leading-7">
-          Register to Journie
-        </h1>
-        <button
-          onClick={handleRegisterClick}
-          className="text-blue-text text-16 border-blue-border mb-2 h-12 w-[94%] rounded-[5px] border bg-white px-5 font-medium"
-        >
-          Register
-        </button>
-        <button className="text-blue-text text-16 mx-10 mb-2 h-12 font-medium">
-          Already have an account
-        </button>
-        <button className="bg-blue-text text-16 rounded-5 h-12 w-[94%] rounded-[5px]  border text-center font-medium text-white">
-          Login
-        </button>
-      </div>
-    </div>
-  );
+	const inputStyle =
+		'border-blue-inputOutlineDefault h-[44px] w-full rounded-md px-3 py-2 bg-blue-background';
+	const labelStyle =
+		'text-blue-formInput font-14 h-[16px] mb-2 block text-sm font-normal';
+	return (
+		<div className="h-screen items-center justify-center">
+			<div className="border-bottom-gray-200 flex h-[25%] w-full flex-col items-center justify-center border-b bg-white">
+				<h1 className="text-blue-text text-xl font-extrabold">
+					Login to your account
+				</h1>
+			</div>
+			<div className="bg-blue-background flex py-10 max-h-full w-full flex-col items-center justify-center">
+				<form className="bg-blue-background mt-6 w-full rounded-md px-2 shadow-md">
+					<div className="mb-6">
+						<label htmlFor="email" className={labelStyle}>
+							E-mail
+						</label>
+						<input
+							type="email"
+							id="email"
+							name="email"
+							// value={formData.email}
+							// onChange={handleChange}
+							className={inputStyle}
+							required
+						/>
+					</div>
+					<div className="mb-6">
+						<label htmlFor="password" className={labelStyle}>
+							Password
+						</label>
+						<input
+							type="password"
+							id="password"
+							name="password"
+							// value={formData.password}
+							// onChange={handleChange}
+							className={inputStyle}
+							required
+						/>
+					</div>
+					<button
+						type="submit"
+						className="bg-blue-text mt-2 h-[44px] w-full rounded px-4 py-2 font-bold text-white"
+						// onClick={handleSubmit}
+					>
+						Login
+					</button>
+				</form>
+				<div className="bg-blue-background w-full min-h-[220px]"/>
+			</div>
+		</div>
+	);
 }
