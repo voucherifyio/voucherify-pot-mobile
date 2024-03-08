@@ -29,15 +29,15 @@ export default function HomePage() {
                 {/*main*/}
                 <div className="h-[50%] w-full"></div>
                 {/*partner hub*/}
-                <div className="h-[20%] w-full text-blue-text text-18 font-bold flex">
+                <div className="h-[20%] mx-4 text-blue-text text-18 font-bold flex justify-between">
                     <div className="flex-col">
-                        <h1 className="text-blue-text text-18 font-bold">
+                        <h1 className="mb-2 text-blue-text text-18 font-bold">
                             Partner Hub
                         </h1>
-                        <h4 className="text-blue-text text-14 font-normal">
+                        <h4 className="mb-4 text-blue-text text-14 font-normal">
                             Get linked. Get more.
                         </h4>
-                        <Button buttonType="yellow" className="w-[111px]">
+                        <Button buttonType="yellow" className="w-[140px] px-2">
                             Link to Aeroplan
                         </Button>
                     </div>
