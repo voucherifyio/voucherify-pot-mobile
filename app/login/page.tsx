@@ -1,6 +1,6 @@
 'use client'
 
-import Button from '@/app/ui/atoms/button'
+import Button from '@/app/components/ui/atoms/button'
 
 export default function LoginPage() {
     const inputStyle =

@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import loginPage from '../public/images/login-page.jpeg'
 import { useRouter } from 'next/navigation'
-import Button from '@/app/ui/atoms/button'
+import Button from '@/app/components/ui/atoms/button'
 
 export default function LoginPage() {
     const router = useRouter()
