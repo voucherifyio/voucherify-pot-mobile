@@ -1,3 +1,4 @@
+'use client'
 import {
     MdCreditCard,
     MdHome,
@@ -6,8 +7,11 @@ import {
     MdStars,
 } from 'react-icons/md'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const Navbar = () => {
+    //todo change the icon color as well
+    const pathname = usePathname()
     const MENU_LIST = [
         {
             text: 'Home',
@@ -40,11 +44,14 @@ const Navbar = () => {
             <div className="grid h-full max-w-screen-sm grid-cols-5 mx-auto font-medium">
                 {MENU_LIST.map((item) => (
                     <Link
-                        className="inline-flex flex-col items-center justify-center px-5 "
+                        key={item.text}
+                        className={`inline-flex flex-col items-center justify-center px-5 `}
                         href={item.href}
                     >
                         {item.icon}
-                        <span className="text-sm text-gray-500">
+                        <span
+                            className={`text-sm  ${pathname === item.href ? 'text-blue-text' : 'text-gray-500'}`}
+                        >
                             {item.text}
                         </span>
                     </Link>
