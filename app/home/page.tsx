@@ -23,8 +23,8 @@ export default function HomePage() {
             </div>
             <div className="flex-row my-4 mx-border-b-2 h-[100%] w-full bg-blue-background">
                 {/*upselling*/}
-                <div className="h-[15%] bg-amber-50 w-full">
-                    UPSELLING COMPONENT
+                <div className="h-[15%] bg-blue-background w-full">
+                    {/*UPSELLING COMPONENT*/}
                 </div>
                 {/*main*/}
                 <div className="h-[50%] w-full"></div>
