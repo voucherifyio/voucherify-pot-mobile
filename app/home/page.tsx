@@ -2,6 +2,7 @@ import { MdOutlineAccountCircle } from 'react-icons/md'
 import Button from '@/app/components/ui/atoms/button'
 import Image from 'next/image'
 import aeroplan from '@/public/images/aeroplan.png'
+import Upselling from '@/app/components/upselling/upselling'
 
 export default function HomePage() {
     //todo get the real customer name
@@ -14,7 +15,7 @@ export default function HomePage() {
                         My Journie
                     </h1>
                     <h4 className="text-blue-text text-[15px] font-normal">
-                        Hello {customerName}
+                        Hello {customerName}!
                     </h4>
                 </div>
                 <div className="w-[20%] h-[70px] self-center pt-4 pl-10">
@@ -24,7 +25,7 @@ export default function HomePage() {
             <div className="flex-row  mx-border-b-2 h-[100%] w-full bg-blue-background">
                 {/*upselling*/}
                 <div className="h-[15%] bg-blue-background w-full">
-                    {/*UPSELLING COMPONENT*/}
+                    <Upselling />
                 </div>
                 {/*main*/}
                 <div className="h-[50%] w-full"></div>
