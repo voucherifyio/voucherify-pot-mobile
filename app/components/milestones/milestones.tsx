@@ -5,7 +5,7 @@ import MilestoneChart from '@/app/components/milestones/milestone-chart'
 
 const Milestones = () => {
     //set real loyalty points
-    const [loyaltyPoints, setLoyaltyPoints] = useState<number>(50)
+    const [loyaltyPoints, setLoyaltyPoints] = useState<number>(300)
     return (
         <div className="p-4">
             <header className="mb-2">

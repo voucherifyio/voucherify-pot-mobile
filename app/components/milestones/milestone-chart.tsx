@@ -11,10 +11,12 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                 <li className="relative mb-6 w-full">
                     <div className="flex items-center">
                         <div
-                            className={`${points < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full bg-yellow-button h-2 z-0`}
+                            className={`${points < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2 z-0`}
                         ></div>
                     </div>
-                    <div className="relative bottom-4 w-6 h-6 bg-yellow-button z-10 rounded-full flex items-center justify-center text-blue-text">
+                    <div
+                        className={`relative bottom-4 w-6 h-6 bg-yellow-button z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    >
                         <MdOutlineLocalGasStation />
                     </div>
                     <div>
@@ -24,13 +26,13 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                 <li className="relative mb-6 w-full">
                     <div className="flex items-center">
                         <div
-                            className={`${points < 300 ? 'bg-gray-300' : 'bg-yellow-button'} ${points < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full bg-yellow-button h-2`}
+                            className={`${points < 300 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                         ></div>
                     </div>
                     <div
-                        className={`${points < 150 ? 'bg-gray-300' : 'bg-yellow-button'} relative bottom-4 w-6 h-6 bg-yellow-button z-10 rounded-full flex items-center justify-center text-blue-text`}
+                        className={`${points < 150 ? 'bg-gray-300' : 'bg-yellow-button'} relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     >
-                        {points < 300 ? (
+                        {points < 150 ? (
                             <MdLock />
                         ) : (
                             <MdOutlineLocalGasStation />
@@ -45,13 +47,13 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                 <li className="relative mb-6 w-full">
                     <div className="flex items-center">
                         <div
-                            className={`flex w-full ${points < 1000 ? 'bg-gray-300' : 'bg-yellow-button'} h-2`}
+                            className={`flex w-full ${points < 10000 ? 'bg-gray-300' : 'bg-yellow-button'} h-2`}
                         ></div>
                     </div>
                     <div
-                        className={`relative bottom-4 w-6 h-6 bg-yellow-button z-10 rounded-full flex items-center justify-center text-blue-text ${points < 300 ? 'bg-gray-300' : 'bg-yellow-button'}`}
+                        className={`relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text ${points < 300 ? 'bg-gray-300' : 'bg-yellow-button'}`}
                     >
-                        {points < 1000 ? (
+                        {points < 300 ? (
                             <MdLock />
                         ) : (
                             <MdOutlineLocalGasStation />
