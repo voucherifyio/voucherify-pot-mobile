@@ -8,7 +8,7 @@ export default function HomePage() {
     const customerName = 'John'
     return (
         <div className="h-screen items-center justify-center">
-            <div className="flex my-4 px-4 border-b-2 h-[8%] w-full bg-white">
+            <div className="flex mt-4 px-4 border-b-2 h-[8%] w-full bg-white">
                 <div className="w-[80%]">
                     <h1 className="text-blue-text text-2xl font-extrabold">
                         My Journie
@@ -17,11 +17,11 @@ export default function HomePage() {
                         Hello {customerName}
                     </h4>
                 </div>
-                <div className="w-[20%]">
+                <div className="w-[20%] h-[70px] self-center pt-4 pl-10">
                     <MdOutlineAccountCircle size={24} color="blue" />
                 </div>
             </div>
-            <div className="flex-row my-4 mx-border-b-2 h-[100%] w-full bg-blue-background">
+            <div className="flex-row  mx-border-b-2 h-[100%] w-full bg-blue-background">
                 {/*upselling*/}
                 <div className="h-[15%] bg-blue-background w-full">
                     {/*UPSELLING COMPONENT*/}
