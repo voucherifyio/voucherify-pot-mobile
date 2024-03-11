@@ -2,7 +2,7 @@ import { MdOutlineAccountCircle } from 'react-icons/md'
 import Button from '@/app/components/ui/atoms/button'
 import Image from 'next/image'
 import aeroplan from '@/public/images/aeroplan.png'
-import Milestones from '@/app/components/milestones/upselling'
+import Milestones from '@/app/components/milestones/milestones'
 
 export default function HomePage() {
     //todo get the real customer name

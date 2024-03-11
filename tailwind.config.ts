@@ -17,6 +17,7 @@ const config: Config = {
                     background: '#ECF0FB',
                     formInput: '#38477B',
                     inputOutlineActive: '#0D2B9D',
+                    activeCoupon: '#0D2B9D1F',
                     inputOutlineDefault: '#5D73BF',
                 },
                 yellow: {

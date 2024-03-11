@@ -2,7 +2,7 @@ import React, { ButtonHTMLAttributes } from 'react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string
-    buttonType?: 'primary' | 'secondary' | 'yellow'
+    buttonType?: 'primary' | 'secondary' | 'yellow' | 'activeCoupon'
 }
 
 const Button = (props: ButtonProps) => {
@@ -12,6 +12,7 @@ const Button = (props: ButtonProps) => {
         primary: 'bg-blue-text text-white',
         secondary: 'border bg-white border-blue-border text-blue-text',
         yellow: 'bg-yellow-button text-blue-text',
+        activeCoupon: 'text-inputOutlineDefault bg-blue-activeCoupon',
     }
 
     const buttonClassName = `${className} text-16 rounded-[5px] font-medium h-12 ${

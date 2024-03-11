@@ -34,8 +34,8 @@ const Navbar = () => {
             icon: <MdOutlineMap color="gray" />,
         },
         {
-            text: 'Reward',
-            href: '/reward',
+            text: 'Rewards',
+            href: '/rewards',
             icon: <MdStars color="gray" />,
         },
     ]

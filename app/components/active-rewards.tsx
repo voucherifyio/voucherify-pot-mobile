@@ -1,4 +1,3 @@
-import loyaltyCardBarCode from '@/public/images/loyalty-card.png'
 import Image from 'next/image'
 
 interface ActiveRewards {

@@ -1,23 +1,14 @@
-import { IoMdArrowBack } from 'react-icons/io'
 import Image from 'next/image'
 import loyaltyCardBarCode from '@/public/images/loyalty-card.png'
 import Button from '@/app/components/ui/atoms/button'
 import ActiveRewards from '@/app/components/active-rewards'
+import JournieHeader from '@/app/components/journie-header/journie-header'
 
 export default function CardPage() {
     return (
         <div className="h-screen items-center justify-center">
             {/*header*/}
-            <div className="flex px-4 border-b-2 h-[8%] w-full bg-white">
-                <div className="w-[80%] flex flex-row items-center">
-                    <div className="w-[20%]">
-                        <IoMdArrowBack size={20} color={'blue'} />
-                    </div>
-                    <h1 className="text-blue-text text-2xl font-extrabold">
-                        My Journie Card
-                    </h1>
-                </div>
-            </div>
+            <JournieHeader headerText={'My Journie Card'} />
             <div className="flex-row p-4 h-[100%] w-full bg-blue-background">
                 {/*	Card*/}
                 <header>
