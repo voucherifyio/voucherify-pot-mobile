@@ -19,6 +19,7 @@ const config: Config = {
                     inputOutlineActive: '#0D2B9D',
                     activeCoupon: '#0D2B9D1F',
                     inputOutlineDefault: '#5D73BF',
+                    activeCouponBorder: '#5A6EBC',
                 },
                 yellow: {
                     button: '#FBBC05',
