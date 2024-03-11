@@ -4,7 +4,7 @@ import { MdLock, MdOutlineLocalGasStation } from 'react-icons/md'
 interface MilestonesProps {
     points: number
 }
-const Milestones: React.FC<MilestonesProps> = ({ points }) => {
+const MilestoneChart: React.FC<MilestonesProps> = ({ points }) => {
     return (
         <div className="p-4">
             <ol className="items-center flex">
@@ -68,4 +68,4 @@ const Milestones: React.FC<MilestonesProps> = ({ points }) => {
     )
 }
 
-export default Milestones
+export default MilestoneChart

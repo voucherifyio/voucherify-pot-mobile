@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Milestones from '@/app/components/upselling/milestones'
+import MilestoneChart from '@/app/components/milestones/milestones'
 
-const Upselling = () => {
+const Milestones = () => {
     //set real loyalty points
     const [loyaltyPoints, setLoyaltyPoints] = useState<number>(50)
     return (
@@ -14,9 +14,9 @@ const Upselling = () => {
                     <span className="pl-2 font-extrabold">{loyaltyPoints}</span>
                 </h4>
             </header>
-            <Milestones points={loyaltyPoints} />
+            <MilestoneChart points={loyaltyPoints} />
         </div>
     )
 }
 
-export default Upselling
+export default Milestones
