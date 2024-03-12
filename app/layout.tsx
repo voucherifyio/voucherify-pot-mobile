@@ -12,9 +12,7 @@ export const metadata: Metadata = {
     description: 'Parkland POT',
 }
 
-export default function RootLayout({
-                                       children,
-                                   }: {
+export default function RootLayout({ children }: {
     children: React.ReactNode
 }) {
     return (
@@ -30,4 +28,6 @@ export default function RootLayout({
         </SessionWrapper>
     )
 }
+
+
 
