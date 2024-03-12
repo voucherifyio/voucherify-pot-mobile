@@ -26,7 +26,7 @@ const Deals = () => {
     ]
 
     const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
-        CurrentDeal.All
+        CurrentDeal.WithinReach
     )
     return (
         <div className="bg-blue-background h-[90%] pt-2">
