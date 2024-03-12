@@ -19,7 +19,7 @@ type RegisteredCustomer = {
 
 export default function RegisterPage() {
     const [error, setError] = useState<undefined | string>(undefined)
-    const { data: session, status } = useSession()
+    const { status } = useSession()
     const [loading, setLoading] = useState(false)
     const form = useForm<Inputs>()
     const {

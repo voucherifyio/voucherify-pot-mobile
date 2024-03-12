@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
                     return null
                 }
 
-                return voucherifyCustomer
+                return { id: voucherifyCustomer.id }
             },
         }),
         CredentialsProvider({
@@ -37,7 +37,6 @@ export const authOptions: NextAuthOptions = {
                 phone: { label: 'Phone number', type: 'text' },
             },
             async authorize(credentials, req) {
-                console.log(credentials, 'CREDENTIALS')
                 if (!credentials?.phone) {
                     return null
                 }

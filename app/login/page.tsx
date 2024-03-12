@@ -41,13 +41,13 @@ export default function LoginPage() {
         })
 
         if (res?.status !== 200) {
+            setLoading(false)
             setError(`Customer does not exist, please register.`)
         }
 
         if (res?.ok) {
             router.push('/dashboard')
         }
-        setLoading(false)
     }
 
     const handleResetError = () => {
@@ -111,6 +111,7 @@ export default function LoginPage() {
                     </div>
                     {error ? <p className="text-center mt-2">{error}</p> : null}
                     <Button
+                        type="submit"
                         buttonType="primary"
                         className="px-4 py-2 w-full bg-green-500 mb-1"
                     >
