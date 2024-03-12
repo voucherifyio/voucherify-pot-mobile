@@ -4,15 +4,55 @@ import Image from 'next/image'
 import loginPage from '../public/images/login-page.jpeg'
 import { useRouter } from 'next/navigation'
 import Button from '@/app/components/ui/atoms/button'
+import { useSession } from 'next-auth/react'
+import { useEffect } from 'react'
+import {
+    InAppMessage,
+    SlideUpMessage,
+    automaticallyShowInAppMessages,
+    initialize,
+    logCustomEvent,
+    openSession,
+    requestImmediateDataFlush,
+    requestPushPermission,
+    showInAppMessage,
+    subscribeToInAppMessage,
+} from '@braze/web-sdk'
+import { initalizeBraze } from './braze/initialize-braze'
 
 export default function LoginPage() {
+    const { status } = useSession()
     const router = useRouter()
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            initalizeBraze()
+            requestPushPermission(() => {
+                logCustomEvent('Custom', {})
+                requestImmediateDataFlush()
+            })
+        }
+    }, [])
+
     const handleRegisterClick = () => {
         router.push('/register')
     }
     const handleLoginClick = () => {
         router.push('/login')
     }
+
+    if (status === 'loading') {
+        return (
+            <div className="flex items-center justify-center w-100 h-screen">
+                <p>Loading...</p>
+            </div>
+        )
+    }
+
+    if (status === 'authenticated') {
+        router.push('/dashboard')
+    }
+
     return (
         <div className="flex h-screen flex-col items-center justify-center bg-blue-100">
             <Image

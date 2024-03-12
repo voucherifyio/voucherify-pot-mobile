@@ -1,6 +1,7 @@
 import '@/app/components/ui/global.css'
 import { inter } from '@/app/components/ui/fonts'
 import { Metadata } from 'next'
+import SessionWrapper from './components/SessionWrapper'
 import Navbar from '@/app/components/navbar'
 
 export const metadata: Metadata = {
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
     },
     description: 'Parkland POT',
 }
+
 export default function RootLayout({
     children,
 }: {
@@ -17,13 +19,23 @@ export default function RootLayout({
 }) {
     // todo show navigation only on home screen (or when logged in)s
     return (
-        <html lang="en">
+        <><SessionWrapper>
+            <html lang="en">
             <body
                 className={`${inter.className} mx-auto max-w-screen-sm antialiased`}
             >
-                <Navbar />
-                {children}
+            {children}
             </body>
-        </html>
+            </html>
+        </SessionWrapper>
+            <html lang="en">
+            <body
+                className={`${inter.className} mx-auto max-w-screen-sm antialiased`}
+            >
+            <Navbar />
+            {children}
+            </body>
+            </html>
+        </>
     )
 }

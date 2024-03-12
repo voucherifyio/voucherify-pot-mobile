@@ -1,22 +1,111 @@
 'use client'
 import Button from '@/app/components/ui/atoms/button'
-import { useForm } from 'react-hook-form'
+import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { signOut } from 'next-auth/react'
+
+type Inputs = {
+    firstName?: string
+    lastName?: string
+    phone: string
+    password?: string
+    postalCode?: string
+}
+
+type RegisteredCustomer = {
+    source_id: string
+}
 
 export default function RegisterPage() {
+    const [error, setError] = useState<undefined | string>(undefined)
+    const { data: session, status } = useSession()
+    const [loading, setLoading] = useState(false)
+    const form = useForm<Inputs>()
     const {
-        handleSubmit,
         register,
-        watch,
+        handleSubmit,
         formState: { errors },
-    } = useForm()
+    } = form
+    const router = useRouter()
+
+    const registerCustomer = async (values: Inputs) => {
+        try {
+            const res = await fetch(`/api/registration`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...values }),
+            })
+            const data = await res.json()
+
+            if (res.status === 400) {
+                return setError(data.error)
+            }
+            console.log(data, 'DARTA')
+            return data
+        } catch (err) {
+            console.log(err, 'REGISTRATION')
+            return err
+        }
+    }
+
+    const onSubmit: SubmitHandler<Inputs> = async (values) => {
+        setLoading(true)
+        const registeredCustomer: RegisteredCustomer =
+            await registerCustomer(values)
+
+        if (registeredCustomer?.source_id) {
+            try {
+                const res = await signIn('login-after-registration', {
+                    redirect: false,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    phone: values.phone,
+                })
+
+                if (res?.status !== 200 || res.error || !res.ok) {
+                    return setError('ERRRR')
+                }
+
+                router.push('/dashboard')
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        setLoading(false)
+    }
+
+    const handleLoginClick = () => {
+        router.push('/login')
+    }
+
     const inputStyle =
         'border-blue-inputOutlineDefault h-[44px] w-full rounded-md px-3 py-2 bg-blue-background'
     const labelStyle =
         'text-blue-formInput font-14 h-[16px] mb-2 block text-sm font-normal'
 
-    //add type below
-    const onFormSubmit = (formData: any) => {
-        console.log(formData)
+    if (status === 'loading' || loading) {
+        return (
+            <div className="flex items-center justify-center w-100 h-screen">
+                <p>Loading...</p>
+            </div>
+        )
+    }
+
+    if (status === 'authenticated') {
+        return (
+            <div>
+                <p>You are logged in, logout first.</p>
+                <Button
+                    onClick={() => signOut()}
+                    buttonType="primary"
+                    className="px-4 py-2 w-full mb-1"
+                >
+                    Logout
+                </Button>
+            </div>
+        )
     }
 
     return (
@@ -29,7 +118,7 @@ export default function RegisterPage() {
             </div>
             <div className="bg-blue-background flex h-[75%] max-h-full w-full flex-col items-center justify-center">
                 <form
-                    onSubmit={handleSubmit(onFormSubmit)}
+                    onSubmit={handleSubmit(onSubmit)}
                     className="bg-blue-background mt-6 h-[100%] w-full rounded-md px-2 shadow-md"
                 >
                     <div className="mb-6">
@@ -37,13 +126,10 @@ export default function RegisterPage() {
                             First name
                         </label>
                         <input
-                            {...register('firstName')}
                             type="text"
                             id="firstName"
-                            name="firstName"
-                            // value={formData.firstName}
                             className={inputStyle}
-                            required
+                            {...register('firstName')}
                         />
                     </div>
                     <div className="mb-6">
@@ -51,35 +137,35 @@ export default function RegisterPage() {
                             Last name
                         </label>
                         <input
-                            {...register('lastName')}
                             type="text"
                             id="lastName"
-                            name="lastName"
-                            // value={formData.lastName}
                             className={inputStyle}
-                            required
+                            {...register('lastName')}
                         />
                     </div>
                     <div className="mb-6">
-                        <label htmlFor="phoneNumber" className={labelStyle}>
+                        <label htmlFor="phone" className={labelStyle}>
                             Phone number
                         </label>
                         <input
-                            {...register('phoneNumber')}
                             type="tel"
-                            id="phoneNumber"
-                            name="phoneNumber"
-                            // value={formData.phoneNumber}
+                            id="phone"
                             className={inputStyle}
-                            required
+                            {...register('phone', {
+                                required: 'Please fill the phone number',
+                            })}
                         />
+                        {errors.phone ? (
+                            <p className="text-xs mt-1 text-red-500">
+                                {errors.phone.message}
+                            </p>
+                        ) : null}
                     </div>
                     <div className="mb-6">
                         <label htmlFor="email" className={labelStyle}>
                             E-mail
                         </label>
                         <input
-                            {...register('email')}
                             type="email"
                             id="email"
                             name="email"
@@ -108,15 +194,10 @@ export default function RegisterPage() {
                             Password
                         </label>
                         <input
-                            {...register('password', {
-                                required: true,
-                            })}
                             type="password"
                             id="password"
-                            name="password"
-                            // value={formData.password}
                             className={inputStyle}
-                            required
+                            {...register('password')}
                         />
                     </div>
                     <div className="mb-6">
@@ -124,29 +205,26 @@ export default function RegisterPage() {
                             Repeat password
                         </label>
                         <input
-                            {...register('confirmPassword', {
-                                required: true,
-                                validate: (value: string) => {
-                                    if (watch('password') !== value) {
-                                        return 'Your passwords do no match'
-                                    }
-                                },
-                            })}
                             type="password"
                             id="repeatPassword"
                             name="repeatPassword"
-                            // value={formData.repeatPassword}
                             className={inputStyle}
-                            required
                         />
                     </div>
+                    {error ? <p className="text-center mt-2">{error}</p> : null}
                     <Button
                         buttonType="primary"
                         type="submit"
-                        className="px-4 py-2 w-full"
-                        // onClick={handleSubmit}
+                        className="px-4 py-2 w-full mb-1"
                     >
                         Register
+                    </Button>
+                    <Button
+                        buttonType="primary"
+                        onClick={handleLoginClick}
+                        className="px-4 py-2 w-full bg-green-500"
+                    >
+                        Login
                     </Button>
                 </form>
             </div>
