@@ -7,16 +7,9 @@ import Button from '@/app/components/ui/atoms/button'
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import {
-    InAppMessage,
-    SlideUpMessage,
-    automaticallyShowInAppMessages,
-    initialize,
     logCustomEvent,
-    openSession,
     requestImmediateDataFlush,
     requestPushPermission,
-    showInAppMessage,
-    subscribeToInAppMessage,
 } from '@braze/web-sdk'
 import { initalizeBraze } from './braze/initialize-braze'
 
