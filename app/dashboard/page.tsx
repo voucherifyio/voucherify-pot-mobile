@@ -1,7 +1,6 @@
 'use client'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import Button from '../ui/atoms/button'
 import {
     InAppMessage,
     SlideUpMessage,
@@ -9,6 +8,7 @@ import {
     showInAppMessage,
 } from '@braze/web-sdk'
 import { initalizeBraze } from '../braze/initialize-braze'
+import Button from '@/app/components/ui/atoms/button'
 
 const Dashboard = () => {
     const router = useRouter()
