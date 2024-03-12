@@ -1,6 +1,6 @@
 'use client'
 
-import Button from '@/app/ui/atoms/button'
+import Button from '@/app/components/ui/atoms/button'
 
 export default function LoginPage() {
     const inputStyle =
@@ -17,14 +17,13 @@ export default function LoginPage() {
             <div className="bg-blue-background flex py-10 max-h-full w-full flex-col items-center justify-center">
                 <form className="bg-blue-background mt-6 w-full rounded-md px-2 shadow-md">
                     <div className="mb-6">
-                        <label htmlFor="email" className={labelStyle}>
-                            E-mail
+                        <label htmlFor="phone" className={labelStyle}>
+                            Phone number
                         </label>
                         <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            // value={formData.email}
+                            id="phone"
+                            name="phone"
+                            // value={formData.phone}
                             className={inputStyle}
                             required
                         />
