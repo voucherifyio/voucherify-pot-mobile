@@ -47,7 +47,6 @@ export default function LoginPage() {
                 >
                     Register
                 </Button>
-                {/*  should be a text */}
                 <button className=" text-blue-text text-16 mx-10 mb-2 h-12 font-medium">
                     Already have an account
                 </button>

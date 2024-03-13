@@ -41,10 +41,11 @@ export default function RegisterPage() {
             if (res.status === 400) {
                 return setError(data.error)
             }
-            console.log(data, 'DARTA')
             return data
         } catch (err) {
-            console.log(err, 'REGISTRATION')
+            if (err instanceof Error) {
+                return setError(err.message)
+            }
             return err
         }
     }
@@ -69,7 +70,10 @@ export default function RegisterPage() {
 
                 router.push('/dashboard')
             } catch (err) {
-                console.log(err)
+                if (err instanceof Error) {
+                    setError(err.message)
+                }
+                return err
             }
         }
         setLoading(false)
