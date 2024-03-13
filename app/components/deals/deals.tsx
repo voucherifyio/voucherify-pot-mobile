@@ -7,6 +7,8 @@ interface Deals {
     id?: string
     title: string
     active: boolean
+    available: boolean
+    eligibilityCondition?: string
 }
 
 enum CurrentDeal {
@@ -19,8 +21,16 @@ const Deals = () => {
             id: '001',
             title: 'Free package of bubble gum',
             active: false,
+            available: true,
         },
-        { id: '002', title: 'Free coca-cola', active: true },
+        { id: '002', title: 'Free coca-cola', active: true, available: true },
+        {
+            id: '003',
+            title: 'Free 6-pack of coca-cola',
+            active: false,
+            available: false,
+            eligibilityCondition: 'pump in 3 different location',
+        },
     ]
 
     const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
@@ -60,6 +70,36 @@ const Deals = () => {
             </ul>
             {currentDealType === CurrentDeal.WithinReach && (
                 <div className="bg-blue-background mx-auto h-[80%] pt-2">
+                    {deals
+                        .filter((deal) => deal.available)
+                        .map((deal) => (
+                            <div
+                                key={deal.id}
+                                className="shadow-md h-[92px] rounded-xl m-4 flex bg-white text-blue-text w-[90%]"
+                            >
+                                <div className="flex flex-col p-2">
+                                    <h3 className="text-[18px] font-extrabold">
+                                        {deal?.title}
+                                    </h3>
+                                    <Button
+                                        buttonType={
+                                            deal.active
+                                                ? 'activeCoupon'
+                                                : 'yellow'
+                                        }
+                                        className="mt-2 px-2 max-h-[32px] max-w-[149px] text-[16px]"
+                                    >
+                                        {deal.active
+                                            ? '✓ Active coupon'
+                                            : 'Activate coupon'}
+                                    </Button>
+                                </div>
+                            </div>
+                        ))}
+                </div>
+            )}
+            {currentDealType === CurrentDeal.All && (
+                <div className="bg-blue-background mx-auto h-[80%] pt-2">
                     {deals.map((deal) => (
                         <div
                             key={deal.id}
@@ -69,23 +109,26 @@ const Deals = () => {
                                 <h3 className="text-[18px] font-extrabold">
                                     {deal?.title}
                                 </h3>
-                                <Button
-                                    buttonType={
-                                        deal.active ? 'activeCoupon' : 'yellow'
-                                    }
-                                    className="mt-2 px-2 max-h-[32px] max-w-[149px] text-[16px]"
-                                >
-                                    {deal.active
-                                        ? '✓ Active coupon'
-                                        : 'Activate coupon'}
-                                </Button>
+                                {deal.available ? (
+                                    <Button
+                                        buttonType={
+                                            deal.active
+                                                ? 'activeCoupon'
+                                                : 'yellow'
+                                        }
+                                        className="mt-2 px-2 max-h-[32px] max-w-[149px] text-[16px]"
+                                    >
+                                        {deal.active
+                                            ? '✓ Active coupon'
+                                            : 'Activate coupon'}
+                                    </Button>
+                                ) : (
+                                    <p>{deal?.eligibilityCondition}</p>
+                                )}
                             </div>
                         </div>
                     ))}
                 </div>
-            )}
-            {currentDealType === CurrentDeal.All && (
-                <div className="bg-blue-background mx-auto h-[80%] pt-2"></div>
             )}
         </div>
     )
