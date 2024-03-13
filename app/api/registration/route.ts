@@ -8,6 +8,12 @@ type Customer = {
     lastName?: string
     phone: string
     password?: string
+    email?: string
+    postalCode?: string
+}
+
+type ModifiedBaseUserTraits = {
+    postalCode?: string
 }
 
 const getAnalalitycs = () => {
@@ -22,15 +28,17 @@ const getAnalalitycs = () => {
 
 export async function POST(req: NextRequest) {
     const body: Customer = await req.json()
-
     let voucherifyCustomer = await getCustomer({
         customer: { ...body },
         voucherify: getVoucherify(),
     })
 
-    if (voucherifyCustomer?.source_id === body.phone) {
+    if (
+        voucherifyCustomer?.source_id === body.phone ||
+        voucherifyCustomer?.metadata?.customer_registered === true
+    ) {
         return NextResponse.json(
-            { error: 'Customer already exist, please login.' },
+            { error: 'Customer already registered, please login.' },
             { status: 400 }
         )
     }
@@ -41,8 +49,15 @@ export async function POST(req: NextRequest) {
             userId: body.phone,
             traits: {
                 phone: body.phone,
-                firstName: body?.firstName,
-                lastName: body?.lastName,
+                first_name: body?.firstName,
+                last_name: body?.lastName,
+                email: body?.email,
+                address: {
+                    postalCode: body?.postalCode,
+                } as ModifiedBaseUserTraits,
+                metadata: {
+                    registered_customer: true,
+                },
             },
         })
 
