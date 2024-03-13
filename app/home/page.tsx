@@ -7,6 +7,7 @@ import Milestones from '@/app/components/milestones/milestones'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useInitalizeBraze } from '../hooks/initializeBraze'
+import { useState } from 'react'
 
 export default function HomePage() {
     const router = useRouter()
@@ -17,6 +18,7 @@ export default function HomePage() {
         },
     })
     const { braze } = useInitalizeBraze()
+    const [error, setError] = useState<string | undefined>(undefined)
 
     if (status === 'loading') {
         return (
@@ -44,7 +46,7 @@ export default function HomePage() {
             <div className="flex-row  mx-border-b-2 h-[100%] w-full bg-blue-background">
                 {/*upselling*/}
                 <div className="h-[15%] bg-blue-background w-full">
-                    <Milestones />
+                    <Milestones userPhone={data.user?.id} setError={setError} />
                 </div>
                 {/*main*/}
                 <div className="h-[50%] w-full"></div>
@@ -62,7 +64,7 @@ export default function HomePage() {
                         </Button>
                     </div>
                 </div>
-            )}
-        </>
+            </div>
+        </div>
     )
 }
