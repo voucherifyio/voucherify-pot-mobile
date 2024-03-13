@@ -3,16 +3,32 @@
 import Image from 'next/image'
 import loginPage from '../public/images/login-page.jpeg'
 import { useRouter } from 'next/navigation'
-import Button from '@/app/ui/atoms/button'
+import Button from '@/app/components/ui/atoms/button'
+import { useSession } from 'next-auth/react'
 
 export default function LoginPage() {
+    const { status } = useSession()
     const router = useRouter()
+
     const handleRegisterClick = () => {
         router.push('/register')
     }
     const handleLoginClick = () => {
         router.push('/login')
     }
+
+    if (status === 'loading') {
+        return (
+            <div className="flex items-center justify-center w-100 h-screen">
+                <p>Loading...</p>
+            </div>
+        )
+    }
+
+    if (status === 'authenticated') {
+        router.push('/home')
+    }
+
     return (
         <div className="flex h-screen flex-col items-center justify-center bg-blue-100">
             <Image
@@ -32,7 +48,6 @@ export default function LoginPage() {
                 >
                     Register
                 </Button>
-                {/*  should be a text */}
                 <button className=" text-blue-text text-16 mx-10 mb-2 h-12 font-medium">
                     Already have an account
                 </button>
