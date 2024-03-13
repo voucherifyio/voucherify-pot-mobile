@@ -1,7 +1,19 @@
-import { NextAuthOptions } from 'next-auth'
+import { DefaultSession, NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { getCustomer } from '@/voucherify/get-customer'
 import { getVoucherify } from '@/voucherify/voucherify-config'
+import { JWT } from 'next-auth/jwt'
+
+// interface Session extends DefaultSession {
+//     user?:
+//         | {
+//               id?: string | null | undefined
+//               name?: string | null | undefined
+//               email?: string | null | undefined
+//               image?: string | null | undefined
+//           }
+//         | undefined
+// }
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -22,11 +34,14 @@ export const authOptions: NextAuthOptions = {
                     voucherify: getVoucherify(),
                 })
 
-                if (!voucherifyCustomer?.id) {
+                if (!voucherifyCustomer?.source_id) {
                     return null
                 }
 
-                return { id: voucherifyCustomer.id }
+                return {
+                    id: voucherifyCustomer.source_id,
+                    name: voucherifyCustomer.name,
+                }
             },
         }),
         CredentialsProvider({
@@ -45,5 +60,14 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     ],
+    callbacks: {
+        session: async ({ session, token }) => ({
+            ...session,
+            user: {
+                ...session.user,
+                id: token.sub,
+            },
+        }),
+    },
     secret: process.env.NEXTAUTH_SECRET,
 }
