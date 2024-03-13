@@ -19,17 +19,18 @@ const Milestones: FC<MilestonesProps> = ({ userPhone, setError }) => {
                         method: 'GET',
                     }
                 )
-                const { customer } = await res.json()
-
+                const data = await res.json()
                 if (res.status !== 200) {
-                    setError('Cannot get loyalty points')
+                    setError('Cannot get user, please try again')
                 }
-                setLoyaltyPoints(customer.loyalty.points)
+                setLoyaltyPoints(data?.customer?.loyalty.points)
             }
 
-            getCustomer()
+            setTimeout(() => {
+                getCustomer()
+            }, 15000)
         }
-    })
+    }, [])
 
     return (
         <div className="p-4">

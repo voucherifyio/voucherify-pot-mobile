@@ -12,6 +12,7 @@ type Inputs = {
     phone: string
     password?: string
     postalCode?: string
+    email?: string
 }
 
 type RegisteredCustomer = {
@@ -60,9 +61,7 @@ export default function RegisterPage() {
             try {
                 const res = await signIn('login-after-registration', {
                     redirect: false,
-                    firstName: values.firstName,
-                    lastName: values.lastName,
-                    phone: values.phone,
+                    ...values,
                 })
 
                 if (res?.status !== 200 || res.error || !res.ok) {
@@ -172,8 +171,8 @@ export default function RegisterPage() {
                         <input
                             type="email"
                             id="email"
-                            name="email"
                             className={inputStyle}
+                            {...register('email')}
                         />
                     </div>
                     <div className="mb-6">

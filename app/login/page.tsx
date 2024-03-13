@@ -79,8 +79,8 @@ export default function LoginPage() {
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <div className="mb-6">
-                        <label htmlFor="email" className={labelStyle}>
-                            E-mail
+                        <label htmlFor="phone" className={labelStyle}>
+                            Phone number
                         </label>
                         <input
                             type="text"

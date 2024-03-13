@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useInitalizeBraze } from '../hooks/initializeBraze'
 import { useState } from 'react'
+import { signOut } from 'next-auth/react'
 
 export default function HomePage() {
     const router = useRouter()
@@ -42,6 +43,9 @@ export default function HomePage() {
                 <div className="w-[20%] h-[70px] self-center pt-4 pl-10">
                     <MdOutlineAccountCircle size={24} color="blue" />
                 </div>
+                <Button onClick={() => signOut({ redirect: false })}>
+                    Logout
+                </Button>
             </div>
             <div className="flex-row  mx-border-b-2 h-[100%] w-full bg-blue-background">
                 {/*upselling*/}
