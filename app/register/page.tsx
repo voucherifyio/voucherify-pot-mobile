@@ -20,7 +20,7 @@ type RegisteredCustomer = {
 
 export default function RegisterPage() {
     const [error, setError] = useState<undefined | string>(undefined)
-    const { data: session, status } = useSession()
+    const { status } = useSession()
     const [loading, setLoading] = useState(false)
     const form = useForm<Inputs>()
     const {
@@ -42,10 +42,11 @@ export default function RegisterPage() {
             if (res.status === 400) {
                 return setError(data.error)
             }
-            console.log(data, 'DARTA')
             return data
         } catch (err) {
-            console.log(err, 'REGISTRATION')
+            if (err instanceof Error) {
+                return setError(err.message)
+            }
             return err
         }
     }
@@ -70,7 +71,10 @@ export default function RegisterPage() {
 
                 router.push('/dashboard')
             } catch (err) {
-                console.log(err)
+                if (err instanceof Error) {
+                    setError(err.message)
+                }
+                return err
             }
         }
         setLoading(false)

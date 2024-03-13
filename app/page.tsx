@@ -5,27 +5,10 @@ import loginPage from '../public/images/login-page.jpeg'
 import { useRouter } from 'next/navigation'
 import Button from '@/app/components/ui/atoms/button'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
-import {
-    logCustomEvent,
-    requestImmediateDataFlush,
-    requestPushPermission,
-} from '@braze/web-sdk'
-import { initalizeBraze } from './braze/initialize-braze'
 
 export default function LoginPage() {
     const { status } = useSession()
     const router = useRouter()
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            initalizeBraze()
-            requestPushPermission(() => {
-                logCustomEvent('Custom', {})
-                requestImmediateDataFlush()
-            })
-        }
-    }, [])
 
     const handleRegisterClick = () => {
         router.push('/register')
@@ -65,7 +48,6 @@ export default function LoginPage() {
                 >
                     Register
                 </Button>
-                {/*  should be a text */}
                 <button className=" text-blue-text text-16 mx-10 mb-2 h-12 font-medium">
                     Already have an account
                 </button>

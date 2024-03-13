@@ -1,14 +1,4 @@
-const installEvent = () => {
-    self.addEventListener('install', () => {
-      console.log('service worker installed');
-    });
-  };
-  installEvent();
-
-  const activateEvent = () => {
-    self.addEventListener('activate', (e) => {
-        console.log(e)
-      console.log('service worker activated');
-    });
-  };
-  activateEvent();
+self.addEventListener("install", event => {
+  event.stopImmediatePropagation();
+});
+self.importScripts("https://js.appboycdn.com/web-sdk/5.1/service-worker.js");

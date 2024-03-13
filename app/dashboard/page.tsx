@@ -1,16 +1,11 @@
 'use client'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import {
-    InAppMessage,
-    SlideUpMessage,
-    automaticallyShowInAppMessages,
-    showInAppMessage,
-} from '@braze/web-sdk'
-import { initalizeBraze } from '../braze/initialize-braze'
+import { useInitalizeBraze } from '../hooks/initializeBraze'
 import Button from '@/app/components/ui/atoms/button'
 
 const Dashboard = () => {
+    const { braze } = useInitalizeBraze()
     const router = useRouter()
     const { status } = useSession({
         required: true,
@@ -21,23 +16,14 @@ const Dashboard = () => {
 
     if (status === 'loading') {
         return (
-            <div className='flex items-center justify-center w-100 h-100'>
+            <div className="flex items-center justify-center w-100 h-screen">
                 <p>Loading...</p>
             </div>
         )
     }
 
-    if (status === 'authenticated' && typeof window !== 'undefined') {
-        initalizeBraze()
-        automaticallyShowInAppMessages()
-        const message = new SlideUpMessage('Hello User!')
-        message.slideFrom = InAppMessage.SlideFrom.TOP
-        message.dismissType = InAppMessage.DismissType.MANUAL
-        showInAppMessage(message)
-    }
-
     return (
-        <div>
+        <div className="flex flex-col justify-center items-center w-full h-screen gap-4">
             <p>Hello User!</p>
             <Button
                 onClick={() => signOut({ redirect: false })}
