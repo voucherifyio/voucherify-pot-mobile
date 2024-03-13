@@ -46,13 +46,6 @@ export async function POST(req: NextRequest) {
             },
         })
 
-        const customer = {
-            source_id: body.phone,
-        }
-
-        return NextResponse.json(
-            { source_id: customer.source_id },
-            { status: 200 }
-        )
+        return NextResponse.json({ source_id: body.phone }, { status: 200 })
     }
 }
