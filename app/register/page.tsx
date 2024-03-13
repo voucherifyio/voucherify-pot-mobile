@@ -1,5 +1,5 @@
 'use client'
-import Button from '@/app/ui/atoms/button'
+import Button from '@/app/components/ui/atoms/button'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -11,6 +11,7 @@ type Inputs = {
     lastName?: string
     phone: string
     password?: string
+    postalCode?: string
 }
 
 type RegisteredCustomer = {
@@ -164,7 +165,7 @@ export default function RegisterPage() {
                             </p>
                         ) : null}
                     </div>
-                    {/* <div className="mb-6">
+                    <div className="mb-6">
                         <label htmlFor="email" className={labelStyle}>
                             E-mail
                         </label>
@@ -176,7 +177,22 @@ export default function RegisterPage() {
                             className={inputStyle}
                             required
                         />
-                    </div> */}
+                    </div>
+                    <div className="mb-6">
+                        <label htmlFor="postalCode" className={labelStyle}>
+                            Postal code
+                        </label>
+                        <input
+                            {...register('postalCode')}
+                            id="postalCode"
+                            name="postalCode"
+                            type="text"
+                            // value={formData.email}
+                            className={inputStyle}
+                            required
+                        />
+                    </div>
+
                     <div className="mb-6">
                         <label htmlFor="password" className={labelStyle}>
                             Password
@@ -190,7 +206,7 @@ export default function RegisterPage() {
                     </div>
                     <div className="mb-6">
                         <label htmlFor="repeatPassword" className={labelStyle}>
-                            Repeat Password
+                            Repeat password
                         </label>
                         <input
                             type="password"

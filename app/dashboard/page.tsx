@@ -1,8 +1,8 @@
 'use client'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import Button from '../ui/atoms/button'
 import { useInitalizeBraze } from '../hooks/initializeBraze'
+import Button from '@/app/components/ui/atoms/button'
 
 const Dashboard = () => {
     const { braze } = useInitalizeBraze()
@@ -23,7 +23,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div className='flex flex-col justify-center items-center w-full h-screen gap-4'>
+        <div className="flex flex-col justify-center items-center w-full h-screen gap-4">
             <p>Hello User!</p>
             <Button
                 onClick={() => signOut({ redirect: false })}

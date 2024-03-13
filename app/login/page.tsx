@@ -1,5 +1,5 @@
 'use client'
-import Button from '@/app/ui/atoms/button'
+import Button from '@/app/components/ui/atoms/button'
 import { useSession, signIn } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -9,6 +9,7 @@ interface Inputs {
     phone: string
     password?: string
 }
+
 
 export default function LoginPage() {
     const [error, setError] = useState<string | undefined>(undefined)
@@ -79,8 +80,8 @@ export default function LoginPage() {
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <div className="mb-6">
-                        <label htmlFor="phone" className={labelStyle}>
-                            Phone number
+                        <label htmlFor="email" className={labelStyle}>
+                            E-mail
                         </label>
                         <input
                             type="text"
