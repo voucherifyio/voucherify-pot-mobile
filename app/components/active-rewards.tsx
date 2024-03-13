@@ -35,7 +35,7 @@ const ActiveRewards = () => {
             <div>
                 {activeRewards.map((reward) => (
                     <div
-                        key={reward.barcode}
+                        key={reward.title}
                         onClick={() => handleExpandCoupon(reward.title)}
                         className="shadow-md rounded-xl flex-row justify-between bg-white mt-4 text-blue-text w-full min-h-[92px] items-center"
                     >
