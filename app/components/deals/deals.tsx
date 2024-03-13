@@ -6,8 +6,9 @@ import { useState } from 'react'
 interface Deals {
     id?: string
     title: string
-    image?: string
     active: boolean
+    available: boolean
+    eligibilityCondition?: string
 }
 
 enum CurrentDeal {
@@ -19,10 +20,17 @@ const Deals = () => {
         {
             id: '001',
             title: 'Free package of bubble gum',
-            image: require('../../../public/images/products/bubble-gum.png'),
             active: false,
+            available: true,
         },
-        { id: '002', title: 'Free coca-cola', image: '', active: true },
+        { id: '002', title: 'Free coca-cola', active: true, available: true },
+        {
+            id: '003',
+            title: 'Free 6-pack of coca-cola',
+            active: false,
+            available: false,
+            eligibilityCondition: 'pump in 3 different location',
+        },
     ]
 
     const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
@@ -50,7 +58,7 @@ const Deals = () => {
                         onClick={() =>
                             setCurrentDealType(CurrentDeal.WithinReach)
                         }
-                        className={`ml-2 max-w-[150px] w-[150px] bg-white inline-block text-blue-text px-4 py-3 rounded-[30px] ${
+                        className={`ml-2 max-w-[150px] w-[150px] inline-block text-blue-text px-4 py-3 rounded-[30px] ${
                             currentDealType === CurrentDeal.WithinReach
                                 ? 'active bg-white'
                                 : 'bg-[#d1d6e8]'
@@ -62,44 +70,65 @@ const Deals = () => {
             </ul>
             {currentDealType === CurrentDeal.WithinReach && (
                 <div className="bg-blue-background mx-auto h-[80%] pt-2">
-                    {deals.map((deal) => (
-                        <div
-                            key={deal.id}
-                            className="shadow-md h-[120px] rounded-xl m-4 flex bg-white text-blue-text w-[90%]"
-                        >
-                            <div className="justify-between flex flex-col p-2 w-3/5">
-                                <h3 className="text-[18px] font-extrabold">
-                                    {deal?.title}
-                                </h3>
-                                <Button
-                                    buttonType={
-                                        deal.active ? 'activeCoupon' : 'yellow'
-                                    }
-                                    className="mt-2 max-h-[32px] max-w-[149px] text-[16px]"
-                                >
-                                    {deal.active
-                                        ? '✓ Active coupon'
-                                        : 'Activate coupon'}
-                                </Button>
-                            </div>
-
-                            {deal.image && (
-                                <div className="flex items-center ml-2 w-2/5">
-                                    <Image
-                                        src={deal.image}
-                                        alt="rewardImage"
-                                        width={120}
-                                        height={100}
-                                        className="max-w-[120px] max-h-[100px]"
-                                    />
+                    {deals
+                        .filter((deal) => deal.available)
+                        .map((deal) => (
+                            <div
+                                key={deal.id}
+                                className="shadow-md h-[92px] rounded-xl m-4 flex bg-white text-blue-text w-[90%]"
+                            >
+                                <div className="flex flex-col p-2">
+                                    <h3 className="text-[18px] font-extrabold">
+                                        {deal?.title}
+                                    </h3>
+                                    <Button
+                                        buttonType={
+                                            deal.active
+                                                ? 'activeCoupon'
+                                                : 'yellow'
+                                        }
+                                        className="mt-2 px-2 max-h-[32px] max-w-[149px] text-[16px]"
+                                    >
+                                        {deal.active
+                                            ? '✓ Active coupon'
+                                            : 'Activate coupon'}
+                                    </Button>
                                 </div>
-                            )}
-                        </div>
-                    ))}
+                            </div>
+                        ))}
                 </div>
             )}
             {currentDealType === CurrentDeal.All && (
-                <div className="bg-blue-background mx-auto h-[80%] pt-2"></div>
+                <div className="bg-blue-background mx-auto h-[80%] pt-2">
+                    {deals.map((deal) => (
+                        <div
+                            key={deal.id}
+                            className="shadow-md h-[92px] rounded-xl m-4 flex bg-white text-blue-text w-[90%]"
+                        >
+                            <div className="flex flex-col p-2">
+                                <h3 className="text-[18px] font-extrabold">
+                                    {deal?.title}
+                                </h3>
+                                {deal.available ? (
+                                    <Button
+                                        buttonType={
+                                            deal.active
+                                                ? 'activeCoupon'
+                                                : 'yellow'
+                                        }
+                                        className="mt-2 px-2 max-h-[32px] max-w-[149px] text-[16px]"
+                                    >
+                                        {deal.active
+                                            ? '✓ Active coupon'
+                                            : 'Activate coupon'}
+                                    </Button>
+                                ) : (
+                                    <p>{deal?.eligibilityCondition}</p>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
             )}
         </div>
     )

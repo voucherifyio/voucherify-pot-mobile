@@ -6,9 +6,12 @@ import ActiveRewards from '@/app/components/active-rewards'
 import JournieHeader from '@/app/components/journie-header/journie-header'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function CardPage() {
+    //todo change this to real card number
+    const [cardNumber, setCardNumber] = useState<string>('123')
+    const [codeCopied, setCodeCopied] = useState<boolean>(false)
     const router = useRouter()
     const { data: session, status } = useSession()
     useEffect(() => {
@@ -20,6 +23,20 @@ export default function CardPage() {
             router.push('/')
         }
     }, [session, status, router])
+
+    const handleCopy = async () => {
+        try {
+            setCodeCopied(false)
+            await navigator.clipboard.writeText(cardNumber)
+            setCodeCopied(true)
+            setTimeout(() => {
+                setCodeCopied(false)
+            }, 2000)
+        } catch (err) {
+            console.error('Unable to copy code')
+            setCodeCopied(false)
+        }
+    }
     return (
         <>
             {status === 'authenticated' && (
@@ -45,8 +62,11 @@ export default function CardPage() {
                             height={106}
                             className="max-w-auto"
                         />
-                        <Button className="w-full my-4 bg-blue-background border border-blue-inputOutlineDefault">
-                            Copy number
+                        <Button
+                            onClick={handleCopy}
+                            className="w-full my-4 bg-blue-background border border-blue-inputOutlineDefault"
+                        >
+                            {codeCopied ? 'Code copied!' : 'Copy number'}
                         </Button>
                         <ActiveRewards />
                     </div>
