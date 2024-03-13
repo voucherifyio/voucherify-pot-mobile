@@ -11,8 +11,8 @@ export default function HomePage() {
         <div className="h-screen items-center justify-center">
             <div className="flex mt-4 px-4 border-b-2 h-[8%] w-full bg-white">
                 <div className="w-[80%]">
-                    <h1 className="text-blue-text text-2xl font-extrabold">
-                        My Journie
+                    <h1 className="text-blue-text text-2xl font-bold">
+                        My <b>JOURNIE</b>
                     </h1>
                     <h4 className="text-blue-text text-[15px] font-normal">
                         Hello {customerName}!

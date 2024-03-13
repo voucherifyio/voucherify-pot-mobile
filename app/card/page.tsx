@@ -8,7 +8,7 @@ export default function CardPage() {
     return (
         <div className="h-screen items-center justify-center">
             {/*header*/}
-            <JournieHeader headerText={'My Journie Card'} />
+            <JournieHeader headerText={'My JOURNIE Card'} />
             <div className="flex-row p-4 h-[100%] w-full bg-blue-background">
                 {/*	Card*/}
                 <header>
