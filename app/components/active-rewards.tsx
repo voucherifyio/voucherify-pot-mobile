@@ -1,18 +1,30 @@
 import Image from 'next/image'
+import Button from '@/app/components/ui/atoms/button'
+import { useState } from 'react'
 
 interface ActiveRewards {
     title: string
-    image?: string
+    barcode: string
 }
 
 const ActiveRewards = () => {
     const activeRewards: ActiveRewards[] = [
         {
             title: 'Free package of bubble gum',
-            image: require('../../public/images/products/bubble-gum.png'),
+            barcode: require('../../public/images/loyalty-card.png'), // TODO: should be a URL
         },
-        { title: 'Free coca-cola', image: '' },
+        {
+            title: 'Free coca-cola',
+            barcode: require('../../public/images/loyalty-card.png'),
+        },
     ]
+
+    const [expandedReward, setExpandedReward] = useState<string | null>(null)
+
+    const handleExpandCoupon = (title: string) => {
+        setExpandedReward((prevReward) => (prevReward === title ? null : title))
+    }
+
     return (
         <div className="mt-4">
             <header>
@@ -22,17 +34,30 @@ const ActiveRewards = () => {
             </header>
             <div>
                 {activeRewards.map((reward) => (
-                    <div className="shadow-md rounded-xl flex justify-between bg-white mt-4 text-blue-text w-full h-[60px]	items-center">
+                    <div
+                        key={reward.barcode}
+                        onClick={() => handleExpandCoupon(reward.title)}
+                        className="shadow-md rounded-xl flex-row justify-between bg-white mt-4 text-blue-text w-full min-h-[92px] items-center"
+                    >
                         <h3 className="text-[18px] font-extrabold p-2">
                             {reward?.title}
                         </h3>
-                        {reward.image && (
+                        {expandedReward !== reward.title && (
+                            <Button
+                                onClick={() => handleExpandCoupon(reward.title)}
+                                buttonType="yellow"
+                                className="h-[24px] px-2 m-2 text-[16px] rounded-md"
+                            >
+                                Scan in-store
+                            </Button>
+                        )}
+                        {expandedReward === reward.title && (
                             <Image
-                                src={reward.image}
-                                alt="rewardImage"
-                                width={48}
-                                height={40}
-                                className="max-w-[48px] max-h-[48px] mr-2"
+                                src={reward.barcode}
+                                alt="couponBarcode"
+                                width={350}
+                                height={65}
+                                className="max-w-auto max-h-auto mx-auto"
                             />
                         )}
                     </div>
@@ -41,4 +66,5 @@ const ActiveRewards = () => {
         </div>
     )
 }
+
 export default ActiveRewards
