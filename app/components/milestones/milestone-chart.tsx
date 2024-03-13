@@ -46,8 +46,8 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                         )}
                     </div>
                     {points >= 150 && (
-                        <div className="text-left text-blue-text m-[-12px]">
-                            <button className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
+                        <div className="text-left text-blue-text m-[-15px] absolute top-[70px] left-[-10px]">
+                            <button className="text-white bg-[#173C9F] h-[32px] rounded text-[16px] px-2">
                                 Choose
                             </button>
                         </div>
@@ -73,13 +73,6 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                             <MdOutlineLocalGasStation />
                         )}
                     </div>
-                    {points >= 300 && (
-                        <div className="text-left text-blue-text m-[-12px]">
-                            <button className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
-                                Choose
-                            </button>
-                        </div>
-                    )}
                 </li>
             </ol>
         </div>
