@@ -15,7 +15,7 @@ export default function HomePage() {
     const { status, data } = useSession({
         required: true,
         onUnauthenticated() {
-            router.push('/login')
+            router.push('/')
         },
     })
     const { braze } = useInitalizeBraze()
