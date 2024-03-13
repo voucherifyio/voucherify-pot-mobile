@@ -26,7 +26,7 @@ export default function LoginPage() {
     }
 
     if (status === 'authenticated') {
-        router.push('/dashboard')
+        router.push('/home')
     }
 
     return (

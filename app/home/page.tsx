@@ -1,12 +1,31 @@
+'use client'
 import { MdOutlineAccountCircle } from 'react-icons/md'
 import Button from '@/app/components/ui/atoms/button'
 import Image from 'next/image'
 import aeroplan from '@/public/images/aeroplan.png'
 import Milestones from '@/app/components/milestones/milestones'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useInitalizeBraze } from '../hooks/initializeBraze'
 
 export default function HomePage() {
-    //todo get the real customer name
-    const customerName = 'John'
+    const router = useRouter()
+    const { status, data } = useSession({
+        required: true,
+        onUnauthenticated() {
+            router.push('/login')
+        },
+    })
+    const { braze } = useInitalizeBraze()
+
+    if (status === 'loading') {
+        return (
+            <div className="flex items-center justify-center w-100 h-screen">
+                <p>Loading...</p>
+            </div>
+        )
+    }
+
     return (
         <div className="h-screen items-center justify-center">
             <div className="flex mt-4 px-4 border-b-2 h-[8%] w-full bg-white">
@@ -15,7 +34,7 @@ export default function HomePage() {
                         My Journie
                     </h1>
                     <h4 className="text-blue-text text-[15px] font-normal">
-                        Hello {customerName}!
+                        Hello {data.user?.name || 'User'}!
                     </h4>
                 </div>
                 <div className="w-[20%] h-[70px] self-center pt-4 pl-10">

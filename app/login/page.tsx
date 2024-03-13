@@ -10,7 +10,6 @@ interface Inputs {
     password?: string
 }
 
-
 export default function LoginPage() {
     const [error, setError] = useState<string | undefined>(undefined)
     const form = useForm<Inputs>()
@@ -25,7 +24,7 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (status === 'authenticated') {
-            router.push('/dashboard')
+            router.push('/home')
         }
     }, [status])
 
@@ -47,7 +46,7 @@ export default function LoginPage() {
         }
 
         if (res?.ok) {
-            router.push('/dashboard')
+            router.push('/home')
         }
     }
 

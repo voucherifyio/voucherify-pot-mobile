@@ -69,7 +69,7 @@ export default function RegisterPage() {
                     return setError('ERRRR')
                 }
 
-                router.push('/dashboard')
+                router.push('/home')
             } catch (err) {
                 if (err instanceof Error) {
                     setError(err.message)
@@ -173,9 +173,7 @@ export default function RegisterPage() {
                             type="email"
                             id="email"
                             name="email"
-                            // value={formData.email}
                             className={inputStyle}
-                            required
                         />
                     </div>
                     <div className="mb-6">
@@ -187,9 +185,7 @@ export default function RegisterPage() {
                             id="postalCode"
                             name="postalCode"
                             type="text"
-                            // value={formData.email}
                             className={inputStyle}
-                            required
                         />
                     </div>
 
