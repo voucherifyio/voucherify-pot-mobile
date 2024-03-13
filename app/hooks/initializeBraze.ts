@@ -4,8 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 export const useInitalizeBraze = () => {
     const [braze, setBraze] = useState<
-        | typeof import('/Users/patryk.smolarz/Desktop/Patryk/parkland-mobile/node_modules/@braze/web-sdk/index')
-        | undefined
+        typeof import('../../node_modules/@braze/web-sdk/index') | undefined
     >()
     const { status, data } = useSession()
 
