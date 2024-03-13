@@ -61,13 +61,8 @@ export default function HomePage() {
                             Link to Aeroplan
                         </Button>
                     </div>
-                    <Image
-                        src={aeroplan}
-                        alt="aeroplan"
-                        className="h-[112px] w-[130px] object-cover object-right"
-                    />
                 </div>
-            </div>
-        </div>
+            )}
+        </>
     )
 }

@@ -1,11 +1,30 @@
+'use client'
 import JournieHeader from '@/app/components/journie-header/journie-header'
 import Deals from '@/app/components/deals/deals'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 export default function DealsPage() {
+    const router = useRouter()
+    const { data: session, status } = useSession()
+    useEffect(() => {
+        if (status === 'loading') {
+            return
+        }
+
+        if (!session || status !== 'authenticated') {
+            router.push('/')
+        }
+    }, [session, status, router])
     return (
-        <div className="h-screen items-center justify-center">
-            <JournieHeader headerText={'Journie Deals'} />
-            <Deals />
-        </div>
+        <>
+            {status === 'authenticated' && (
+                <div className="h-screen items-center justify-center">
+                    <JournieHeader headerText={'JOURNIE Deals'} />
+                    <Deals />
+                </div>
+            )}
+        </>
     )
 }

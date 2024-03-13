@@ -10,9 +10,9 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
             <ol className="items-center flex">
                 <li className="relative mb-6 w-full">
                     <div className="text-left text-blue-text mb-2 ml-2 font-bold">
-                        <button className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
+                        <p className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
                             0
-                        </button>
+                        </p>
                     </div>
                     <div className="flex items-center">
                         <div
@@ -27,9 +27,9 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                 </li>
                 <li className="relative mb-6 w-full">
                     <div className="text-left text-blue-text mb-2 font-bold">
-                        <button className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
+                        <p className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
                             150
-                        </button>
+                        </p>
                     </div>
                     <div className="flex items-center">
                         <div
@@ -46,22 +46,22 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                         )}
                     </div>
                     {points >= 150 && (
-                        <div className="text-left text-blue-text m-[-12px]">
-                            <button className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
+                        <div className="text-left text-blue-text m-[-15px] absolute top-[70px] left-[-10px]">
+                            <button className="text-white bg-[#173C9F] h-[32px] rounded text-[16px] px-2">
                                 Choose
                             </button>
                         </div>
                     )}
                 </li>
-                <li className="relative mb-6 w-full">
+                <li className="relative mb-6">
                     <div className="text-left text-blue-text mb-2 font-bold">
-                        <button className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
+                        <p className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
                             300
-                        </button>
+                        </p>
                     </div>
-                    <div className="flex items-center">
+                    <div className="items-center">
                         <div
-                            className={`flex w-full ${points < 10000 ? 'bg-gray-300' : 'bg-yellow-button'} h-2`}
+                            className={`flex  ${points < 10000 ? 'bg-gray-300' : 'bg-yellow-button'} h-2`}
                         ></div>
                     </div>
                     <div
@@ -73,13 +73,6 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                             <MdOutlineLocalGasStation />
                         )}
                     </div>
-                    {points >= 300 && (
-                        <div className="text-left text-blue-text m-[-12px]">
-                            <button className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
-                                Choose
-                            </button>
-                        </div>
-                    )}
                 </li>
             </ol>
         </div>
