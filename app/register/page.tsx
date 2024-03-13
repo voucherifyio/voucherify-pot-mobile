@@ -114,13 +114,13 @@ export default function RegisterPage() {
 
     return (
         <div className="h-screen items-center justify-center">
-            <div className="border-bottom-gray-200 flex h-[25%] w-full flex-col items-center justify-center border-b bg-white">
+            <div className="border-bottom-gray-200 flex h-[15%] w-full flex-col items-center justify-center border-b bg-white">
                 <h1 className="text-blue-text  text-xl font-extrabold">
                     Create your account
                 </h1>
                 <h4 className="text-blue-text">to start earning rewards</h4>
             </div>
-            <div className="bg-blue-background flex h-[75%] max-h-full w-full flex-col items-center justify-center">
+            <div className="bg-blue-background flex h-[85%] max-h-full w-full flex-col items-center justify-center">
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="bg-blue-background mt-6 h-[100%] w-full rounded-md px-2 shadow-md"
