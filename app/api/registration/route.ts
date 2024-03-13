@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     })
 
     if (
-        voucherifyCustomer?.source_id === body.phone ||
+        voucherifyCustomer?.source_id === body.phone &&
         voucherifyCustomer?.metadata?.customer_registered === true
     ) {
         return NextResponse.json(
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
         )
     }
 
-    if (!voucherifyCustomer?.id) {
+    if (!voucherifyCustomer?.id || (voucherifyCustomer.id && !voucherifyCustomer.metadata?.registered_customer)) {
         const analitycs = getAnalalitycs()
         analitycs.identify({
             userId: body.phone,
