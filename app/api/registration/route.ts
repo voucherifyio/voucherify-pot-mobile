@@ -16,7 +16,7 @@ type ModifiedBaseUserTraits = {
     postalCode?: string
 }
 
-const getAnalalitycs = () => {
+const getAnalytics = () => {
     if (!process.env.SEGMENTIO_SOURCE_WRITE_KEY) {
         throw new Error(
             'SEGMENTIO_SOURCE_WRITE_KEY not defined in env variables'
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (!voucherifyCustomer?.id || (voucherifyCustomer.id && !voucherifyCustomer.metadata?.registered_customer)) {
-        const analitycs = getAnalalitycs()
+        const analitycs = getAnalytics()
         analitycs.identify({
             userId: body.phone,
             traits: {

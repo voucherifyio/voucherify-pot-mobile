@@ -1,6 +1,6 @@
 import '@/app/components/ui/global.css'
 import { Metadata } from 'next'
-import SessionWrapper from './components/SessionWrapper'
+import SessionWrapper from './components/session-wrapper'
 import Navbar from '@/app/components/navbar'
 import { inter } from '@/app/components/ui/fonts'
 import { useSession } from 'next-auth/react'

@@ -1,4 +1,4 @@
-import { Customer, CustomerObject, VoucherifyServerSide } from '@voucherify/sdk'
+import { CustomerObject, VoucherifyServerSide } from '@voucherify/sdk'
 
 type CustomerParams = {
     phone: string

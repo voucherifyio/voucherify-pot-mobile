@@ -23,12 +23,10 @@ const Milestones: FC<MilestonesProps> = ({ userPhone, setError }) => {
                 if (res.status !== 200) {
                     setError('Cannot get user, please try again')
                 }
-                setLoyaltyPoints(data?.customer?.loyalty.points)
+                setLoyaltyPoints(data?.customer?.loyalty.points || 0)
             }
 
-            setTimeout(() => {
-                getCustomer()
-            }, 15000)
+            getCustomer()
         }
     }, [])
 
