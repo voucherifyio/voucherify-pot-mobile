@@ -4,6 +4,7 @@ import { useSession, signIn } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
+import Loading from '../components/loading/loading'
 
 interface Inputs {
     phone: string
@@ -59,11 +60,7 @@ export default function LoginPage() {
     }
 
     if (status === 'loading' || loading) {
-        return (
-            <div className="flex items-center justify-center w-100 h-screen">
-                <p>Loading...</p>
-            </div>
-        )
+        return <Loading />
     }
 
     return (

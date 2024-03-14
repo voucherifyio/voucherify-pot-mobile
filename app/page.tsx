@@ -5,6 +5,7 @@ import loginPage from '../public/images/login-page.jpeg'
 import { useRouter } from 'next/navigation'
 import Button from '@/app/components/ui/atoms/button'
 import { useSession } from 'next-auth/react'
+import Loading from './components/loading/loading'
 
 export default function LoginPage() {
     const { status } = useSession()
@@ -18,11 +19,7 @@ export default function LoginPage() {
     }
 
     if (status === 'loading') {
-        return (
-            <div className="flex items-center justify-center w-100 h-screen">
-                <p>Loading...</p>
-            </div>
-        )
+        return <Loading />
     }
 
     if (status === 'authenticated') {
@@ -34,6 +31,7 @@ export default function LoginPage() {
             <Image
                 src={loginPage}
                 alt="login-page"
+                priority
                 className="h-[68%] w-[200%] object-cover object-right"
             />
 
