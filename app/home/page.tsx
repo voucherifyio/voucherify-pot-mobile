@@ -7,7 +7,6 @@ import Milestones from '@/app/components/milestones/milestones'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useInitalizeBraze } from '../hooks/useInitializeBraze'
-import { useState } from 'react'
 import { signOut } from 'next-auth/react'
 import BrazePermissionModal from '../components/braze-permission-modal/braze-permission-modal'
 import DealsCarousel from '@/app/components/deals/deals-carousel'
@@ -22,7 +21,6 @@ export default function HomePage() {
         },
     })
     const { braze } = useInitalizeBraze()
-    const [error, setError] = useState<string | undefined>(undefined)
 
     if (status === 'loading') {
         return <Loading />
@@ -30,7 +28,8 @@ export default function HomePage() {
 
     return (
         <div className="h-screen items-center justify-center">
-            {data.user?.id && !braze?.isPushPermissionGranted() ? (
+            {(data.user?.id && !braze?.isPushPermissionGranted()) ||
+            data.user?.id !== braze?.getUser()?.getUserId() ? (
                 <BrazePermissionModal braze={braze} />
             ) : null}
             <div className="flex mt-4 px-4 border-b-2 h-[8%] w-full bg-white">
@@ -52,7 +51,7 @@ export default function HomePage() {
             <div className="flex-row  mx-border-b-2 h-[100%] w-full bg-blue-background">
                 {/*upselling*/}
                 <div className="h-[15%] bg-blue-background w-full">
-                    <Milestones userPhone={data.user?.id} setError={setError} />
+                    <Milestones userPhone={data.user?.id} />
                 </div>
                 {/*main*/}
                 <div className="h-[50%] w-full">

@@ -24,6 +24,7 @@ export const useInitalizeBraze = () => {
                 }
             )
             if (isInit) {
+                instanceBraze.changeUser(data.user.id)
                 return setBraze(instanceBraze)
             }
         }
