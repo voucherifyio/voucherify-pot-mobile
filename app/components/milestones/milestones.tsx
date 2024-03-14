@@ -8,7 +8,7 @@ type MilestonesProps = {
 }
 
 const Milestones: FC<MilestonesProps> = ({ userPhone, setError }) => {
-    const [loyaltyPoints, setLoyaltyPoints] = useState<number>(0)
+    const [loyaltyPoints, setLoyaltyPoints] = useState<number>(300)
 
     useEffect(() => {
         if (userPhone) {

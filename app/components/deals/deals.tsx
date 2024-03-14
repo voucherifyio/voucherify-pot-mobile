@@ -164,7 +164,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                     {dealsWithinReach.map((deal) => (
                         <div
                             key={deal.id}
-                            className="shadow-md min-h-[92px] rounded-xl m-4 flex bg-white text-blue-text w-[90%]"
+                            className="shadow-md min-h-[92px] rounded-xl m-2 flex bg-white text-blue-text w-[95%]"
                         >
                             <div className="flex flex-col p-2">
                                 <h3 className="text-[18px] font-extrabold">
