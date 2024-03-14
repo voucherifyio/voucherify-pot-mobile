@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useInitalizeBraze } from '../hooks/initializeBraze'
 import { useState } from 'react'
 import { signOut } from 'next-auth/react'
+import DealsCarousel from '@/app/components/deals/deals-carousel'
 
 export default function HomePage() {
     const router = useRouter()
@@ -53,7 +54,9 @@ export default function HomePage() {
                     <Milestones userPhone={data.user?.id} setError={setError} />
                 </div>
                 {/*main*/}
-                <div className="h-[50%] w-full"></div>
+                <div className="h-[50%] w-full">
+                    <DealsCarousel />
+                </div>
                 {/*partner hub*/}
                 <div className="h-[20%] mx-4 text-blue-text text-18 font-bold flex justify-between">
                     <div className="flex-col">
