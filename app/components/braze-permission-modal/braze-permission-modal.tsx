@@ -3,7 +3,7 @@ import Button from '../ui/atoms/button'
 
 type BrazePermissionModalProps = {
     braze:
-        | typeof import('/Users/patryk.smolarz/Desktop/Patryk/parkland-mobile/node_modules/@braze/web-sdk/index')
+        | typeof import('../../../node_modules/@braze/web-sdk/index')
         | undefined
 }
 
