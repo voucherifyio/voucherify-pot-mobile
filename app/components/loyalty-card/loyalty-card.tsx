@@ -35,7 +35,6 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ customerId }) => {
                         }
                     )
                     const data: LoyaltyCardResponse = await res.json()
-
                     setCardUrl(data.loyaltyCard.barcode.url)
                     setCardNumber(data.loyaltyCard.code)
                 } catch (err) {
@@ -68,7 +67,7 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ customerId }) => {
 
     return (
         <>
-            {cardUrl && (
+            {cardUrl && !error && (
                 <Image
                     src={cardUrl}
                     alt="loyaltyCardBarCode"
@@ -77,12 +76,14 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ customerId }) => {
                     className="max-w-auto"
                 />
             )}
-            <Button
-                onClick={handleCopy}
-                className="w-full my-4 bg-blue-background border border-blue-inputOutlineDefault"
-            >
-                {codeCopied ? 'Code copied!' : 'Copy number'}
-            </Button>
+            {cardNumber && !error && (
+                <Button
+                    onClick={handleCopy}
+                    className="w-full my-4 bg-blue-background border border-blue-inputOutlineDefault"
+                >
+                    {codeCopied ? 'Code copied!' : 'Copy number'}
+                </Button>
+            )}
             {error && (
                 <p className="text-red-500 font-extrabold">Error: {error}</p>
             )}

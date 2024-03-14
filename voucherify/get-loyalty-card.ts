@@ -1,4 +1,4 @@
-import { VoucherifyServerSide } from '@voucherify/sdk'
+import { VoucherifyServerSide, VouchersListResponse } from '@voucherify/sdk'
 
 type Params = {
     voucherify: ReturnType<typeof VoucherifyServerSide>
@@ -13,11 +13,12 @@ export const getLoyaltyCard = async (params: Params) => {
         if (customerId) {
             const vouchers = await voucherify.vouchers.list({
                 customer: customerId,
+                campaign: JOURNIE_LOYALTY_CAMPAIGN_NAME,
             })
-
             const journieLoyaltyCard = vouchers.vouchers.find(
                 (voucher) => voucher.campaign === JOURNIE_LOYALTY_CAMPAIGN_NAME
             )
+
             if (journieLoyaltyCard) {
                 const barcode = journieLoyaltyCard?.assets?.barcode
                 const code = journieLoyaltyCard?.code
