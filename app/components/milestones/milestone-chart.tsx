@@ -63,7 +63,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                     </div>
                     <div className="flex items-center">
                         <div
-                            className={`${points < 185.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                            className={`${points < 187.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                         ></div>
                     </div>
                     <div
