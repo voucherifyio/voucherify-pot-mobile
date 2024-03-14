@@ -16,7 +16,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                     </div>
                     <div className="flex items-center">
                         <div
-                            className={`${points < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2 z-0`}
+                            className={`${points < 37.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2 z-0`}
                         ></div>
                     </div>
                     <div
@@ -24,6 +24,36 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                     >
                         <MdOutlineLocalGasStation />
                     </div>
+                </li>
+                <li className="relative w-full">
+                    <div className="flex items-center">
+                        <div
+                            className={`${points < 75 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        ></div>
+                    </div>
+                    <div
+                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    ></div>
+                </li>
+                <li className="relative w-full">
+                    <div className="flex items-center">
+                        <div
+                            className={`${points < 112.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        ></div>
+                    </div>
+                    <div
+                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    ></div>
+                </li>
+                <li className="relative w-full">
+                    <div className="flex items-center">
+                        <div
+                            className={`${points < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        ></div>
+                    </div>
+                    <div
+                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    ></div>
                 </li>
                 <li className="relative mb-6 w-full">
                     <div className="text-left text-blue-text mb-2 font-bold">
@@ -33,7 +63,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                     </div>
                     <div className="flex items-center">
                         <div
-                            className={`${points < 300 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                            className={`${points < 185.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                         ></div>
                     </div>
                     <div
@@ -52,6 +82,36 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                             </button>
                         </div>
                     )}
+                </li>
+                <li className="relative w-full">
+                    <div className="flex items-center">
+                        <div
+                            className={`${points < 225 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        ></div>
+                    </div>
+                    <div
+                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    ></div>
+                </li>
+                <li className="relative w-full">
+                    <div className="flex items-center">
+                        <div
+                            className={`${points < 262.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        ></div>
+                    </div>
+                    <div
+                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    ></div>
+                </li>
+                <li className="relative w-full">
+                    <div className="flex items-center">
+                        <div
+                            className={`${points < 300 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        ></div>
+                    </div>
+                    <div
+                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    ></div>
                 </li>
                 <li className="relative mb-6">
                     <div className="text-left text-blue-text mb-2 font-bold">
