@@ -1,7 +1,7 @@
 'use client'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useInitalizeBraze } from '../hooks/initializeBraze'
+import { useInitalizeBraze } from '../hooks/useInitializeBraze'
 import Button from '@/app/components/ui/atoms/button'
 
 const Dashboard = () => {

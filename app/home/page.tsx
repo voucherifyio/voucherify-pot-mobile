@@ -6,9 +6,10 @@ import aeroplan from '@/public/images/aeroplan.png'
 import Milestones from '@/app/components/milestones/milestones'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useInitalizeBraze } from '../hooks/initializeBraze'
+import { useInitalizeBraze } from '../hooks/useInitializeBraze'
 import { useState } from 'react'
 import { signOut } from 'next-auth/react'
+import BrazePermissionModal from '../components/braze-permission-modal/braze-permission-modal'
 
 export default function HomePage() {
     const router = useRouter()
@@ -31,6 +32,9 @@ export default function HomePage() {
 
     return (
         <div className="h-screen items-center justify-center">
+            {data.user?.id && !braze?.isPushPermissionGranted() ? (
+                <BrazePermissionModal braze={braze} />
+            ) : null}
             <div className="flex mt-4 px-4 border-b-2 h-[8%] w-full bg-white">
                 <div className="w-[80%]">
                     <h1 className="text-blue-text text-2xl font-extrabold">
