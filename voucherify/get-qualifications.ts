@@ -31,8 +31,9 @@ export const getQualifications = async (params: Params) => {
             qualifications.redeemables.data =
                 qualifications.redeemables.data.filter(
                     (redeemable) =>
-                        redeemable.object === 'promotion_tier' ||
-                        redeemable.object === 'voucher'
+                        (redeemable.object === 'promotion_tier' ||
+                            redeemable.object === 'voucher') &&
+                        !redeemable.result.loyalty_card
                 )
             return qualifications
         } else {

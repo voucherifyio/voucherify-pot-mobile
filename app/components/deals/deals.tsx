@@ -196,6 +196,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                     ))}
                 </div>
             )}
+            <footer className="bg-blue-background h-[40px]"></footer>
             {/*{currentDealType === CurrentDeal.All && (*/}
             {/*    <div className="bg-blue-background mx-auto h-[80%] pt-2">*/}
             {/*        {deals.map((deal) => (*/}
