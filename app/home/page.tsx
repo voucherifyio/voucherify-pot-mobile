@@ -10,13 +10,14 @@ import { useInitalizeBraze } from '../hooks/useInitializeBraze'
 import { useState } from 'react'
 import { signOut } from 'next-auth/react'
 import BrazePermissionModal from '../components/braze-permission-modal/braze-permission-modal'
+import DealsCarousel from '@/app/components/deals/deals-carousel'
 
 export default function HomePage() {
     const router = useRouter()
     const { status, data } = useSession({
         required: true,
         onUnauthenticated() {
-            router.push('/login')
+            router.push('/')
         },
     })
     const { braze } = useInitalizeBraze()
@@ -57,7 +58,9 @@ export default function HomePage() {
                     <Milestones userPhone={data.user?.id} setError={setError} />
                 </div>
                 {/*main*/}
-                <div className="h-[50%] w-full"></div>
+                <div className="h-[50%] w-full">
+                    <DealsCarousel />
+                </div>
                 {/*partner hub*/}
                 <div className="h-[20%] mx-4 text-blue-text text-18 font-bold flex justify-between">
                     <div className="flex-col">
@@ -71,6 +74,11 @@ export default function HomePage() {
                             Link to Aeroplan
                         </Button>
                     </div>
+                    <Image
+                        src={aeroplan}
+                        alt="aeroplan"
+                        className="h-[112px] w-[130px] object-cover object-right"
+                    />
                 </div>
             </div>
         </div>

@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+    images: {
+        domains: ['dev.dl.voucherify.io'],
+    },
+}
 
 module.exports = nextConfig

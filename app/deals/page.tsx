@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react'
 export default function DealsPage() {
     const router = useRouter()
     const { data: session, status } = useSession()
+    const customerId = session?.user?.id
     useEffect(() => {
         if (status === 'loading') {
             return
@@ -22,7 +23,7 @@ export default function DealsPage() {
             {status === 'authenticated' && (
                 <div className="h-screen items-center justify-center">
                     <JournieHeader headerText={'JOURNIE Deals'} />
-                    <Deals />
+                    {customerId && <Deals customerId={customerId} />}
                 </div>
             )}
         </>
