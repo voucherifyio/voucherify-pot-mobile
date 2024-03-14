@@ -43,7 +43,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                 } else {
                     try {
                         const res = await fetch(
-                            `/api/qualifications?customerId=${customerId}`,
+                            `/api/voucherify/qualifications?customerId=${customerId}`,
                             {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
@@ -80,7 +80,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
     ) => {
         if (available && !active) {
             try {
-                const res = await fetch(`/api/validation?coupon=${id}`, {
+                const res = await fetch(`/api/voucherify/validation?coupon=${id}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                 })

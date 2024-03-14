@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { signOut } from 'next-auth/react'
+import Loading from '../components/loading/loading'
 
 type Inputs = {
     firstName?: string
@@ -33,7 +34,7 @@ export default function RegisterPage() {
 
     const registerCustomer = async (values: Inputs) => {
         try {
-            const res = await fetch(`/api/registration`, {
+            const res = await fetch(`/api/voucherify/registration`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...values }),
@@ -89,11 +90,7 @@ export default function RegisterPage() {
         'text-blue-formInput font-14 h-[16px] mb-2 block text-sm font-normal'
 
     if (status === 'loading' || loading) {
-        return (
-            <div className="flex items-center justify-center w-100 h-screen">
-                <p>Loading...</p>
-            </div>
-        )
+        return <Loading />
     }
 
     if (status === 'authenticated') {

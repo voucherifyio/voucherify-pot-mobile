@@ -11,6 +11,7 @@ import { useState } from 'react'
 import { signOut } from 'next-auth/react'
 import BrazePermissionModal from '../components/braze-permission-modal/braze-permission-modal'
 import DealsCarousel from '@/app/components/deals/deals-carousel'
+import Loading from '../components/loading/loading'
 
 export default function HomePage() {
     const router = useRouter()
@@ -24,11 +25,7 @@ export default function HomePage() {
     const [error, setError] = useState<string | undefined>(undefined)
 
     if (status === 'loading') {
-        return (
-            <div className="flex items-center justify-center w-100 h-screen">
-                <p>Loading...</p>
-            </div>
-        )
+        return <Loading />
     }
 
     return (

@@ -3,6 +3,7 @@ import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useInitalizeBraze } from '../hooks/useInitializeBraze'
 import Button from '@/app/components/ui/atoms/button'
+import Loading from '../components/loading/loading'
 
 const Dashboard = () => {
     const { braze } = useInitalizeBraze()
@@ -15,11 +16,7 @@ const Dashboard = () => {
     })
 
     if (status === 'loading') {
-        return (
-            <div className="flex items-center justify-center w-100 h-screen">
-                <p>Loading...</p>
-            </div>
-        )
+        return <Loading />
     }
 
     return (

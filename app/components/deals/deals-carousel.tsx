@@ -40,7 +40,7 @@ const DealsCarousel: React.FC<DealsCarouselProps> = () => {
                 } else {
                     try {
                         const res = await fetch(
-                            `/api/qualifications?customerId=${customerId}`,
+                            `/api/voucherify/qualifications?customerId=${customerId}`,
                             {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },

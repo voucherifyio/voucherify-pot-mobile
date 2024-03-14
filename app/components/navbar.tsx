@@ -3,7 +3,6 @@ import {
     MdCreditCard,
     MdHome,
     MdOutlineLocalOffer,
-    MdOutlineMap,
     MdStars,
 } from 'react-icons/md'
 import Link from 'next/link'
@@ -31,11 +30,6 @@ const Navbar = () => {
             icon: <MdCreditCard color="gray" />,
         },
         {
-            text: 'Map',
-            href: '/map',
-            icon: <MdOutlineMap color="gray" />,
-        },
-        {
             text: 'Rewards',
             href: '/rewards',
             icon: <MdStars color="gray" />,
@@ -45,7 +39,7 @@ const Navbar = () => {
         <>
             {status && status === 'authenticated' && (
                 <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200">
-                    <div className="grid h-full max-w-screen-sm grid-cols-5 mx-auto font-medium">
+                    <div className="flex justify-evenly h-full max-w-screen-sm grid-cols-5 mx-auto font-medium">
                         {MENU_LIST.map((item) => (
                             <Link
                                 key={item.text}
