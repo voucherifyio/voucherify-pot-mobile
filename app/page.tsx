@@ -31,6 +31,7 @@ export default function LoginPage() {
             <Image
                 src={loginPage}
                 alt="login-page"
+                priority
                 className="h-[68%] w-[200%] object-cover object-right"
             />
 
