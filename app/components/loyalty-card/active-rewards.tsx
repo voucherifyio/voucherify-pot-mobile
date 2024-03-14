@@ -26,8 +26,12 @@ const ActiveRewards = () => {
         }
     }, [])
 
-    const handleExpandCoupon = (title: string) => {
-        setExpandedReward((prevReward) => (prevReward === title ? null : title))
+    const handleExpandCoupon = (id: string) => {
+        if (expandedReward === id) {
+            setExpandedReward(null)
+        } else {
+            setExpandedReward(id)
+        }
     }
 
     return (
