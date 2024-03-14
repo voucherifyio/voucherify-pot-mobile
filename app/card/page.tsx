@@ -1,5 +1,5 @@
 'use client'
-import ActiveRewards from '@/app/components/active-rewards'
+import ActiveRewards from '@/app/components/loyalty-card/active-rewards'
 import JournieHeader from '@/app/components/journie-header/journie-header'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'

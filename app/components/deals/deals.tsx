@@ -1,37 +1,128 @@
 'use client'
-import Image from 'next/image'
 import Button from '@/app/components/ui/atoms/button'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+interface DealsProps {
+    customerId: string
+}
 
-interface Deals {
-    id?: string
-    title: string
+export interface DealWithinReach {
+    id: string
+    name?: string
+    object: 'campaign' | 'voucher'
+    created_at: string
+    result?: {
+        loyalty_card?: {
+            points?: number
+        }
+    }
+    applicable_to?: {}
+    inapplicable_to?: {}
     active: boolean
     available: boolean
-    eligibilityCondition?: string
 }
 
 enum CurrentDeal {
     All = 'All',
     WithinReach = 'Within reach',
 }
-const Deals = () => {
-    const deals: Deals[] = [
-        {
-            id: '001',
-            title: 'Free package of bubble gum',
-            active: false,
-            available: true,
-        },
-        { id: '002', title: 'Free coca-cola', active: true, available: true },
-        {
-            id: '003',
-            title: 'Free 6-pack of coca-cola',
-            active: false,
-            available: false,
-            eligibilityCondition: 'pump in 3 different location',
-        },
-    ]
+
+const Deals: React.FC<DealsProps> = ({ customerId }) => {
+    const [dealsWithinReach, setDealsWithinReach] = useState<DealWithinReach[]>(
+        []
+    )
+    const [error, setError] = useState<string | undefined>(undefined)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (customerId) {
+                const storedDealsWithinReach =
+                    localStorage.getItem('dealsWithinReach')
+                if (storedDealsWithinReach) {
+                    const parsedDeals = JSON.parse(storedDealsWithinReach)
+                    setDealsWithinReach(parsedDeals)
+                } else {
+                    try {
+                        const res = await fetch(
+                            `/api/qualifications?customerId=${customerId}`,
+                            {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                            }
+                        )
+                        const data = await res.json()
+                        data.qualifications.redeemables.data.forEach(
+                            (qualification: DealWithinReach) => {
+                                qualification.active = false
+                                qualification.available = true
+                            }
+                        )
+                        setDealsWithinReach(
+                            data.qualifications.redeemables.data
+                        )
+                    } catch (err) {
+                        if (err instanceof Error) {
+                            return setError(err.message)
+                        }
+                        return err
+                    }
+                }
+            }
+        }
+        if (!dealsWithinReach || dealsWithinReach.length === 0) {
+            fetchData().catch(console.error)
+        }
+    }, [])
+
+    const handleActivateCoupon = async (
+        id: string,
+        active: boolean,
+        available: boolean
+    ) => {
+        if (available && !active) {
+            try {
+                const res = await fetch(`/api/validation?coupon=${id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                })
+                const data = await res.json()
+                if (data.validCoupons.valid) {
+                    const updatedDeals = dealsWithinReach.map((deal) => {
+                        if (deal.id === id) {
+                            return {
+                                ...deal,
+                                active: true,
+                                barcode: data.validCoupons.barcode,
+                            }
+                        }
+                        return deal
+                    })
+                    setDealsWithinReach(updatedDeals)
+                    localStorage.setItem(
+                        'dealsWithinReach',
+                        JSON.stringify(updatedDeals)
+                    )
+                }
+            } catch (err) {
+                if (err instanceof Error) {
+                    return setError(err.message)
+                }
+                return err
+            }
+        }
+        if (active) {
+            const updatedDeals = dealsWithinReach.map((deal) => {
+                if (deal.id === id) {
+                    return { ...deal, active: false }
+                }
+                return deal
+            })
+            setDealsWithinReach(updatedDeals)
+            localStorage.setItem(
+                'dealsWithinReach',
+                JSON.stringify(updatedDeals)
+            )
+        }
+    }
 
     const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
         CurrentDeal.WithinReach
@@ -69,67 +160,74 @@ const Deals = () => {
                 </li>
             </ul>
             {currentDealType === CurrentDeal.WithinReach && (
-                <div className="bg-blue-background mx-auto h-[80%] pt-2">
-                    {deals
-                        .filter((deal) => deal.available)
-                        .map((deal) => (
-                            <div
-                                key={deal.id}
-                                className="shadow-md h-[92px] rounded-xl m-4 flex bg-white text-blue-text w-[90%]"
-                            >
-                                <div className="flex flex-col p-2">
-                                    <h3 className="text-[18px] font-extrabold">
-                                        {deal?.title}
-                                    </h3>
-                                    <Button
-                                        buttonType={
-                                            deal.active
-                                                ? 'activeCoupon'
-                                                : 'yellow'
-                                        }
-                                        className="mt-2 px-2 max-h-[32px] max-w-[149px] text-[16px]"
-                                    >
-                                        {deal.active
-                                            ? '✓ Active coupon'
-                                            : 'Activate coupon'}
-                                    </Button>
-                                </div>
-                            </div>
-                        ))}
-                </div>
-            )}
-            {currentDealType === CurrentDeal.All && (
-                <div className="bg-blue-background mx-auto h-[80%] pt-2">
-                    {deals.map((deal) => (
+                <div className="bg-blue-background mx-auto h-auto pt-2">
+                    {dealsWithinReach.map((deal) => (
                         <div
                             key={deal.id}
-                            className="shadow-md h-[92px] rounded-xl m-4 flex bg-white text-blue-text w-[90%]"
+                            className="shadow-md min-h-[92px] rounded-xl m-4 flex bg-white text-blue-text w-[90%]"
                         >
                             <div className="flex flex-col p-2">
                                 <h3 className="text-[18px] font-extrabold">
-                                    {deal?.title}
+                                    {deal?.name || deal.id}
                                 </h3>
-                                {deal.available ? (
+                                {deal.object === 'voucher' && (
                                     <Button
+                                        onClick={() =>
+                                            handleActivateCoupon(
+                                                deal.id,
+                                                deal.active,
+                                                deal.available
+                                            )
+                                        }
                                         buttonType={
                                             deal.active
                                                 ? 'activeCoupon'
                                                 : 'yellow'
                                         }
-                                        className="mt-2 px-2 max-h-[32px] max-w-[149px] text-[16px]"
+                                        className="mt-4 px-2 max-h-[32px] max-w-[149px] text-[16px]"
                                     >
                                         {deal.active
                                             ? '✓ Active coupon'
                                             : 'Activate coupon'}
                                     </Button>
-                                ) : (
-                                    <p>{deal?.eligibilityCondition}</p>
                                 )}
                             </div>
                         </div>
                     ))}
                 </div>
             )}
+            {/*{currentDealType === CurrentDeal.All && (*/}
+            {/*    <div className="bg-blue-background mx-auto h-[80%] pt-2">*/}
+            {/*        {deals.map((deal) => (*/}
+            {/*            <div*/}
+            {/*                key={deal.id}*/}
+            {/*                className="shadow-md h-[92px] rounded-xl m-4 flex bg-white text-blue-text w-[90%]"*/}
+            {/*            >*/}
+            {/*                <div className="flex flex-col p-2">*/}
+            {/*                    <h3 className="text-[18px] font-extrabold">*/}
+            {/*                        {deal?.title}*/}
+            {/*                    </h3>*/}
+            {/*                    {deal.available ? (*/}
+            {/*                        <Button*/}
+            {/*                            buttonType={*/}
+            {/*                                deal.active*/}
+            {/*                                    ? 'activeCoupon'*/}
+            {/*                                    : 'yellow'*/}
+            {/*                            }*/}
+            {/*                            className="mt-2 px-2 max-h-[32px] max-w-[149px] text-[16px]"*/}
+            {/*                        >*/}
+            {/*                            {deal.active*/}
+            {/*                                ? '✓ Active coupon'*/}
+            {/*                                : 'Activate coupon'}*/}
+            {/*                        </Button>*/}
+            {/*                    ) : (*/}
+            {/*                        <p>{deal?.eligibilityCondition}</p>*/}
+            {/*                    )}*/}
+            {/*                </div>*/}
+            {/*            </div>*/}
+            {/*        ))}*/}
+            {/*    </div>*/}
+            {/*)}*/}
         </div>
     )
 }

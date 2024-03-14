@@ -25,7 +25,6 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ customerId }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            // const customerId = session?.user?.id
             if (customerId) {
                 try {
                     const res = await fetch(
