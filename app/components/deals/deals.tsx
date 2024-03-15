@@ -98,7 +98,9 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
             activeDealsIdsWithinReach.push(id)
         } else {
             activeDealsIdsWithinReach = activeDealsIdsWithinReach.filter(
-                (dealId: string) => dealId !== id
+                (dealId: string) =>
+                    dealsWithinReach.some((deal) => deal.id === dealId) &&
+                    dealId !== id
             )
         }
 
