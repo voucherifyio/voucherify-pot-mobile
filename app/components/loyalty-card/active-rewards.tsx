@@ -17,12 +17,16 @@ const ActiveRewards = () => {
     useEffect(() => {
         const dealsWithinReach = localStorage.getItem('dealsWithinReach')
         if (dealsWithinReach) {
-            const parsedDeals = JSON.parse(dealsWithinReach)
-            const activeRewards = parsedDeals.filter(
-                //todo types
-                (deal: any) => deal.active === true
+            let parsedDeals = JSON.parse(dealsWithinReach)
+            let activeDealsIdsWithinReach = JSON.parse(
+                localStorage.getItem('activeDealsIdsWithinReach') || '[]'
             )
-            setActiveRewards(activeRewards)
+
+            parsedDeals = parsedDeals.map((deal) => ({
+                ...deal,
+                active: activeDealsIdsWithinReach.includes(deal.id),
+            }))
+            setActiveRewards(parsedDeals.filter((deal) => deal.active))
         }
     }, [])
 
