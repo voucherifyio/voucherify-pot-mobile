@@ -12,7 +12,7 @@ const JournieHeader: React.FC<JournieHeaderProps> = ({ headerText }) => {
         router.push('/home')
     }
     return (
-        <div className="flex px-4 border-b h-[8%] w-full bg-white">
+        <div className="flex px-4 border-b w-full bg-white">
             <div className="w-full flex flex-row items-center">
                 <div>
                     <Button onClick={handleGoToPreviousPageClick}>

@@ -1,43 +1,32 @@
 'use client'
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import MilestoneChart from '@/app/components/milestones/milestone-chart'
+import { useGetCustomer } from '@/app/hooks/useGetCustomer'
+import { CAMPAIGNS } from '@/enum/campaigns'
 
-type MilestonesProps = {
-    userPhone: string | undefined | null
-}
-
-const Milestones: FC<MilestonesProps> = ({ userPhone }) => {
-    const [loyaltyPoints, setLoyaltyPoints] = useState<number>(0)
-
-    useEffect(() => {
-        if (userPhone) {
-            const getCustomer = async () => {
-                const res = await fetch(
-                    `/api/voucherify/get-customer?phone=${userPhone}`,
-                    {
-                        method: 'GET',
-                    }
-                )
-                const data = await res.json()
-                if (res.status !== 200) {
-                    return true
-                }
-                setLoyaltyPoints(data?.customer?.loyalty.points || 0)
-            }
-
-            getCustomer()
-        }
-    }, [])
+const Milestones = () => {
+    const { customer } = useGetCustomer()
+    const mainLoyaltyPoints =
+        customer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
+            ?.points || 0
+    const promoPoints =
+        customer?.loyalty.campaigns?.[CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM]
+            ?.points || 0
 
     return (
         <div className="p-4">
             <header className="mb-2">
                 <h4 className="text-blue-text text-16">
                     Your Points
-                    <span className="pl-2 font-extrabold">{loyaltyPoints}</span>
+                    <span className="pl-2 font-extrabold">
+                        {mainLoyaltyPoints}
+                    </span>
                 </h4>
             </header>
-            <MilestoneChart points={loyaltyPoints} />
+            <MilestoneChart
+                mainLoyaltyPoints={mainLoyaltyPoints}
+                customerId={customer?.id}
+                promoPoints={promoPoints}
+            />
         </div>
     )
 }

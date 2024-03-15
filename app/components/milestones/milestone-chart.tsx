@@ -1,10 +1,38 @@
 'use client'
+import { useState } from 'react'
 import { MdLock, MdOutlineLocalGasStation } from 'react-icons/md'
+import RewardsModal from '../rewards-modal.ts/rewards-modal'
 
 interface MilestoneChartProps {
-    points: number
+    mainLoyaltyPoints: number
+    promoPoints: number
+    customerId: string | null | undefined
 }
-const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
+const MilestoneChart: React.FC<MilestoneChartProps> = ({
+    mainLoyaltyPoints,
+    promoPoints,
+    customerId,
+}) => {
+    const [rewards, setRewards] = useState([])
+    const [rewardModalOpened, setRewardModalOpened] = useState(false)
+
+    const listMemberRewards = async (customerId: string | null | undefined) => {
+        const res = await fetch(
+            `api/voucherify/list-member-rewards?customerId=${customerId}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        )
+        const { rewards } = await res.json()
+        if (res.status !== 200) {
+            return false
+        }
+        setRewards(rewards)
+    }
+
     return (
         <div className="p-4">
             <ol className="items-center flex">
@@ -16,7 +44,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                     </div>
                     <div className="flex items-center">
                         <div
-                            className={`${points < 37.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2 z-0`}
+                            className={`${mainLoyaltyPoints < 37.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2 z-0`}
                         ></div>
                     </div>
                     <div
@@ -28,7 +56,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                 <li className="relative w-full">
                     <div className="flex items-center">
                         <div
-                            className={`${points < 75 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                            className={`${mainLoyaltyPoints < 75 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                         ></div>
                     </div>
                     <div
@@ -38,7 +66,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                 <li className="relative w-full">
                     <div className="flex items-center">
                         <div
-                            className={`${points < 112.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                            className={`${mainLoyaltyPoints < 112.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                         ></div>
                     </div>
                     <div
@@ -48,7 +76,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                 <li className="relative w-full">
                     <div className="flex items-center">
                         <div
-                            className={`${points < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                            className={`${mainLoyaltyPoints < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                         ></div>
                     </div>
                     <div
@@ -63,30 +91,36 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                     </div>
                     <div className="flex items-center">
                         <div
-                            className={`${points < 187.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                            className={`${mainLoyaltyPoints < 187.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                         ></div>
                     </div>
                     <div
-                        className={`${points < 150 ? 'bg-gray-300' : 'bg-yellow-button'} relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text`}
+                        className={`${mainLoyaltyPoints < 150 ? 'bg-gray-300' : 'bg-yellow-button'} relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     >
-                        {points < 150 ? (
+                        {mainLoyaltyPoints < 150 ? (
                             <MdLock />
                         ) : (
                             <MdOutlineLocalGasStation />
                         )}
                     </div>
-                    {points >= 150 && (
+                    {/* {promoPoints <= 1 && (
                         <div className="text-left text-blue-text m-[-15px] absolute top-[70px] left-[-10px]">
-                            <button className="text-white bg-[#173C9F] h-[32px] rounded text-[16px] px-2">
+                            <button
+                                onClick={() => {
+                                    listMemberRewards(customerId)
+                                    setRewardModalOpened(true)
+                                }}
+                                className="text-white bg-[#173C9F] h-[32px] rounded text-[16px] px-2"
+                            >
                                 Choose
                             </button>
                         </div>
-                    )}
+                    )} */}
                 </li>
                 <li className="relative w-full">
                     <div className="flex items-center">
                         <div
-                            className={`${points < 225 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                            className={`${mainLoyaltyPoints < 225 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                         ></div>
                     </div>
                     <div
@@ -96,7 +130,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                 <li className="relative w-full">
                     <div className="flex items-center">
                         <div
-                            className={`${points < 262.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                            className={`${mainLoyaltyPoints < 262.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                         ></div>
                     </div>
                     <div
@@ -106,7 +140,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                 <li className="relative w-full">
                     <div className="flex items-center">
                         <div
-                            className={`${points < 300 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                            className={`${mainLoyaltyPoints < 300 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                         ></div>
                     </div>
                     <div
@@ -121,13 +155,13 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                     </div>
                     <div className="items-center">
                         <div
-                            className={`flex  ${points < 10000 ? 'bg-gray-300' : 'bg-yellow-button'} h-2`}
+                            className={`flex  ${mainLoyaltyPoints < 10000 ? 'bg-gray-300' : 'bg-yellow-button'} h-2`}
                         ></div>
                     </div>
                     <div
-                        className={`relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text ${points < 300 ? 'bg-gray-300' : 'bg-yellow-button'}`}
+                        className={`relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text ${mainLoyaltyPoints < 300 ? 'bg-gray-300' : 'bg-yellow-button'}`}
                     >
-                        {points < 300 ? (
+                        {mainLoyaltyPoints < 300 ? (
                             <MdLock />
                         ) : (
                             <MdOutlineLocalGasStation />
@@ -135,6 +169,27 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({ points }) => {
                     </div>
                 </li>
             </ol>
+            {promoPoints <= 1 && (
+                <div className="flex justify-center relative">
+                    {rewardModalOpened ? (
+                        <RewardsModal
+                            rewards={rewards}
+                            rewardModalOpened={rewardModalOpened}
+                            setRewardModalOpened={setRewardModalOpened}
+                            customerId={customerId}
+                        />
+                    ) : null}
+                    <button
+                        onClick={() => {
+                            listMemberRewards(customerId)
+                            setRewardModalOpened(true)
+                        }}
+                        className="text-white bg-[#173C9F] h-[32px] rounded text-[16px] px-2"
+                    >
+                        Choose
+                    </button>
+                </div>
+            )}
         </div>
     )
 }

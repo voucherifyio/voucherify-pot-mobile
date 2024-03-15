@@ -27,15 +27,15 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex h-screen flex-col items-center justify-center bg-blue-100">
+        <div className="flex-1 flex flex-col items-center justify-center bg-blue-100">
             <Image
                 src={loginPage}
                 alt="login-page"
                 priority
-                className="h-[68%] w-[200%] object-cover object-right"
+                className="object-cover object-right flex-1"
             />
 
-            <div className="mt-6 h-[30%] w-full max-w-screen-sm text-center">
+            <div className="flex-1 max-h-60 mt-6 w-full max-w-screen-sm text-center">
                 <h1 className="text-blue-text mb-6 px-5 text-left text-xl font-bold leading-7">
                     Register to Journie
                 </h1>

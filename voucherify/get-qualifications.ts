@@ -1,9 +1,12 @@
+import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { VoucherifyServerSide } from '@voucherify/sdk'
 
 type Params = {
     voucherify: ReturnType<typeof VoucherifyServerSide>
     customerId: string
-    scenario: 'AUDIENCE_ONLY'
+    scenario:
+        | QUALIFICATION_SCENARIO.AUDIENCE_ONLY
+        | QUALIFICATION_SCENARIO.CUSTOMER_WALLET
     options?: {
         limit?: number
         expand?: ['reedemable']

@@ -1,5 +1,6 @@
 'use client'
 import Button from '@/app/components/ui/atoms/button'
+import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { useEffect, useState } from 'react'
 interface DealsProps {
     customerId: string
@@ -43,10 +44,15 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                 } else {
                     try {
                         const res = await fetch(
-                            `/api/voucherify/qualifications?customerId=${customerId}`,
+                            `/api/voucherify/qualifications`,
                             {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    customerId,
+                                    scenario:
+                                        QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
+                                }),
                             }
                         )
                         const data = await res.json()
@@ -80,10 +86,13 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
     ) => {
         if (available && !active) {
             try {
-                const res = await fetch(`/api/voucherify/validation?coupon=${id}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                })
+                const res = await fetch(
+                    `/api/voucherify/validation?coupon=${id}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                    }
+                )
                 const data = await res.json()
                 if (data.validCoupons.valid) {
                     const updatedDeals = dealsWithinReach.map((deal) => {
@@ -128,7 +137,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         CurrentDeal.WithinReach
     )
     return (
-        <div className="bg-blue-background h-[90%] pt-2">
+        <div className="bg-blue-background flex-1 pt-2">
             <ul className="my-2 justify-center flex text-[16px] font-bold text-center text-gray-500">
                 <li>
                     <button
@@ -196,7 +205,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                     ))}
                 </div>
             )}
-            <footer className="bg-blue-background h-[40px]"></footer>
+            {/* <footer className="bg-blue-background h-[40px]"></footer> */}
             {/*{currentDealType === CurrentDeal.All && (*/}
             {/*    <div className="bg-blue-background mx-auto h-[80%] pt-2">*/}
             {/*        {deals.map((deal) => (*/}

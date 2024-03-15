@@ -2,14 +2,13 @@ import { getVoucherify } from '@/voucherify/voucherify-config'
 import { getQualifications } from '@/voucherify/get-qualifications'
 
 export async function POST(req: Request) {
-    const { searchParams } = new URL(req.url)
-    const customerId = searchParams.get('customerId')
+    const { customerId, scenario } = await req.json()
 
     if (customerId) {
         const qualifications = await getQualifications({
-            customerId: customerId,
+            customerId,
             voucherify: getVoucherify(),
-            scenario: 'AUDIENCE_ONLY',
+            scenario
         })
 
         return Response.json(
