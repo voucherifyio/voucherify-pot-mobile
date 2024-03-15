@@ -1,6 +1,7 @@
 'use client'
 import Button from '@/app/components/ui/atoms/button'
 import { useEffect, useState } from 'react'
+import Toast from '@/app/components/ui/atoms/toast'
 interface DealsProps {
     customerId: string
 }
@@ -66,7 +67,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                     )
                 } catch (err) {
                     if (err instanceof Error) {
-                        return setError(err.message)
+                        setError(err.message)
                     }
                     return err
                 }
@@ -115,6 +116,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
     )
     return (
         <div className="bg-blue-background h-[90%] pt-2">
+            {error && <Toast toastText={error} toastType="error" />}
             <ul className="my-2 justify-center flex text-[16px] font-bold text-center text-gray-500">
                 <li>
                     <button

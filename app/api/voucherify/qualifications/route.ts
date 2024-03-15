@@ -5,16 +5,19 @@ export async function POST(req: Request) {
     const customerId = searchParams.get('customerId')
 
     if (customerId) {
-        const promotionTiersAndVouchers = await getQualifications({
-            customerId: customerId,
-            voucherify: getVoucherify(),
-            scenario: 'AUDIENCE_ONLY',
-        })
+        try {
+            const promotionTiersAndVouchers = await getQualifications({
+                customerId: customerId,
+                voucherify: getVoucherify(),
+                scenario: 'AUDIENCE_ONLY',
+            })
 
-        return Response.json(
-            { qualifications: promotionTiersAndVouchers },
-            { status: 200 }
-        )
+            return Response.json(
+                { qualifications: promotionTiersAndVouchers },
+                { status: 200 }
+            )
+        } catch (err) {
+            return Response.json({ status: 400 })
+        }
     }
-    return Response.json({ status: 400 })
 }

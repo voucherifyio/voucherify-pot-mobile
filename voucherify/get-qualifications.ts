@@ -38,10 +38,13 @@ export const getQualifications = async (params: Params) => {
             return qualifications
         } else {
             console.error(
-                `Could not get qualifications for campaign: ${JOURNIE_LOYALTY_CAMPAIGN_NAME}`
+                `[voucherify/qualifications] Missing customerId or scenario`
             )
         }
-    } catch (err) {
-        console.error(err)
+    } catch (err: any) {
+        console.error(
+            `Could not get qualifications for ${JOURNIE_LOYALTY_CAMPAIGN_NAME} campaign. ${err}`
+        )
+        throw new Error(err?.message)
     }
 }
