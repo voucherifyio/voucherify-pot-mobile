@@ -4,11 +4,10 @@ import MilestoneChart from '@/app/components/milestones/milestone-chart'
 
 type MilestonesProps = {
     userPhone: string | undefined | null
-    setError: Dispatch<SetStateAction<string | undefined>>
 }
 
-const Milestones: FC<MilestonesProps> = ({ userPhone, setError }) => {
-    const [loyaltyPoints, setLoyaltyPoints] = useState<number>(300)
+const Milestones: FC<MilestonesProps> = ({ userPhone }) => {
+    const [loyaltyPoints, setLoyaltyPoints] = useState<number>(0)
 
     useEffect(() => {
         if (userPhone) {
@@ -21,14 +20,12 @@ const Milestones: FC<MilestonesProps> = ({ userPhone, setError }) => {
                 )
                 const data = await res.json()
                 if (res.status !== 200) {
-                    setError('Cannot get user, please try again')
+                    return true
                 }
-                setLoyaltyPoints(data?.customer?.loyalty.points)
+                setLoyaltyPoints(data?.customer?.loyalty.points || 0)
             }
 
-            setTimeout(() => {
-                getCustomer()
-            }, 15000)
+            getCustomer()
         }
     }, [])
 

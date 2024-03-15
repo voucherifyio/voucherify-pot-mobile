@@ -24,10 +24,7 @@ export const useInitalizeBraze = () => {
                 }
             )
             if (isInit) {
-                braze?.changeUser(data.user.id)
-                instanceBraze.automaticallyShowInAppMessages()
-                instanceBraze.requestPushPermission()
-                instanceBraze.openSession()
+                instanceBraze.changeUser(data.user.id)
                 return setBraze(instanceBraze)
             }
         }

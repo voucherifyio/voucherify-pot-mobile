@@ -28,7 +28,7 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ customerId }) => {
             if (customerId) {
                 try {
                     const res = await fetch(
-                        `/api/loyalty-card?customerId=${customerId}`,
+                        `/api/voucherify/loyalty-card?customerId=${customerId}`,
                         {
                             method: 'GET',
                             headers: { 'Content-Type': 'application/json' },

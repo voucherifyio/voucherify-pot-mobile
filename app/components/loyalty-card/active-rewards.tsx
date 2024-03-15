@@ -71,9 +71,16 @@ const ActiveRewards = () => {
     return (
         <div className="mt-4">
             <header>
-                <h1 className="mb-4 text-[18px] font-bold text-blue-text">
-                    Active rewards/coupons
-                </h1>
+                {activeRewards.length > 0 && (
+                    <h1 className="mb-4 text-[18px] font-bold text-blue-text">
+                        Active rewards/coupons
+                    </h1>
+                )}
+                {activeRewards.length === 0 && (
+                    <p className="mb-4 text-[14px] font-bold text-blue-text">
+                        No active coupons.
+                    </p>
+                )}
             </header>
             <div>
                 {activeRewards.map((reward) => (

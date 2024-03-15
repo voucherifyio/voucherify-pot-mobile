@@ -6,10 +6,11 @@ import aeroplan from '@/public/images/aeroplan.png'
 import Milestones from '@/app/components/milestones/milestones'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useInitalizeBraze } from '../hooks/initializeBraze'
-import { useState } from 'react'
+import { useInitalizeBraze } from '../hooks/useInitializeBraze'
 import { signOut } from 'next-auth/react'
+import BrazePermissionModal from '../components/braze-permission-modal/braze-permission-modal'
 import DealsCarousel from '@/app/components/deals/deals-carousel'
+import Loading from '../components/loading/loading'
 
 export default function HomePage() {
     const router = useRouter()
@@ -20,18 +21,17 @@ export default function HomePage() {
         },
     })
     const { braze } = useInitalizeBraze()
-    const [error, setError] = useState<string | undefined>(undefined)
 
     if (status === 'loading') {
-        return (
-            <div className="flex items-center justify-center w-100 h-screen">
-                <p>Loading...</p>
-            </div>
-        )
+        return <Loading />
     }
 
     return (
         <div className="h-screen items-center justify-center">
+            {(data.user?.id && !braze?.isPushPermissionGranted()) ||
+            data.user?.id !== braze?.getUser()?.getUserId() ? (
+                <BrazePermissionModal braze={braze} />
+            ) : null}
             <div className="flex mt-4 px-4 border-b-2 h-[8%] w-full bg-white">
                 <div className="w-[80%]">
                     <h1 className="text-blue-text text-2xl font-extrabold">
@@ -51,7 +51,7 @@ export default function HomePage() {
             <div className="flex-row  mx-border-b-2 h-[100%] w-full bg-blue-background">
                 {/*upselling*/}
                 <div className="h-[15%] bg-blue-background w-full">
-                    <Milestones userPhone={data.user?.id} setError={setError} />
+                    <Milestones userPhone={data.user?.id} />
                 </div>
                 {/*main*/}
                 <div className="h-[50%] w-full">
