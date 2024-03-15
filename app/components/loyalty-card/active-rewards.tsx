@@ -36,7 +36,7 @@ const ActiveRewards = () => {
 
             const fetchBarcode = async (deal: DealWithinReach) => {
                 const barcodesRes = await fetch(
-                    `/api/get-voucher-barcode?coupon=${deal.id}`,
+                    `/api/voucherify/voucher-barcode?coupon=${deal.id}`,
                     {
                         method: 'GET',
                         headers: { 'Content-Type': 'application/json' },

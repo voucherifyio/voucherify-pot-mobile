@@ -37,7 +37,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
             if (customerId) {
                 try {
                     const res = await fetch(
-                        `/api/qualifications?customerId=${customerId}`,
+                        `/api/voucherify/qualifications?customerId=${customerId}`,
                         {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
