@@ -51,10 +51,14 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                     )
 
                     const updatedDeals =
-                        data.qualifications.redeemables.data.map((deal) => ({
-                            ...deal,
-                            active: activeDealsIdsWithinReach.includes(deal.id),
-                        }))
+                        data.qualifications.redeemables.data.map(
+                            (deal: DealWithinReach) => ({
+                                ...deal,
+                                active: activeDealsIdsWithinReach.includes(
+                                    deal.id
+                                ),
+                            })
+                        )
                     setDealsWithinReach(updatedDeals)
                     localStorage.setItem(
                         'dealsWithinReach',
@@ -74,49 +78,34 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
     }, [])
 
     const handleActivateCoupon = async (id: string, active: boolean) => {
+        let updatedDeals
         if (!active) {
-            const updatedDeals = dealsWithinReach.map((deal) => {
-                if (deal.id === id) {
-                    return { ...deal, active: true }
-                }
-                return deal
-            })
-            setDealsWithinReach(updatedDeals)
-            let activeDealsIdsWithinReach = JSON.parse(
-                localStorage.getItem('activeDealsIdsWithinReach') || 'null'
+            updatedDeals = dealsWithinReach.map((deal) =>
+                deal.id === id ? { ...deal, active: true } : deal
             )
-
-            if (!activeDealsIdsWithinReach) {
-                activeDealsIdsWithinReach = []
-            }
-
-            activeDealsIdsWithinReach.push(id)
-
-            localStorage.setItem(
-                'activeDealsIdsWithinReach',
-                JSON.stringify(activeDealsIdsWithinReach)
-            )
-        } else if (active) {
-            const updatedDeals = dealsWithinReach.map((deal) => {
-                if (deal.id === id) {
-                    return { ...deal, active: false }
-                }
-                return deal
-            })
-            setDealsWithinReach(updatedDeals)
-            let activeDealsIdsWithinReach = JSON.parse(
-                localStorage.getItem('activeDealsIdsWithinReach') || 'null'
-            )
-
-            localStorage.setItem(
-                'activeDealsIdsWithinReach',
-                JSON.stringify(
-                    activeDealsIdsWithinReach.filter(
-                        (dealId: string) => dealId !== id
-                    )
-                )
+        } else {
+            updatedDeals = dealsWithinReach.map((deal) =>
+                deal.id === id ? { ...deal, active: false } : deal
             )
         }
+        setDealsWithinReach(updatedDeals)
+
+        let activeDealsIdsWithinReach = JSON.parse(
+            localStorage.getItem('activeDealsIdsWithinReach') || '[]'
+        )
+
+        if (!active) {
+            activeDealsIdsWithinReach.push(id)
+        } else {
+            activeDealsIdsWithinReach = activeDealsIdsWithinReach.filter(
+                (dealId: string) => dealId !== id
+            )
+        }
+
+        localStorage.setItem(
+            'activeDealsIdsWithinReach',
+            JSON.stringify(activeDealsIdsWithinReach)
+        )
     }
 
     const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
