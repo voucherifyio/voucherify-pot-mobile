@@ -37,7 +37,7 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     customerId,
-                    scenario: QUALIFICATION_SCENARIO.CUSTOMER_WALLET,
+                    scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
                 }),
             })
 
@@ -64,7 +64,7 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
                             <h3 className="text-[18px] font-extrabold">
                                 {reward?.name || reward.id}
                             </h3>
-                            {reward.object === 'voucher' && (
+                            {/* {reward.object === 'voucher' && (
                                 <Button
                                     // onClick={() =>
                                     //     handleActivateCoupon(
@@ -84,7 +84,7 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
                                         ? '✓ Active coupon'
                                         : 'Activate coupon'}
                                 </Button>
-                            )}
+                            )} */}
                         </div>
                     </div>
                 ))
