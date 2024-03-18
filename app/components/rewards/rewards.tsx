@@ -37,7 +37,7 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     customerId,
-                    scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
+                    scenario: QUALIFICATION_SCENARIO.CUSTOMER_WALLET,
                 }),
             })
 
@@ -46,7 +46,6 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
             const filteredRewards = allRewards.filter(
                 (reward) => reward.metadata.Reward
             )
-            console.log(filteredRewards, '?????')
             setRewards(filteredRewards)
         }
 

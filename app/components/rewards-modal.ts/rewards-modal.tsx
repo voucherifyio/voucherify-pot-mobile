@@ -40,8 +40,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
         if (res.status !== 200) {
             console.log(data)
         }
-        console.log(data, 'RES')
-        return true
+        setConfimration(false)
     }
 
     const pattern = /\(150\s*Point[s]*\s*Reward\)/

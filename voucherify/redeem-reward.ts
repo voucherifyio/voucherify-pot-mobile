@@ -24,6 +24,6 @@ export const redeemReward = async (params: Params) => {
         campaign.code,
         { reward: { id: rewardId } }
     )
-    console.log(redeemedReward, 'redeeeeeem')
+
     return redeemedReward
 }

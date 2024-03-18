@@ -103,19 +103,6 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                             <MdOutlineLocalGasStation />
                         )}
                     </div>
-                    {/* {promoPoints <= 1 && (
-                        <div className="text-left text-blue-text m-[-15px] absolute top-[70px] left-[-10px]">
-                            <button
-                                onClick={() => {
-                                    listMemberRewards(customerId)
-                                    setRewardModalOpened(true)
-                                }}
-                                className="text-white bg-[#173C9F] h-[32px] rounded text-[16px] px-2"
-                            >
-                                Choose
-                            </button>
-                        </div>
-                    )} */}
                 </li>
                 <li className="relative w-full">
                     <div className="flex items-center">
@@ -169,7 +156,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                     </div>
                 </li>
             </ol>
-            {promoPoints <= 1 && (
+            {promoPoints >= 1 && (
                 <div className="flex justify-center relative">
                     {rewardModalOpened ? (
                         <RewardsModal
