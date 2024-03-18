@@ -2,6 +2,7 @@
 import Button from '@/app/components/ui/atoms/button'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { useEffect, useState } from 'react'
+import Toast from '@/app/components/ui/atoms/toast'
 interface DealsProps {
     customerId: string
 }
@@ -36,41 +37,41 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
     useEffect(() => {
         const fetchData = async () => {
             if (customerId) {
-                const storedDealsWithinReach =
-                    localStorage.getItem('dealsWithinReach')
-                if (storedDealsWithinReach) {
-                    const parsedDeals = JSON.parse(storedDealsWithinReach)
-                    setDealsWithinReach(parsedDeals)
-                } else {
-                    try {
-                        const res = await fetch(
-                            `/api/voucherify/qualifications`,
-                            {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    customerId,
-                                    scenario:
-                                        QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
-                                }),
-                            }
+                try {
+                    const res = await fetch(`/api/voucherify/qualifications`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            customerId,
+                            scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
+                        }),
+                    })
+                    const data = await res.json()
+
+                    let activeDealsIdsWithinReach = JSON.parse(
+                        localStorage.getItem('activeDealsIdsWithinReach') ||
+                            '[]'
+                    )
+
+                    const updatedDeals =
+                        data.qualifications.redeemables.data.map(
+                            (deal: DealWithinReach) => ({
+                                ...deal,
+                                active: activeDealsIdsWithinReach.includes(
+                                    deal.id
+                                ),
+                            })
                         )
-                        const data = await res.json()
-                        data.qualifications.redeemables.data.forEach(
-                            (qualification: DealWithinReach) => {
-                                qualification.active = false
-                                qualification.available = true
-                            }
-                        )
-                        setDealsWithinReach(
-                            data.qualifications.redeemables.data
-                        )
-                    } catch (err) {
-                        if (err instanceof Error) {
-                            return setError(err.message)
-                        }
-                        return err
+                    setDealsWithinReach(updatedDeals)
+                    localStorage.setItem(
+                        'dealsWithinReach',
+                        JSON.stringify(updatedDeals)
+                    )
+                } catch (err) {
+                    if (err instanceof Error) {
+                        setError(err.message)
                     }
+                    return err
                 }
             }
         }
@@ -79,65 +80,45 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         }
     }, [])
 
-    const handleActivateCoupon = async (
-        id: string,
-        active: boolean,
-        available: boolean
-    ) => {
-        if (available && !active) {
-            try {
-                const res = await fetch(
-                    `/api/voucherify/validation?coupon=${id}`,
-                    {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                    }
-                )
-                const data = await res.json()
-                if (data.validCoupons.valid) {
-                    const updatedDeals = dealsWithinReach.map((deal) => {
-                        if (deal.id === id) {
-                            return {
-                                ...deal,
-                                active: true,
-                                barcode: data.validCoupons.barcode,
-                            }
-                        }
-                        return deal
-                    })
-                    setDealsWithinReach(updatedDeals)
-                    localStorage.setItem(
-                        'dealsWithinReach',
-                        JSON.stringify(updatedDeals)
-                    )
-                }
-            } catch (err) {
-                if (err instanceof Error) {
-                    return setError(err.message)
-                }
-                return err
-            }
-        }
-        if (active) {
-            const updatedDeals = dealsWithinReach.map((deal) => {
-                if (deal.id === id) {
-                    return { ...deal, active: false }
-                }
-                return deal
-            })
-            setDealsWithinReach(updatedDeals)
-            localStorage.setItem(
-                'dealsWithinReach',
-                JSON.stringify(updatedDeals)
+    const handleActivateCoupon = async (id: string, active: boolean) => {
+        let updatedDeals
+        if (!active) {
+            updatedDeals = dealsWithinReach.map((deal) =>
+                deal.id === id ? { ...deal, active: true } : deal
+            )
+        } else {
+            updatedDeals = dealsWithinReach.map((deal) =>
+                deal.id === id ? { ...deal, active: false } : deal
             )
         }
+        setDealsWithinReach(updatedDeals)
+
+        let activeDealsIdsWithinReach = JSON.parse(
+            localStorage.getItem('activeDealsIdsWithinReach') || '[]'
+        )
+
+        if (!active) {
+            activeDealsIdsWithinReach.push(id)
+        } else {
+            activeDealsIdsWithinReach = activeDealsIdsWithinReach.filter(
+                (dealId: string) =>
+                    dealsWithinReach.some((deal) => deal.id === dealId) &&
+                    dealId !== id
+            )
+        }
+
+        localStorage.setItem(
+            'activeDealsIdsWithinReach',
+            JSON.stringify(activeDealsIdsWithinReach)
+        )
     }
 
     const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
         CurrentDeal.WithinReach
     )
     return (
-        <div className="bg-blue-background flex-1 pt-2">
+        <div className="bg-blue-background h-[90%] pt-2">
+            {error && <Toast toastText={error} toastType="error" />}
             <ul className="my-2 justify-center flex text-[16px] font-bold text-center text-gray-500">
                 <li>
                     <button
@@ -184,8 +165,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                                         onClick={() =>
                                             handleActivateCoupon(
                                                 deal.id,
-                                                deal.active,
-                                                deal.available
+                                                deal.active
                                             )
                                         }
                                         buttonType={
@@ -205,39 +185,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                     ))}
                 </div>
             )}
-            {/* <footer className="bg-blue-background h-[40px]"></footer> */}
-            {/*{currentDealType === CurrentDeal.All && (*/}
-            {/*    <div className="bg-blue-background mx-auto h-[80%] pt-2">*/}
-            {/*        {deals.map((deal) => (*/}
-            {/*            <div*/}
-            {/*                key={deal.id}*/}
-            {/*                className="shadow-md h-[92px] rounded-xl m-4 flex bg-white text-blue-text w-[90%]"*/}
-            {/*            >*/}
-            {/*                <div className="flex flex-col p-2">*/}
-            {/*                    <h3 className="text-[18px] font-extrabold">*/}
-            {/*                        {deal?.title}*/}
-            {/*                    </h3>*/}
-            {/*                    {deal.available ? (*/}
-            {/*                        <Button*/}
-            {/*                            buttonType={*/}
-            {/*                                deal.active*/}
-            {/*                                    ? 'activeCoupon'*/}
-            {/*                                    : 'yellow'*/}
-            {/*                            }*/}
-            {/*                            className="mt-2 px-2 max-h-[32px] max-w-[149px] text-[16px]"*/}
-            {/*                        >*/}
-            {/*                            {deal.active*/}
-            {/*                                ? '✓ Active coupon'*/}
-            {/*                                : 'Activate coupon'}*/}
-            {/*                        </Button>*/}
-            {/*                    ) : (*/}
-            {/*                        <p>{deal?.eligibilityCondition}</p>*/}
-            {/*                    )}*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        ))}*/}
-            {/*    </div>*/}
-            {/*)}*/}
+            <footer className="bg-blue-background h-[40px]"></footer>
         </div>
     )
 }
