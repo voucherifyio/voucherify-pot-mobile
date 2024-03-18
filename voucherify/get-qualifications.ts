@@ -4,9 +4,7 @@ import { VoucherifyServerSide } from '@voucherify/sdk'
 type Params = {
     voucherify: ReturnType<typeof VoucherifyServerSide>
     customerId: string
-    scenario:
-        | QUALIFICATION_SCENARIO.AUDIENCE_ONLY
-        | QUALIFICATION_SCENARIO.CUSTOMER_WALLET
+    scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY
     options?: {
         limit?: number
         expand?: ['reedemable']
