@@ -4,6 +4,7 @@ import { FaArrowRight } from 'react-icons/fa'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 
 interface DealsCarouselProps {}
 export interface DealWithinReach {
@@ -40,10 +41,15 @@ const DealsCarousel: React.FC<DealsCarouselProps> = () => {
                 } else {
                     try {
                         const res = await fetch(
-                            `/api/voucherify/qualifications?customerId=${customerId}`,
+                            `/api/voucherify/qualifications`,
                             {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    customerId,
+                                    scenario:
+                                        QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
+                                }),
                             }
                         )
                         const data = await res.json()
@@ -79,11 +85,11 @@ const DealsCarousel: React.FC<DealsCarouselProps> = () => {
     const [error, setError] = useState<string | undefined>(undefined)
     return (
         <>
-            <div className="flex justify-between mx-8 mt-10 h-[32px]">
+            <div className="flex justify-between mx-8 h-[32px]">
                 <h1 className="text-blue-text text-18 font-bold">Deals</h1>
                 <button
                     onClick={handleDealsRedirectClick}
-                    className="flex items-center h-[32px] text-[16px] font-normal text-blue-text px-10 rounded bg-blue-background border border-blue-activeCoupon"
+                    className="flex items-center h-[32px] text-[16px] font-normal text-blue-text px-4 rounded bg-blue-background border border-blue-activeCoupon"
                 >
                     See all
                     <span className="pl-2">

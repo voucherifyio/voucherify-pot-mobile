@@ -1,5 +1,6 @@
 'use client'
 import Button from '@/app/components/ui/atoms/button'
+import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { useEffect, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
 interface DealsProps {
@@ -37,13 +38,14 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         const fetchData = async () => {
             if (customerId) {
                 try {
-                    const res = await fetch(
-                        `/api/voucherify/qualifications?customerId=${customerId}`,
-                        {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                        }
-                    )
+                    const res = await fetch(`/api/voucherify/qualifications`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            customerId,
+                            scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
+                        }),
+                    })
                     const data = await res.json()
 
                     let activeDealsIdsWithinReach = JSON.parse(

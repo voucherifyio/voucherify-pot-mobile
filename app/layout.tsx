@@ -23,10 +23,10 @@ export default function RootLayout({
         <SessionWrapper>
             <html lang="en">
                 <body
-                    className={`${inter.className} mx-auto max-w-screen-sm antialiased`}
+                    className={`${inter.className} flex flex-col min-h-screen justify-between mx-auto max-w-screen-sm antialiased`}
                 >
-                    <Navbar />
                     {children}
+                    <Navbar />
                 </body>
             </html>
         </SessionWrapper>

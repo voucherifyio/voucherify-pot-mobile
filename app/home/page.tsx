@@ -27,13 +27,13 @@ export default function HomePage() {
     }
 
     return (
-        <div className="h-screen items-center justify-center">
+        <div className="flex-1 items-center justify-center bg-[#ecf0fb]">
             {(data.user?.id && !braze?.isPushPermissionGranted()) ||
             data.user?.id !== braze?.getUser()?.getUserId() ? (
                 <BrazePermissionModal braze={braze} />
             ) : null}
-            <div className="flex mt-4 px-4 border-b-2 h-[8%] w-full bg-white">
-                <div className="w-[80%]">
+            <div className="flex justify-between px-4 py-2 border-b-2 w-full bg-white">
+                <div>
                     <h1 className="text-blue-text text-2xl font-extrabold">
                         My Journie
                     </h1>
@@ -41,24 +41,20 @@ export default function HomePage() {
                         Hello {data.user?.name || 'User'}!
                     </h4>
                 </div>
-                <div className="w-[20%] h-[70px] self-center pt-4 pl-10">
+                <div className="flex items-center gap-2">
                     <MdOutlineAccountCircle size={24} color="blue" />
+                    <Button onClick={() => signOut({ redirect: false })} className='bg-slate-300 h-auto py-1 px-2'>
+                        Logout
+                    </Button>
                 </div>
-                <Button onClick={() => signOut({ redirect: false })}>
-                    Logout
-                </Button>
             </div>
-            <div className="flex-row  mx-border-b-2 h-[100%] w-full bg-blue-background">
+            <div className="flex-row  mx-border-b-2 w-full">
                 {/*upselling*/}
-                <div className="h-[15%] bg-blue-background w-full">
-                    <Milestones userPhone={data.user?.id} />
-                </div>
+                <Milestones />
                 {/*main*/}
-                <div className="h-[50%] w-full">
-                    <DealsCarousel />
-                </div>
+                <DealsCarousel />
                 {/*partner hub*/}
-                <div className="h-[20%] mx-4 text-blue-text text-18 font-bold flex justify-between">
+                <div className="mx-4 text-blue-text text-18 font-bold flex justify-between mt-4">
                     <div className="flex-col">
                         <h1 className="mb-2 text-blue-text text-18 font-bold">
                             Partner Hub
