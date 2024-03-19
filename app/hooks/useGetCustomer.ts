@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react'
 export const useGetCustomer = () => {
     const { data } = useSession()
     const [customer, setCustomer] = useState<CustomerObject>()
+    const userPhone = data?.user?.id
 
     useEffect(() => {
-        const userPhone = data?.user?.id
         if (userPhone) {
             const getCustomer = async () => {
                 const res = await fetch(
@@ -20,13 +20,12 @@ export const useGetCustomer = () => {
                 if (res.status !== 200) {
                     return true
                 }
-                console.log(customer)
                 setCustomer(customer)
             }
 
             getCustomer()
         }
-    }, [])
+    }, [userPhone])
 
     return { customer }
 }

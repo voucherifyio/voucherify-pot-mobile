@@ -1,88 +1,24 @@
 'use client'
-
 import { FaArrowRight } from 'react-icons/fa'
-import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
+import { useDealsCarousel } from '@/app/hooks/useDealsCarousel'
+import { FC } from 'react'
 
-interface DealsCarouselProps {}
-export interface DealWithinReach {
-    id: string
-    name?: string
-    object: 'campaign' | 'voucher'
-    created_at: string
-    result?: {
-        loyalty_card?: {
-            points?: number
-        }
-    }
-    applicable_to?: {}
-    inapplicable_to?: {}
-    active: boolean
-    available: boolean
+type DealsCarouselProps = {
+    customerId: string | null | undefined
 }
 
-const DealsCarousel: React.FC<DealsCarouselProps> = () => {
+const DealsCarousel: FC<DealsCarouselProps> = ({ customerId }) => {
     const router = useRouter()
-    const { data: session } = useSession()
-    const customerId = session?.user?.id
-    const [dealsWithinReach, setDealsWithinReach] = useState<DealWithinReach[]>(
-        []
-    )
-    useEffect(() => {
-        const fetchData = async () => {
-            if (customerId) {
-                const storedDealsWithinReach =
-                    localStorage.getItem('dealsWithinReach')
-                if (storedDealsWithinReach) {
-                    const parsedDeals = JSON.parse(storedDealsWithinReach)
-                    setDealsWithinReach(parsedDeals)
-                } else {
-                    try {
-                        const res = await fetch(
-                            `/api/voucherify/qualifications`,
-                            {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    customerId,
-                                    scenario:
-                                        QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
-                                }),
-                            }
-                        )
-                        const data = await res.json()
-                        data.qualifications.redeemables.data.forEach(
-                            (qualification: DealWithinReach) => {
-                                qualification.active = false
-                                qualification.available = true
-                            }
-                        )
-                        setDealsWithinReach(
-                            data.qualifications.redeemables.data
-                        )
-                    } catch (err) {
-                        if (err instanceof Error) {
-                            return setError(err.message)
-                        }
-                        return err
-                    }
-                }
-            }
-        }
-        if (!dealsWithinReach || dealsWithinReach.length === 0) {
-            fetchData().catch(console.error)
-        }
-    }, [])
-
-    const firstDeal = dealsWithinReach[0]
+    const { activeDeals, error } = useDealsCarousel({
+        customerId,
+    })
+    const firstDeal = activeDeals[0]
 
     const handleDealsRedirectClick = () => {
         router.push('/deals')
     }
 
-    const [error, setError] = useState<string | undefined>(undefined)
     return (
         <>
             <div className="flex justify-between mx-8 h-[32px]">
