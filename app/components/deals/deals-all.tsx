@@ -3,11 +3,13 @@ import Button from '@/app/components/ui/atoms/button'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { useEffect, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
+import { useSession } from 'next-auth/react'
+import DealsWithinReach from '@/app/components/deals/deals-within-reach'
 interface DealsProps {
     customerId: string
 }
 
-export interface DealWithinReach {
+export interface Deal {
     id: string
     name?: string
     object: 'campaign' | 'voucher'
@@ -29,13 +31,18 @@ enum CurrentDeal {
 }
 
 const Deals: React.FC<DealsProps> = ({ customerId }) => {
-    const [dealsWithinReach, setDealsWithinReach] = useState<DealWithinReach[]>(
-        []
-    )
+    const [dealsWithinReach, setDealsWithinReach] = useState<Deal[]>([])
+    const [conditionalDeals, setConditionalDeals] = useState<Deal[]>([])
+    const [
+        isEligibleForTheConditionalDeal,
+        setIsEligibleForTheConditionalDeal,
+    ] = useState<boolean>(false)
     const [error, setError] = useState<string | undefined>(undefined)
+    const { data: session } = useSession()
+    const customerPhone = session?.user?.id
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDealsWithinReach = async () => {
             if (customerId) {
                 try {
                     const res = await fetch(`/api/voucherify/qualifications`, {
@@ -46,22 +53,20 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                             scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
                         }),
                     })
+
                     const data = await res.json()
 
-                    let activeDealsIdsWithinReach = JSON.parse(
-                        localStorage.getItem('activeDealsIdsWithinReach') ||
-                            '[]'
+                    let activeDealsAndRewards = JSON.parse(
+                        localStorage.getItem('activeDealsAndRewards') || '[]'
                     )
 
-                    const updatedDeals =
-                        data.qualifications.redeemables.data.map(
-                            (deal: DealWithinReach) => ({
-                                ...deal,
-                                active: activeDealsIdsWithinReach.includes(
-                                    deal.id
-                                ),
-                            })
-                        )
+                    const updatedDeals = data.qualifications.map(
+                        (deal: Deal) => ({
+                            ...deal,
+                            active: activeDealsAndRewards.includes(deal.id),
+                        })
+                    )
+
                     setDealsWithinReach(updatedDeals)
                     localStorage.setItem(
                         'dealsWithinReach',
@@ -75,8 +80,55 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                 }
             }
         }
+
+        const fetchNotYetApplicableDeals = async () => {
+            if (customerId) {
+                try {
+                    const res = await fetch(`/api/voucherify/qualifications`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            customerId,
+                            scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
+                            customerMetadata: {
+                                unique_locations_purchased_at: 3,
+                            },
+                        }),
+                    })
+
+                    const data = await res.json()
+
+                    setConditionalDeals(data.qualifications)
+
+                    // Check if the customer is eligible for the discount
+                    try {
+                        const res = await fetch(
+                            `/api/voucherify/get-customer?phone=${customerPhone}`,
+                            {
+                                method: 'GET',
+                            }
+                        )
+                        const { customer } = await res.json()
+                        if (
+                            customer.metadata?.unique_locations_purchased_at >=
+                            3
+                        ) {
+                            setIsEligibleForTheConditionalDeal(true)
+                        }
+                    } catch (err) {
+                        return err
+                    }
+                } catch (err) {
+                    if (err instanceof Error) {
+                        setError(err.message)
+                    }
+                    return err
+                }
+            }
+        }
         if (!dealsWithinReach || dealsWithinReach.length === 0) {
-            fetchData().catch(console.error)
+            fetchDealsWithinReach().catch(console.error)
+            fetchNotYetApplicableDeals().catch(console.error)
         }
     }, [])
 
@@ -93,14 +145,14 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         }
         setDealsWithinReach(updatedDeals)
 
-        let activeDealsIdsWithinReach = JSON.parse(
-            localStorage.getItem('activeDealsIdsWithinReach') || '[]'
+        let activeDealsAndRewards = JSON.parse(
+            localStorage.getItem('activeDealsAndRewards') || '[]'
         )
 
         if (!active) {
-            activeDealsIdsWithinReach.push(id)
+            activeDealsAndRewards.push(id)
         } else {
-            activeDealsIdsWithinReach = activeDealsIdsWithinReach.filter(
+            activeDealsAndRewards = activeDealsAndRewards.filter(
                 (dealId: string) =>
                     dealsWithinReach.some((deal) => deal.id === dealId) &&
                     dealId !== id
@@ -108,8 +160,8 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         }
 
         localStorage.setItem(
-            'activeDealsIdsWithinReach',
-            JSON.stringify(activeDealsIdsWithinReach)
+            'activeDealsAndRewards',
+            JSON.stringify(activeDealsAndRewards)
         )
     }
 
@@ -150,7 +202,32 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                 </li>
             </ul>
             {currentDealType === CurrentDeal.WithinReach && (
+                <DealsWithinReach fetchedDealsWithinReach={dealsWithinReach} />
+            )}
+            {currentDealType === CurrentDeal.All && (
                 <div className="bg-blue-background mx-auto h-auto pt-2">
+                    {conditionalDeals.map((deal) => (
+                        <div
+                            key={deal.id}
+                            className="shadow-md min-h-[92px] rounded-xl m-2 flex bg-white text-blue-text w-[95%]"
+                        >
+                            <div className="flex flex-col p-2">
+                                <h3 className="text-[18px] font-extrabold">
+                                    {deal?.name || deal.id}
+                                </h3>
+                                {/*<h3>{deal?.metadata?.eligibility_condition}</h3>*/}
+                                {isEligibleForTheConditionalDeal ? (
+                                    <h3 className="pt-1 text-green-700">
+                                        ✓ Available
+                                    </h3>
+                                ) : (
+                                    <h3 className="pt-1">
+                                        pump in 3 different locations
+                                    </h3>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                     {dealsWithinReach.map((deal) => (
                         <div
                             key={deal.id}

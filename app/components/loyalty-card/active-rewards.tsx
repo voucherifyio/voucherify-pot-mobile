@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Button from '@/app/components/ui/atoms/button'
 import { useEffect, useState } from 'react'
-import { DealWithinReach } from '@/app/components/deals/deals'
+import { Deal } from '@/app/components/deals/deals-all'
 
 interface ActiveReward {
     id: string
@@ -23,18 +23,16 @@ const ActiveRewards = () => {
 
             let dealsWithinReach = JSON.parse(dealsWithinReachFromLocalStorage)
 
-            const activeDealsIdsWithinReach = JSON.parse(
-                localStorage.getItem('activeDealsIdsWithinReach') || '[]'
+            const activeDealsAndRewards = JSON.parse(
+                localStorage.getItem('activeDealsAndRewards') || '[]'
             )
 
-            dealsWithinReach = dealsWithinReach.map(
-                (deal: DealWithinReach) => ({
-                    ...deal,
-                    active: activeDealsIdsWithinReach.includes(deal.id),
-                })
-            )
+            dealsWithinReach = dealsWithinReach.map((deal: Deal) => ({
+                ...deal,
+                active: activeDealsAndRewards.includes(deal.id),
+            }))
 
-            const fetchBarcode = async (deal: DealWithinReach) => {
+            const fetchBarcode = async (deal: Deal) => {
                 const barcodesRes = await fetch(
                     `/api/voucherify/voucher-barcode?coupon=${deal.id}`,
                     {
@@ -50,7 +48,7 @@ const ActiveRewards = () => {
             }
 
             const activeDeals = dealsWithinReach.filter(
-                (deal: DealWithinReach) => deal.active
+                (deal: Deal) => deal.active
             )
             const barcodePromises = activeDeals.map(fetchBarcode)
             const updatedDeals = await Promise.all(barcodePromises)

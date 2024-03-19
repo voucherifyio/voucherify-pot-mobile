@@ -78,7 +78,7 @@ const Aeroplan = () => {
                     </Button>
                 ) : (
                     <h4 className="px-3 font-normal mt-5">
-                        Your account is already connected to Aeroplan
+                        Your account is already connected to Aeroplan.
                     </h4>
                 )}
             </div>
