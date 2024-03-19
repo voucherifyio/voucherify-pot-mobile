@@ -1,10 +1,10 @@
 'use client'
-import ActiveRewards from '@/app/components/loyalty-card/active-rewards'
-import JournieHeader from '@/app/components/journie-header/journie-header'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import ActiveRewards from '@/app/components/loyalty-card/active-rewards'
+import JournieHeader from '@/app/components/journie-header/journie-header'
 import LoyaltyCard from '@/app/components/loyalty-card/loyalty-card'
-import Loading from '../components/loading/loading'
+import Loading from '@/app/components/loading/loading'
 
 export default function CardPage() {
     const router = useRouter()

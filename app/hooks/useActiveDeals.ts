@@ -1,5 +1,5 @@
-import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { useEffect, useState } from 'react'
+import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { Deal } from '@/app/components/deals/deals'
 
 export const useActiveDeals = ({

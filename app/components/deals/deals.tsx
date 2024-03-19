@@ -1,6 +1,6 @@
 'use client'
-import Button from '@/app/components/ui/atoms/button'
 import { useState } from 'react'
+import Button from '@/app/components/ui/atoms/button'
 import Toast from '@/app/components/ui/atoms/toast'
 import { useActiveDeals } from '@/app/hooks/useActiveDeals'
 interface DealsProps {

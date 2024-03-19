@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { Reward } from '@/app/components/rewards/rewards'
-import { useEffect, useState } from 'react'
 
 export const useActiveRewards = ({
     customerId,

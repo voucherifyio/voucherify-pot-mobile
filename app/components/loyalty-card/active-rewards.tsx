@@ -1,6 +1,6 @@
+import { useState } from 'react'
 import Image from 'next/image'
 import Button from '@/app/components/ui/atoms/button'
-import { useState } from 'react'
 import { useActivatedDealsAndRewards } from '@/app/hooks/useActivatedDealsAndRewards'
 
 const ActiveRewards = () => {

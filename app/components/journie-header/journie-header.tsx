@@ -1,7 +1,7 @@
 'use client'
+import { useRouter } from 'next/navigation'
 import { IoMdArrowBack } from 'react-icons/io'
 import Button from '@/app/components/ui/atoms/button'
-import { useRouter } from 'next/navigation'
 
 interface JournieHeaderProps {
     headerText: string

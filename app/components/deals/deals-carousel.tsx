@@ -1,8 +1,8 @@
 'use client'
-import { FaArrowRight } from 'react-icons/fa'
-import { useRouter } from 'next/navigation'
-import { useDealsCarousel } from '@/app/hooks/useDealsCarousel'
 import { FC } from 'react'
+import { useRouter } from 'next/navigation'
+import { FaArrowRight } from 'react-icons/fa'
+import { useDealsCarousel } from '@/app/hooks/useDealsCarousel'
 
 type DealsCarouselProps = {
     customerId: string | null | undefined

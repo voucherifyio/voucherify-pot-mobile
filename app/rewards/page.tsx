@@ -3,7 +3,6 @@ import JournieHeader from '@/app/components/journie-header/journie-header'
 import Rewards from '@/app/components/rewards/rewards'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
 import Loading from '../components/loading/loading'
 
 export default function RewardsPage() {

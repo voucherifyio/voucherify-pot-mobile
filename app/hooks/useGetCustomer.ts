@@ -1,6 +1,6 @@
-import { CustomerObject } from '@voucherify/sdk'
-import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { CustomerObject } from '@voucherify/sdk'
 
 export const useGetCustomer = () => {
     const { data } = useSession()

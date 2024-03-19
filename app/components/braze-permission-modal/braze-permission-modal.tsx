@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import Button from '../ui/atoms/button'
+import Button from '@/app/components/ui/atoms/button'
 
 type BrazePermissionModalProps = {
     braze:

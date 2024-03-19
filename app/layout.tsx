@@ -3,8 +3,7 @@ import { Metadata } from 'next'
 import SessionWrapper from './components/session-wrapper'
 import Navbar from '@/app/components/navbar'
 import { inter } from '@/app/components/ui/fonts'
-import { useSession } from 'next-auth/react'
-import Toast from '@/app/components/ui/atoms/toast'
+import LocalStorage from './components/vouchers-amount-context/vouchers-amount-context'
 
 export const metadata: Metadata = {
     title: {
@@ -25,8 +24,12 @@ export default function RootLayout({
                 <body
                     className={`${inter.className} flex flex-col min-h-screen justify-between mx-auto max-w-screen-sm antialiased`}
                 >
-                    {children}
-                    <Navbar />
+                    <LocalStorage>
+                        <>
+                            {children}
+                            <Navbar />
+                        </>
+                    </LocalStorage>
                 </body>
             </html>
         </SessionWrapper>
