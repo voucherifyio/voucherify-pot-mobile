@@ -1,4 +1,7 @@
 'use client'
+import { usePathname } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { useContext } from 'react'
 import {
     MdCreditCard,
     MdHome,
@@ -6,11 +9,12 @@ import {
     MdStars,
 } from 'react-icons/md'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import { VouchersAmountContext } from '@/app/components/vouchers-amount-context/vouchers-amount-context'
 
 const Navbar = () => {
     const { status } = useSession()
+    const { dealsAndRewards } = useContext(VouchersAmountContext)
+
     //todo change the icon color as well
     const pathname = usePathname()
     const MENU_LIST = [
@@ -43,15 +47,26 @@ const Navbar = () => {
                     {MENU_LIST.map((item) => (
                         <Link
                             key={item.text}
-                            className={`inline-flex flex-col items-center justify-center px-5 `}
+                            className={`inline-flex flex-col items-center justify-center px-5 relative`}
                             href={item.href}
                         >
+                            {dealsAndRewards.deals && item.text === 'Deals' ? (
+                                <span className="absolute top-2 right-3 text-xs bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white">
+                                    {dealsAndRewards.deals}
+                                </span>
+                            ) : null}
+                            {dealsAndRewards.rewards &&
+                            item.text === 'Rewards' ? (
+                                <span className="absolute top-2 right-6 text-xs bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white">
+                                    {dealsAndRewards.rewards}
+                                </span>
+                            ) : null}
                             {item.icon}
-                            <span
+                            <p
                                 className={`text-sm  ${pathname === item.href ? 'text-blue-text' : 'text-gray-500'}`}
                             >
                                 {item.text}
-                            </span>
+                            </p>
                         </Link>
                     ))}
                 </div>
