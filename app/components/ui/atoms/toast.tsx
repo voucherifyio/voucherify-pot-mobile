@@ -10,7 +10,7 @@ const Toast = (props: ToastProps) => {
     const { className, toastText, toastType } = props
     const toastStyles: Record<string, string> = {
         error: 'text-red-500',
-        success: 'text-green-500',
+        success: 'text-green-600',
     }
 
     const toastClassName = `${className} font-bold border border-gray-300 rounded-lg shadow-lg fixed bottom-[10%] left-[10%] flex items-center w-full max-w-xs p-4  bg-white ${

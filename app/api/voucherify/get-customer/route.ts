@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
         if (!customer?.id) {
             return NextResponse.json(
-                { error: 'User does not exist, please try again' },
+                { error: 'Customer does not exist, please try again' },
                 { status: 404 }
             )
         }
