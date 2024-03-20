@@ -15,6 +15,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
 }) => {
     const [rewards, setRewards] = useState([])
     const [rewardModalOpened, setRewardModalOpened] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const listMemberRewards = async (customerId: string | null | undefined) => {
         const res = await fetch(
@@ -31,6 +32,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
             return false
         }
         setRewards(rewards)
+        setLoading(false)
     }
 
     return (
@@ -146,6 +148,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                             rewardModalOpened={rewardModalOpened}
                             setRewardModalOpened={setRewardModalOpened}
                             customerId={customerId}
+                            loading={loading}
                         />
                     ) : null}
                     <button

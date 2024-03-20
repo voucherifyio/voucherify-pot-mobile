@@ -21,7 +21,7 @@ const DealsCarousel: FC<DealsCarouselProps> = ({ customerId }) => {
 
     return (
         <>
-            <div className="flex justify-between mx-8 h-[20px]">
+            <div className="flex justify-between mx-8">
                 <h1 className="text-blue-text text-18 font-bold">Deals</h1>
                 <button
                     onClick={handleDealsRedirectClick}
