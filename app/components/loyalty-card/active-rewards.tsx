@@ -1,62 +1,11 @@
+import { useState } from 'react'
 import Image from 'next/image'
 import Button from '@/app/components/ui/atoms/button'
-import { useEffect, useState } from 'react'
-import { Deal } from '@/app/components/deals/deals-all'
-
-interface ActiveReward {
-    id: string
-    barcode?: {
-        url?: string
-        id?: string
-    }
-}
+import { useActivatedDealsAndRewards } from '@/app/hooks/useActivatedDealsAndRewards'
 
 const ActiveRewards = () => {
+    const { activatedRewards } = useActivatedDealsAndRewards()
     const [expandedReward, setExpandedReward] = useState<string | null>(null)
-    const [activeRewards, setActiveRewards] = useState<ActiveReward[]>([])
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const dealsWithinReachFromLocalStorage =
-                localStorage.getItem('dealsWithinReach')
-            if (!dealsWithinReachFromLocalStorage) return
-
-            let dealsWithinReach = JSON.parse(dealsWithinReachFromLocalStorage)
-
-            const activeDealsAndRewards = JSON.parse(
-                localStorage.getItem('activeDealsAndRewards') || '[]'
-            )
-
-            dealsWithinReach = dealsWithinReach.map((deal: Deal) => ({
-                ...deal,
-                active: activeDealsAndRewards.includes(deal.id),
-            }))
-
-            const fetchBarcode = async (deal: Deal) => {
-                const barcodesRes = await fetch(
-                    `/api/voucherify/voucher-barcode?coupon=${deal.id}`,
-                    {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' },
-                    }
-                )
-                const data = await barcodesRes.json()
-                return {
-                    ...deal,
-                    barcode: data.barcode,
-                }
-            }
-
-            const activeDeals = dealsWithinReach.filter(
-                (deal: Deal) => deal.active
-            )
-            const barcodePromises = activeDeals.map(fetchBarcode)
-            const updatedDeals = await Promise.all(barcodePromises)
-            setActiveRewards(updatedDeals)
-        }
-
-        fetchData().catch(console.error)
-    }, [])
 
     const handleExpandCoupon = (id: string) => {
         if (expandedReward === id) {
@@ -69,19 +18,19 @@ const ActiveRewards = () => {
     return (
         <div className="mt-4">
             <header>
-                {activeRewards.length > 0 && (
+                {activatedRewards.length > 0 && (
                     <h1 className="mb-4 text-[18px] font-bold text-blue-text">
                         Active rewards/coupons
                     </h1>
                 )}
-                {activeRewards.length === 0 && (
+                {activatedRewards.length === 0 && (
                     <p className="mb-4 text-[14px] font-bold text-blue-text">
                         No active coupons.
                     </p>
                 )}
             </header>
             <div>
-                {activeRewards.map((reward) => (
+                {activatedRewards.map((reward) => (
                     <div
                         key={reward.id}
                         onClick={() => handleExpandCoupon(reward.id)}

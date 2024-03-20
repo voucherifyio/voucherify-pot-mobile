@@ -1,4 +1,4 @@
-import { VoucherifyServerSide, VouchersListResponse } from '@voucherify/sdk'
+import { VoucherifyServerSide } from '@voucherify/sdk'
 
 type Params = {
     voucherify: ReturnType<typeof VoucherifyServerSide>

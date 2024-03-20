@@ -1,16 +1,16 @@
 'use client'
+import { useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { MdOutlineAccountCircle } from 'react-icons/md'
+import { useInitalizeBraze } from '@/app/hooks/useInitializeBraze'
 import Button from '@/app/components/ui/atoms/button'
 import Milestones from '@/app/components/milestones/milestones'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useInitalizeBraze } from '../hooks/useInitializeBraze'
-import { signOut } from 'next-auth/react'
-import BrazePermissionModal from '../components/braze-permission-modal/braze-permission-modal'
+import BrazePermissionModal from '@/app/components/braze-permission-modal/braze-permission-modal'
 import DealsCarousel from '@/app/components/deals/deals-carousel'
-import Loading from '../components/loading/loading'
 import Aeroplan from '@/app/components/aeroplan/aeroplan'
 import EarningRulesCarousel from '@/app/components/earning-rules/earning-rules-carousel'
+import Loading from '@/app/components/loading/loading'
 
 export default function HomePage() {
     const router = useRouter()
@@ -21,6 +21,11 @@ export default function HomePage() {
         },
     })
     const { braze } = useInitalizeBraze()
+
+    const handleLocalStorage = () => {
+        localStorage.setItem('dealsAndRewards', JSON.stringify([]))
+        localStorage.setItem('activeDealsAndRewards', JSON.stringify([]))
+    }
 
     if (status === 'loading') {
         return <Loading />
@@ -44,16 +49,19 @@ export default function HomePage() {
                 <div className="flex items-center gap-2">
                     <MdOutlineAccountCircle size={24} color="blue" />
                     <Button
-                        onClick={() => signOut({ redirect: false })}
+                        onClick={() => {
+                            signOut({ redirect: false })
+                            handleLocalStorage()
+                        }}
                         className="bg-slate-300 h-auto py-1 px-2"
                     >
                         Logout
                     </Button>
                 </div>
             </div>
-            <div className="flex-row mx-border-b-2 w-full">
+            <div className="flex-row  mx-border-b-2 w-full">
                 <Milestones />
-                <DealsCarousel />
+                <DealsCarousel customerId={data.user?.id} />
                 <EarningRulesCarousel />
                 <Aeroplan />
             </div>

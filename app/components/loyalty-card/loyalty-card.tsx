@@ -1,54 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import Button from '@/app/components/ui/atoms/button'
-import MilestoneChart from '@/app/components/milestones/milestone-chart'
+import { useLoyaltyCard } from '@/app/hooks/useLoyaltyCard'
 
 interface LoyaltyCardProps {
     customerId: string
 }
 
-interface LoyaltyCardResponse {
-    loyaltyCard: {
-        code: string
-        barcode: {
-            id: string
-            url: string
-        }
-    }
-}
-
 const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ customerId }) => {
-    const [error, setError] = useState<undefined | string>(undefined)
-    const [cardUrl, setCardUrl] = useState<string>('')
-    const [cardNumber, setCardNumber] = useState<string>('')
+    const { cardNumber, cardUrl, error, setError } = useLoyaltyCard({
+        customerId,
+    })
     const [codeCopied, setCodeCopied] = useState<boolean>(false)
-
-    useEffect(() => {
-        const fetchData = async () => {
-            if (customerId) {
-                try {
-                    const res = await fetch(
-                        `/api/voucherify/loyalty-card?customerId=${customerId}`,
-                        {
-                            method: 'GET',
-                            headers: { 'Content-Type': 'application/json' },
-                        }
-                    )
-                    const data: LoyaltyCardResponse = await res.json()
-                    setCardUrl(data.loyaltyCard.barcode.url)
-                    setCardNumber(data.loyaltyCard.code)
-                } catch (err) {
-                    if (err instanceof Error) {
-                        return setError(err.message)
-                    }
-                    return err
-                }
-            }
-        }
-        if (!cardUrl || !cardNumber) {
-            fetchData().catch(console.error)
-        }
-    }, [])
 
     const handleCopy = async () => {
         try {

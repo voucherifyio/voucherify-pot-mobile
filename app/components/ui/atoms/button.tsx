@@ -1,5 +1,4 @@
 import React, { ButtonHTMLAttributes } from 'react'
-
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string
     buttonType?: 'primary' | 'secondary' | 'yellow' | 'activeCoupon'

@@ -2,7 +2,7 @@
 import JournieHeader from '@/app/components/journie-header/journie-header'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import Loading from '../components/loading/loading'
+import Loading from '@/app/components/loading/loading'
 import Deals from '@/app/components/deals/deals-all'
 
 export default function DealsPage() {

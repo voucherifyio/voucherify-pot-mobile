@@ -1,5 +1,4 @@
 import React, { ButtonHTMLAttributes, useEffect, useState } from 'react'
-
 interface ToastProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string
     toastType: 'error' | 'success'

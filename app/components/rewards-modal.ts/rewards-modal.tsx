@@ -1,6 +1,7 @@
 import { LoyaltiesListMemberRewardsResponseBody } from '@voucherify/sdk'
-import { Dispatch, FC, SetStateAction, useState } from 'react'
-import Button from '../ui/atoms/button'
+import { Dispatch, FC, SetStateAction, useContext, useState } from 'react'
+import Button from '@/app/components/ui/atoms/button'
+import { VouchersAmountContext } from '@/app/components/vouchers-amount-context/vouchers-amount-context'
 
 type RewardsModalProps = {
     rewards: LoyaltiesListMemberRewardsResponseBody['data']
@@ -14,7 +15,7 @@ type ChoiceConfirmationProps = {
     customerId: string
     rewardId: string
     confirmation: boolean
-    setConfimration: Dispatch<SetStateAction<boolean>>
+    setConfirmation: Dispatch<SetStateAction<boolean>>
 }
 
 const RewardsModal: FC<RewardsModalProps> = ({
@@ -23,8 +24,11 @@ const RewardsModal: FC<RewardsModalProps> = ({
     setRewardModalOpened,
     customerId,
 }) => {
-    const [confirmation, setConfimration] = useState<boolean>(false)
+    const [confirmation, setConfirmation] = useState<boolean>(false)
     const [rewardId, setRewardId] = useState<string | null>(null)
+    const { dealsAndRewards, setDealsAndRewards } = useContext(
+        VouchersAmountContext
+    )
 
     const redeemReward = async (customerId: string, rewardId: string) => {
         const res = await fetch(`/api/voucherify/redeem-reward`, {
@@ -40,7 +44,11 @@ const RewardsModal: FC<RewardsModalProps> = ({
         if (res.status !== 200) {
             console.log(data)
         }
-        setConfimration(false)
+        setConfirmation(false)
+        setDealsAndRewards({
+            ...dealsAndRewards,
+            rewards: dealsAndRewards.rewards + 1,
+        })
     }
 
     const pattern = /\(150\s*Point[s]*\s*Reward\)/
@@ -55,7 +63,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
                     rewardId={rewardId}
                     redeemReward={redeemReward}
                     confirmation={confirmation}
-                    setConfimration={setConfimration}
+                    setConfirmation={setConfirmation}
                 />
             ) : (
                 <>
@@ -75,7 +83,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
                                 className="text-white text-center text-sm bg-[#fbbc05] rounded-lg py-0.5 px-1"
                                 onClick={() => {
                                     setRewardId(reward.id)
-                                    setConfimration(true)
+                                    setConfirmation(true)
                                 }}
                             >
                                 {reward.name?.replace(pattern, '')}
@@ -93,7 +101,7 @@ const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
     customerId,
     rewardId,
     confirmation,
-    setConfimration,
+    setConfirmation,
 }) => {
     if (!confirmation) return null
 
@@ -108,7 +116,7 @@ const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
                     Choose reward
                 </button>
                 <button
-                    onClick={() => setConfimration(false)}
+                    onClick={() => setConfirmation(false)}
                     className="text-white bg-[#fbbc05] rounded-lg px-2 py-1"
                 >
                     Cancel

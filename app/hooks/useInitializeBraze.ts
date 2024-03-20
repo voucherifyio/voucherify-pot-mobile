@@ -1,6 +1,6 @@
-import * as instanceBraze from '@braze/web-sdk'
-import { useSession } from 'next-auth/react'
 import { useCallback, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import * as instanceBraze from '@braze/web-sdk'
 
 export const useInitalizeBraze = () => {
     const [braze, setBraze] = useState<

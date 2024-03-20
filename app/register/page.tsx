@@ -89,6 +89,11 @@ export default function RegisterPage() {
     const labelStyle =
         'text-blue-formInput font-14 h-[16px] mb-2 block text-sm font-normal'
 
+    const handleLocalStorage = () => {
+        localStorage.setItem('dealsAndRewards', JSON.stringify([]))
+        localStorage.setItem('activeDealsAndRewards', JSON.stringify([]))
+    }
+
     if (status === 'loading' || loading) {
         return <Loading />
     }
@@ -98,7 +103,10 @@ export default function RegisterPage() {
             <div className="flex-1 flex flex-col items-center justify-center gap-10">
                 <p>You are logged in, logout first.</p>
                 <Button
-                    onClick={() => signOut()}
+                    onClick={() => {
+                        signOut()
+                        handleLocalStorage()
+                    }}
                     buttonType="primary"
                     className="px-4 py-2 w-full max-w-[200px]"
                 >
