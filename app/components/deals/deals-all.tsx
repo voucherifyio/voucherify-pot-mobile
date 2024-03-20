@@ -40,6 +40,9 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
     const [error, setError] = useState<string | undefined>(undefined)
     const { data: session } = useSession()
     const customerPhone = session?.user?.id
+    const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
+        CurrentDeal.All
+    )
 
     useEffect(() => {
         const fetchDealsWithinReach = async () => {
@@ -165,9 +168,6 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         )
     }
 
-    const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
-        CurrentDeal.WithinReach
-    )
     return (
         <div className="bg-blue-background h-[90%] pt-2">
             {error && <Toast toastText={error} toastType="error" />}

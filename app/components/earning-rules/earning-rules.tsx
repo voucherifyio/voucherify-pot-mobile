@@ -11,9 +11,15 @@ interface EarningRule {
 }
 
 const EarningRules: React.FC<EarningRulesProps> = ({ customerId }) => {
-    const [earningRules, setEarningRules] = useState<EarningRule[]>([])
+    // const [earningRules, setEarningRules] = useState<EarningRule[]>([])
     const [error, setError] = useState<string | undefined>(undefined)
 
+    const earningRules = [
+        {
+            id: 1,
+            name: 'Buy chocolate bar get 2x points',
+        },
+    ]
     return (
         <div className="bg-blue-background h-[90%] pt-2">
             {error && <Toast toastText={error} toastType="error" />}

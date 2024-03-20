@@ -26,7 +26,7 @@ const EarningRulesCarousel: React.FC<EarningRulesCarouselProps> = () => {
 
     return (
         <>
-            <div className="flex justify-between mx-8 h-[32px]">
+            <div className="flex justify-between mx-8 h-[20px]">
                 <h1 className="text-blue-text text-18 font-bold">
                     Earning rules
                 </h1>
@@ -41,10 +41,10 @@ const EarningRulesCarousel: React.FC<EarningRulesCarouselProps> = () => {
                 </button>
             </div>
             <div>
-                <div className="ml-2 relative min-h-[80px] overflow-hidden rounded-lg md:h-96">
+                <div className="ml-2 relative mb-4 overflow-hidden rounded-lg">
                     <div
                         key={firstEarningRule?.name || firstEarningRule?.id}
-                        className="shadow-md min-h-[60px] rounded-xl m-4 flex bg-white text-blue-text w-[80%]"
+                        className="shadow-md min-h-[60px] rounded-xl m-6 flex bg-white text-blue-text w-[80%]"
                     >
                         <div className="flex flex-col p-2">
                             <h3 className="text-[18px] font-extrabold">

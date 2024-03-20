@@ -53,7 +53,7 @@ export default function HomePage() {
                     </Button>
                 </div>
             </div>
-            <div className="flex-row  mx-border-b-2 w-full">
+            <div className="flex-row mx-border-b-2 w-full">
                 <Milestones />
                 <DealsCarousel />
                 <EarningRulesCarousel />

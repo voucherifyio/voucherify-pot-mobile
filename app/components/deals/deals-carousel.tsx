@@ -85,7 +85,7 @@ const DealsCarousel: React.FC<DealsCarouselProps> = () => {
     const [error, setError] = useState<string | undefined>(undefined)
     return (
         <>
-            <div className="flex justify-between mx-8 h-[32px]">
+            <div className="flex justify-between mx-8 h-[20px]">
                 <h1 className="text-blue-text text-18 font-bold">Deals</h1>
                 <button
                     onClick={handleDealsRedirectClick}
@@ -98,10 +98,10 @@ const DealsCarousel: React.FC<DealsCarouselProps> = () => {
                 </button>
             </div>
             <div>
-                <div className="ml-2 relative min-h-[80px] overflow-hidden rounded-lg md:h-96">
+                <div className="ml-2 relative mb-4 overflow-hidden rounded-lg">
                     <div
                         key={firstDeal?.name || firstDeal?.id}
-                        className="shadow-md min-h-[60px] rounded-xl m-4 flex bg-white text-blue-text w-[80%]"
+                        className="shadow-md min-h-[60px] rounded-xl m-6 flex bg-white text-blue-text w-[80%]"
                     >
                         <div className="flex flex-col p-2">
                             <h3 className="text-[18px] font-extrabold">

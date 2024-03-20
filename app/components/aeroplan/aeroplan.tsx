@@ -58,7 +58,7 @@ const Aeroplan = () => {
     }, [handleLinkToAeroplan])
 
     return (
-        <div className="mx-4 text-blue-text text-18 font-bold flex justify-between mt-4">
+        <div className="bottom-20 mx-4 text-blue-text text-18 font-bold flex justify-between mt-40">
             <div className="flex-col">
                 <h1 className="mb-2 text-blue-text text-18 font-bold">
                     Partner Hub
