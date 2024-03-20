@@ -8,6 +8,7 @@ type RewardsModalProps = {
     rewardModalOpened: boolean
     setRewardModalOpened: Dispatch<SetStateAction<boolean>>
     customerId: string | null | undefined
+    loading: boolean
 }
 
 type ChoiceConfirmationProps = {
@@ -23,6 +24,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
     rewardModalOpened,
     setRewardModalOpened,
     customerId,
+    loading,
 }) => {
     const [confirmation, setConfirmation] = useState<boolean>(false)
     const [rewardId, setRewardId] = useState<string | null>(null)
@@ -49,6 +51,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
             ...dealsAndRewards,
             rewards: dealsAndRewards.rewards + 1,
         })
+        setRewardModalOpened(false)
     }
 
     const pattern = /\(150\s*Point[s]*\s*Reward\)/
@@ -57,7 +60,11 @@ const RewardsModal: FC<RewardsModalProps> = ({
 
     return (
         <div className="flex w-full min-h-80 flex-col items-end bg-[#173C9F] absolute z-50 rounded-lg px-6 py-4 gap-4 bottom-0 left-2/4 -translate-x-2/4">
-            {rewardId && customerId && confirmation ? (
+            {loading && <ModalLoading />}
+            {!loading && rewards?.length <= 0 && (
+                <NoRewardsState setRewardModalOpened={setRewardModalOpened} />
+            )}
+            {rewardId && customerId && confirmation && (
                 <ChoiceConfimartion
                     customerId={customerId}
                     rewardId={rewardId}
@@ -65,7 +72,8 @@ const RewardsModal: FC<RewardsModalProps> = ({
                     confirmation={confirmation}
                     setConfirmation={setConfirmation}
                 />
-            ) : (
+            )}
+            {!loading && !confirmation && rewards?.length >= 1 && (
                 <>
                     <div className="flex w-full justify-between">
                         <p className="text-white">Choose your reward</p>
@@ -125,5 +133,27 @@ const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
         </div>
     )
 }
+
+const ModalLoading = () => (
+    <div className="flex justify-center items-center w-full h-full">
+        <p className="text-white">Loading...</p>
+    </div>
+)
+
+const NoRewardsState = ({
+    setRewardModalOpened,
+}: {
+    setRewardModalOpened: Dispatch<SetStateAction<boolean>>
+}) => (
+    <div className="flex flex-col justify-center items-center w-full h-full gap-3">
+        <Button
+            onClick={() => setRewardModalOpened(false)}
+            className="h-auto text-white self-end"
+        >
+            Close
+        </Button>
+        <p className="text-white">You don't have any rewards.</p>
+    </div>
+)
 
 export default RewardsModal
