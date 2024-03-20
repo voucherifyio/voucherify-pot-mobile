@@ -216,11 +216,11 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                     {activeDeals.map((deal) => (
                         <div
                             key={deal.id}
-                            className="shadow-md min-h-[92px] rounded-xl m-2 flex bg-white text-blue-text w-[95%]"
+                            className="shadow-md min-h-[80px] rounded-xl m-2 flex bg-white text-blue-text w-[95%]"
                         >
                             <div className="flex flex-col p-2">
                                 <h3 className="text-[18px] font-extrabold">
-                                    {deal?.name || deal.id}
+                                    {deal?.banner || deal?.name || deal.id}
                                 </h3>
                                 {deal.object === 'voucher' && (
                                     <Button
