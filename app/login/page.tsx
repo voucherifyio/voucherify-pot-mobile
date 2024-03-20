@@ -84,7 +84,7 @@ export default function LoginPage() {
                             id="phone"
                             className={inputStyle}
                             {...register('phone', {
-                                required: 'Please fill the phone number',
+                                required: 'Please fill in the phone number',
                             })}
                             onChange={handleResetError}
                         />

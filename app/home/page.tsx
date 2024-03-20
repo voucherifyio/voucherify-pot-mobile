@@ -1,8 +1,6 @@
 'use client'
 import { MdOutlineAccountCircle } from 'react-icons/md'
 import Button from '@/app/components/ui/atoms/button'
-import Image from 'next/image'
-import aeroplan from '@/public/images/aeroplan.png'
 import Milestones from '@/app/components/milestones/milestones'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
