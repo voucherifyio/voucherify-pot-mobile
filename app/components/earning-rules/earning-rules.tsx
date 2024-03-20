@@ -1,29 +1,54 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
+import { CAMPAIGNS } from '@/enum/campaigns'
+
 interface EarningRulesProps {
     customerId: string
 }
 
-interface EarningRule {
+export interface EarningRule {
     id: string
-    name: string
+    source?: {
+        banner?: string
+    }
 }
 
 const EarningRules: React.FC<EarningRulesProps> = ({ customerId }) => {
-    // const [earningRules, setEarningRules] = useState<EarningRule[]>([])
+    const [earningRules, setEarningRules] = useState<EarningRule[]>([])
     const [error, setError] = useState<string | undefined>(undefined)
 
-    const earningRules = [
-        {
-            id: 1,
-            name: 'Buy chocolate bar get 2x points',
-        },
-    ]
+    useEffect(() => {
+        const fetchEarningRules = async () => {
+            try {
+                const res = await fetch(
+                    `/api/voucherify/list-earning-rules?campaignId=${CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM_ID}`,
+                    {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' },
+                    }
+                )
+
+                const data = await res.json()
+                const fetchedEarningRules = data.earningRules.data
+                setEarningRules(fetchedEarningRules)
+            } catch (err) {
+                if (err instanceof Error) {
+                    setError(err.message)
+                }
+                return err
+            }
+        }
+
+        if (!earningRules || earningRules.length === 0) {
+            fetchEarningRules().catch(console.error)
+        }
+    }, [])
+
     return (
-        <div className="bg-blue-background h-[90%] pt-2">
+        <div className="bg-blue-background  pt-2">
             {error && <Toast toastText={error} toastType="error" />}
-            <div className="bg-blue-background mx-auto h-auto pt-2">
+            <div className="bg-blue-background mx-auto pt-2">
                 {earningRules.map((rule) => (
                     <div
                         key={rule.id}
@@ -31,13 +56,12 @@ const EarningRules: React.FC<EarningRulesProps> = ({ customerId }) => {
                     >
                         <div className="flex flex-col p-2">
                             <h3 className="text-[18px] font-extrabold">
-                                {rule?.name || rule.id}
+                                {rule?.source?.banner || rule.id}
                             </h3>
                         </div>
                     </div>
                 ))}
             </div>
-            <footer className="bg-blue-background h-[40px]"></footer>
         </div>
     )
 }
