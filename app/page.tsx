@@ -1,11 +1,10 @@
 'use client'
-
 import Image from 'next/image'
-import loginPage from '../public/images/login-page.jpeg'
-import { useRouter } from 'next/navigation'
-import Button from '@/app/components/ui/atoms/button'
 import { useSession } from 'next-auth/react'
-import Loading from './components/loading/loading'
+import { useRouter } from 'next/navigation'
+import loginPage from '@/public/images/login-page.jpeg'
+import Button from '@/app/components/ui/atoms/button'
+import Loading from '@/app/components/loading/loading'
 
 export default function LoginPage() {
     const { status } = useSession()
