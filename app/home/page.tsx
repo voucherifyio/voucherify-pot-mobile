@@ -32,7 +32,7 @@ export default function HomePage() {
     }
 
     return (
-        <div className="flex-1 items-center justify-center bg-[#ecf0fb]">
+        <div className="flex-1 items-center justify-center bg-[#ecf0fb] overflow-hidden">
             {(data.user?.id && !braze?.isPushPermissionGranted()) ||
             data.user?.id !== braze?.getUser()?.getUserId() ? (
                 <BrazePermissionModal braze={braze} />

@@ -5,6 +5,7 @@ import Toast from '@/app/components/ui/atoms/toast'
 import { useActiveDeals } from '@/app/hooks/useActiveDeals'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { useSession } from 'next-auth/react'
+import Loading from '@/app/components/loading/loading'
 interface DealsProps {
     customerId: string
 }
@@ -30,7 +31,7 @@ enum CurrentDeal {
 }
 
 const Deals: React.FC<DealsProps> = ({ customerId }) => {
-    const { activeDeals, setActiveDeals, error } = useActiveDeals({
+    const { activeDeals, setActiveDeals, error, loading } = useActiveDeals({
         customerId,
     })
     const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
@@ -118,6 +119,10 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         })
 
         setActiveDeals(updatedDeals)
+    }
+
+    if (loading) {
+        return <Loading />
     }
 
     return (

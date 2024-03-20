@@ -2,9 +2,10 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Button from '@/app/components/ui/atoms/button'
 import { useActivatedDealsAndRewards } from '@/app/hooks/useActivatedDealsAndRewards'
+import Loading from '@/app/components/loading/loading'
 
 const ActiveRewards = () => {
-    const { activatedRewards } = useActivatedDealsAndRewards()
+    const { activatedRewards, loading } = useActivatedDealsAndRewards()
     const [expandedReward, setExpandedReward] = useState<string | null>(null)
 
     const handleExpandCoupon = (id: string) => {
@@ -13,6 +14,10 @@ const ActiveRewards = () => {
         } else {
             setExpandedReward(id)
         }
+    }
+
+    if (loading) {
+        return <Loading />
     }
 
     return (
