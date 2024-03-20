@@ -1,9 +1,9 @@
 import '@/app/components/ui/global.css'
 import { Metadata } from 'next'
-import SessionWrapper from './components/session-wrapper'
+import SessionWrapper from '@/app/components/session-wrapper'
 import Navbar from '@/app/components/navbar'
 import { inter } from '@/app/components/ui/fonts'
-import LocalStorage from './components/vouchers-amount-context/vouchers-amount-context'
+import LocalStorage from '@/app/components/vouchers-amount-context/vouchers-amount-context'
 
 export const metadata: Metadata = {
     title: {
@@ -11,6 +11,9 @@ export const metadata: Metadata = {
         default: 'Journie',
     },
     description: 'Parkland POT',
+    icons: {
+        icon: '/images/favicon-32x32.png',
+    },
 }
 
 export default function RootLayout({
