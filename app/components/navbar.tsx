@@ -42,7 +42,7 @@ const Navbar = () => {
 
     if (status === 'authenticated') {
         return (
-            <div className="w-full h-16 bg-white border-t border-gray-200">
+            <div className="w-full h-16 bg-white border-t border-gray-200 sticky bottom-0">
                 <div className="flex justify-evenly h-full max-w-screen-sm grid-cols-5 mx-auto font-medium">
                     {MENU_LIST.map((item) => (
                         <Link
