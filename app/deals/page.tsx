@@ -3,7 +3,7 @@ import JournieHeader from '@/app/components/journie-header/journie-header'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Loading from '@/app/components/loading/loading'
-import Deals from '@/app/components/deals/deals-all'
+import Deals from '@/app/components/deals/deals'
 
 export default function DealsPage() {
     const router = useRouter()

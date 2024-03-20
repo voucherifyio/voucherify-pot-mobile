@@ -22,9 +22,11 @@ export const useActiveDeals = ({
                             scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
                         }),
                     })
+                    console.log('res', res)
                     const data = await res.json()
-                    const qualifications: Deal[] =
-                        data.qualifications.redeemables.data
+                    console.log('data', data)
+                    const qualifications: Deal[] = data.qualifications
+                    console.log('qualifications', qualifications)
                     const filteredDeals = qualifications.filter(
                         (deal: Deal) => !deal.metadata.hasOwnProperty('Reward')
                     )

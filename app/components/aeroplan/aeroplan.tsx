@@ -68,7 +68,12 @@ const Aeroplan = () => {
                         Get linked. Get more.
                     </h4>
                 )}
-                {!isLinkedToAeroplan ? (
+                {isLinkedToAeroplan && (
+                    <h4 className="px-3 font-normal mt-5">
+                        Your account is already connected to Aeroplan.
+                    </h4>
+                )}
+                {!isLinkedToAeroplan && (
                     <Button
                         onClick={handleLinkToAeroplan}
                         buttonType="yellow"
@@ -76,10 +81,6 @@ const Aeroplan = () => {
                     >
                         Link to Aeroplan
                     </Button>
-                ) : (
-                    <h4 className="px-3 font-normal mt-5">
-                        Your account is already connected to Aeroplan.
-                    </h4>
                 )}
             </div>
             <Image

@@ -56,9 +56,7 @@ export const useDealsCarousel = ({
                             }
                         )
                         const data = await res.json()
-                        filteredDeals = filterDealVouchers(
-                            data.qualifications.redeemables.data
-                        )
+                        filteredDeals = filterDealVouchers(data.qualifications)
                         setActiveDeals(filteredDeals)
                     } catch (err) {
                         if (err instanceof Error) {

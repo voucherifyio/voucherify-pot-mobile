@@ -46,8 +46,7 @@ const VouchersAmount = ({ children }: { children: JSX.Element }) => {
             })
 
             const data = await res.json()
-            const qualifications: Reward[] =
-                data.qualifications.redeemables.data
+            const qualifications: Reward[] = data.qualifications
             const filteredRewards = qualifications.filter(
                 (reward: Reward) => reward.metadata.Reward
             )
