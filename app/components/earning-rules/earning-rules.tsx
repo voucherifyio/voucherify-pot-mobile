@@ -39,16 +39,15 @@ const EarningRules: React.FC<EarningRulesProps> = ({ customerId }) => {
                 return err
             }
         }
-
         if (!earningRules || earningRules.length === 0) {
             fetchEarningRules().catch(console.error)
         }
     }, [])
 
     return (
-        <div className="bg-blue-background  pt-2">
+        <>
             {error && <Toast toastText={error} toastType="error" />}
-            <div className="bg-blue-background mx-auto pt-2">
+            <div className="pt-2">
                 {earningRules.map((rule) => (
                     <div
                         key={rule.id}
@@ -62,7 +61,7 @@ const EarningRules: React.FC<EarningRulesProps> = ({ customerId }) => {
                     </div>
                 ))}
             </div>
-        </div>
+        </>
     )
 }
 

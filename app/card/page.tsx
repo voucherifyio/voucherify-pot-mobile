@@ -22,7 +22,7 @@ export default function CardPage() {
 
     if (status === 'authenticated') {
         return (
-            <div className="flex-1 bg-[#ecf0fb]">
+            <div className="flex-1 bg-blue-background">
                 <JournieHeader headerText={'My JOURNIE Card'} />
                 <div className="p-4 w-full">
                     <header>

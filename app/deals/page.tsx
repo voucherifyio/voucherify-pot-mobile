@@ -20,7 +20,7 @@ export default function DealsPage() {
     }
 
     return (
-        <div className="flex flex-col flex-1">
+        <div className="bg-blue-background flex flex-col flex-1">
             <JournieHeader headerText={'JOURNIE Deals'} />
             {customerId && <Deals customerId={customerId} />}
         </div>
