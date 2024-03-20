@@ -9,6 +9,7 @@ export const useActiveDeals = ({
 }) => {
     const [activeDeals, setActiveDeals] = useState<Deal[]>([])
     const [error, setError] = useState<string | undefined>(undefined)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (customerId) {
@@ -51,10 +52,11 @@ export const useActiveDeals = ({
                     }
                     return err
                 }
+                setLoading(false)
             }
             fetchData()
         }
     }, [customerId])
 
-    return { activeDeals, setActiveDeals, error }
+    return { activeDeals, setActiveDeals, error, loading }
 }

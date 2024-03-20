@@ -8,6 +8,7 @@ export const useActiveRewards = ({
     customerId: string | null | undefined
 }) => {
     const [activeRewards, setActiveRewards] = useState<Reward[]>([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (customerId) {
@@ -45,11 +46,12 @@ export const useActiveRewards = ({
                 })
 
                 setActiveRewards(updatedRewards)
+                setLoading(false)
             }
 
             fetchData()
         }
     }, [customerId])
 
-    return { activeRewards, setActiveRewards }
+    return { activeRewards, setActiveRewards, loading }
 }

@@ -2,6 +2,7 @@
 import { FC } from 'react'
 import Button from '@/app/components/ui/atoms/button'
 import { useActiveRewards } from '@/app/hooks/useActiveRewards'
+import Loading from '@/app/components/loading/loading'
 
 type RewardsProps = {
     customerId: string | undefined | null
@@ -22,7 +23,9 @@ export interface Reward {
 }
 
 const Rewards: FC<RewardsProps> = ({ customerId }) => {
-    const { activeRewards, setActiveRewards } = useActiveRewards({ customerId })
+    const { activeRewards, setActiveRewards, loading } = useActiveRewards({
+        customerId,
+    })
 
     const handleActivateCoupon = async (id: string) => {
         const activeDealsAndRewards = JSON.parse(
@@ -46,6 +49,10 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
         })
 
         setActiveRewards(updatedRewards)
+    }
+
+    if (loading) {
+        return <Loading />
     }
 
     return (
