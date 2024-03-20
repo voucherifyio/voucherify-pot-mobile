@@ -34,7 +34,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         customerId,
     })
     const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
-        CurrentDeal.All
+        CurrentDeal.WithinReach
     )
     const [conditionalDeals, setConditionalDeals] = useState<Deal[]>([])
     const [

@@ -44,7 +44,7 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ customerId }) => {
                     onClick={handleCopy}
                     className="w-full my-4 border border-blue-inputOutlineDefault"
                 >
-                    {codeCopied ? 'Code copied!' : 'Copy number'}
+                    {codeCopied ? 'Number copied!' : 'Copy number'}
                 </Button>
             )}
             {error && (
