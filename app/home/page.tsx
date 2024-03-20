@@ -12,6 +12,7 @@ import BrazePermissionModal from '../components/braze-permission-modal/braze-per
 import DealsCarousel from '@/app/components/deals/deals-carousel'
 import Loading from '../components/loading/loading'
 import Aeroplan from '@/app/components/aeroplan/aeroplan'
+import EarningRulesCarousel from '@/app/components/earning-rules/earning-rules-carousel'
 
 export default function HomePage() {
     const router = useRouter()
@@ -55,6 +56,7 @@ export default function HomePage() {
             <div className="flex-row  mx-border-b-2 w-full">
                 <Milestones />
                 <DealsCarousel />
+                <EarningRulesCarousel />
                 <Aeroplan />
             </div>
         </div>
