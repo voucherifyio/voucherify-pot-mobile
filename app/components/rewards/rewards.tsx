@@ -61,7 +61,7 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
                 activeRewards.map((reward) => (
                     <div
                         key={reward.id}
-                        className="shad-md min-h-[92px] rounded-xl m-2 flex bg-white text-blue-text w-[95%]"
+                        className="shadow-md min-h-[92px] rounded-xl m-2 flex bg-white text-blue-text w-[95%]"
                     >
                         <div className="flex flex-col p-2">
                             <h3 className="text-[18px] font-extrabold">

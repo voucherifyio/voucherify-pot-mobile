@@ -126,7 +126,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
     }
 
     return (
-        <div className="h-[90%] pt-2">
+        <div className="pt-2">
             {error && <Toast toastText={error} toastType="error" />}
             {errorMessage && (
                 <Toast toastText={errorMessage} toastType="error" />
