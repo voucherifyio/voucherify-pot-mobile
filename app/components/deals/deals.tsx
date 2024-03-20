@@ -59,7 +59,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
     }
 
     return (
-        <div className="bg-blue-background h-[90%] pt-2">
+        <div className="bg-blue-background flex-1 pt-2">
             {error && <Toast toastText={error} toastType="error" />}
             <ul className="my-2 justify-center flex text-[16px] font-bold text-center text-gray-500">
                 <li>
