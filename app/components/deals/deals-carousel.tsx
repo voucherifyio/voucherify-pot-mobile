@@ -1,8 +1,9 @@
 'use client'
-import { FC } from 'react'
+import { FC, MutableRefObject, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { FaArrowRight } from 'react-icons/fa'
 import { useDealsCarousel } from '@/app/hooks/useDealsCarousel'
+import ScrollContainer from 'react-indiana-drag-scroll'
 
 type DealsCarouselProps = {
     customerId: string | null | undefined
@@ -13,7 +14,6 @@ const DealsCarousel: FC<DealsCarouselProps> = ({ customerId }) => {
     const { activeDeals, error } = useDealsCarousel({
         customerId,
     })
-    const firstDeal = activeDeals[0]
 
     const handleDealsRedirectClick = () => {
         router.push('/deals')
@@ -33,20 +33,22 @@ const DealsCarousel: FC<DealsCarouselProps> = ({ customerId }) => {
                     </span>
                 </button>
             </div>
-            <div>
-                <div className="ml-2 relative min-h-[80px] overflow-hidden rounded-lg md:h-96">
+            <ScrollContainer
+                component={'div'}
+                className="scroll-container flex ml-2 w-full"
+                buttons={[1, 2, 3, 4]}
+            >
+                {activeDeals?.slice(0, 4)?.map((deal) => (
                     <div
-                        key={firstDeal?.name || firstDeal?.id}
-                        className="shadow-md min-h-[60px] rounded-xl m-4 flex bg-white text-blue-text w-[80%]"
+                        key={deal.id}
+                        className="shadow-md min-h-[60px] min-w-[70%] rounded-xl m-4 flex bg-white text-blue-text flex flex-col p-2"
                     >
-                        <div className="flex flex-col p-2">
-                            <h3 className="text-[18px] font-extrabold">
-                                {firstDeal?.name || firstDeal?.id}
-                            </h3>
-                        </div>
+                        <h3 className="text-[18px] font-extrabold">
+                            {deal?.name || deal?.id}
+                        </h3>
                     </div>
-                </div>
-            </div>
+                ))}
+            </ScrollContainer>
         </>
     )
 }
