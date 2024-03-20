@@ -1,0 +1,4 @@
+export enum REWARDS {
+    AEROPLAN_TRANSFER_REWARD_ID = 'rew_MMm0dMR9dUaB6gKyxDSHbCQp',
+    SEVEN_CENTS_PER_LITER_REWARD_ID = 'rew_m89w60Ga4ybWDfcDlYT87qjx',
+}
