@@ -13,6 +13,7 @@ export const useActivatedDealsAndRewards = () => {
     const [activatedRewards, setActivatedRewards] = useState<ActivatedReward[]>(
         []
     )
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -50,10 +51,11 @@ export const useActivatedDealsAndRewards = () => {
             const barcodePromises = activatedDealsAndRewards.map(fetchBarcode)
             const updatedDeals = await Promise.all(barcodePromises)
             setActivatedRewards(updatedDeals)
+            setLoading(false)
         }
 
         fetchData().catch(console.error)
     }, [])
 
-    return { activatedRewards }
+    return { activatedRewards, loading }
 }

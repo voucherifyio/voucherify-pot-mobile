@@ -49,7 +49,7 @@ const EarningRulesCarousel: React.FC<EarningRulesCarouselProps> = () => {
 
     return (
         <>
-            <div className="flex justify-between mx-8 h-[20px]">
+            <div className="flex justify-between mx-8">
                 <h1 className="text-blue-text text-18 font-bold">
                     Earning rules
                 </h1>
@@ -70,7 +70,7 @@ const EarningRulesCarousel: React.FC<EarningRulesCarouselProps> = () => {
                             firstEarningRule?.source?.banner ||
                             firstEarningRule?.id
                         }
-                        className="shadow-md min-h-[60px] rounded-xl m-6 flex bg-white text-blue-text w-[80%]"
+                        className="shadow-md min-h-[60px] rounded-xl m-4 flex bg-white text-blue-text w-[80%]"
                     >
                         <div className="flex flex-col p-2">
                             <h3 className="text-[18px] font-extrabold">

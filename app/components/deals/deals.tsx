@@ -5,6 +5,7 @@ import Toast from '@/app/components/ui/atoms/toast'
 import { useActiveDeals } from '@/app/hooks/useActiveDeals'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { SEGMENTS } from '@/enum/segments'
+import Loading from '@/app/components/loading/loading'
 interface DealsProps {
     customerId: string
 }
@@ -39,11 +40,11 @@ interface Segment {
 }
 
 const Deals: React.FC<DealsProps> = ({ customerId }) => {
-    const { activeDeals, setActiveDeals, error } = useActiveDeals({
+    const { activeDeals, setActiveDeals, error, loading } = useActiveDeals({
         customerId,
     })
     const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
-        CurrentDeal.All
+        CurrentDeal.WithinReach
     )
     const [conditionalDeals, setConditionalDeals] = useState<Deal[]>([])
     const [
@@ -132,8 +133,12 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         setActiveDeals(updatedDeals)
     }
 
+    if (loading) {
+        return <Loading />
+    }
+
     return (
-        <div className="h-[90%] pt-2">
+        <div className="pt-2">
             {error && <Toast toastText={error} toastType="error" />}
             {errorMessage && (
                 <Toast toastText={errorMessage} toastType="error" />

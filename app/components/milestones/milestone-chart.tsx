@@ -15,6 +15,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
 }) => {
     const [rewards, setRewards] = useState([])
     const [rewardModalOpened, setRewardModalOpened] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const listMemberRewards = async (customerId: string | null | undefined) => {
         const res = await fetch(
@@ -31,22 +32,21 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
             return false
         }
         setRewards(rewards)
+        setLoading(false)
     }
 
     return (
-        <div className="p-4">
+        <div className="py-2">
             <ol className="items-center flex">
-                <li className="relative mb-6 w-full">
+                <li className="relative w-full mb-6">
                     <div className="text-left text-blue-text mb-2 ml-2 font-bold">
                         <p className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
                             0
                         </p>
                     </div>
-                    <div className="flex items-center">
-                        <div
-                            className={`${mainLoyaltyPoints < 37.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2 z-0`}
-                        ></div>
-                    </div>
+                    <div
+                        className={`${mainLoyaltyPoints < 37.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2 z-0`}
+                    />
                     <div
                         className={`relative bottom-4 w-6 h-6 bg-yellow-button z-10 rounded-full flex items-center justify-center text-blue-text`}
                     >
@@ -54,46 +54,38 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                     </div>
                 </li>
                 <li className="relative w-full">
-                    <div className="flex items-center">
-                        <div
-                            className={`${mainLoyaltyPoints < 75 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                        ></div>
-                    </div>
                     <div
-                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    ></div>
+                        className={`${mainLoyaltyPoints < 75 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                    />
+                    <div
+                        className={`bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    />
                 </li>
                 <li className="relative w-full">
-                    <div className="flex items-center">
-                        <div
-                            className={`${mainLoyaltyPoints < 112.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                        ></div>
-                    </div>
                     <div
-                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    ></div>
+                        className={`${mainLoyaltyPoints < 112.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                    />
+                    <div
+                        className={`bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    />
                 </li>
                 <li className="relative w-full">
-                    <div className="flex items-center">
-                        <div
-                            className={`${mainLoyaltyPoints < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                        ></div>
-                    </div>
+                    <div
+                        className={`${mainLoyaltyPoints < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                    />
                     <div
                         className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    ></div>
+                    />
                 </li>
-                <li className="relative mb-6 w-full">
+                <li className="relative w-full mb-6">
                     <div className="text-left text-blue-text mb-2 font-bold">
                         <p className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
                             150
                         </p>
                     </div>
-                    <div className="flex items-center">
-                        <div
-                            className={`${mainLoyaltyPoints < 187.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                        ></div>
-                    </div>
+                    <div
+                        className={`${mainLoyaltyPoints < 187.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                    />
                     <div
                         className={`${mainLoyaltyPoints < 150 ? 'bg-gray-300' : 'bg-yellow-button'} relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     >
@@ -105,34 +97,28 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                     </div>
                 </li>
                 <li className="relative w-full">
-                    <div className="flex items-center">
-                        <div
-                            className={`${mainLoyaltyPoints < 225 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                        ></div>
-                    </div>
+                    <div
+                        className={`${mainLoyaltyPoints < 225 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                    />
                     <div
                         className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    ></div>
+                    />
                 </li>
                 <li className="relative w-full">
-                    <div className="flex items-center">
-                        <div
-                            className={`${mainLoyaltyPoints < 262.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                        ></div>
-                    </div>
+                    <div
+                        className={`${mainLoyaltyPoints < 262.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                    />
                     <div
                         className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    ></div>
+                    />
                 </li>
                 <li className="relative w-full">
-                    <div className="flex items-center">
-                        <div
-                            className={`${mainLoyaltyPoints < 300 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                        ></div>
-                    </div>
+                    <div
+                        className={`${mainLoyaltyPoints < 300 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                    />
                     <div
                         className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    ></div>
+                    />
                 </li>
                 <li className="relative mb-6">
                     <div className="text-left text-blue-text mb-2 font-bold">
@@ -140,11 +126,9 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                             300
                         </p>
                     </div>
-                    <div className="items-center">
-                        <div
-                            className={`flex  ${mainLoyaltyPoints < 10000 ? 'bg-gray-300' : 'bg-yellow-button'} h-2`}
-                        ></div>
-                    </div>
+                    <div
+                        className={`flex  ${mainLoyaltyPoints < 10000 ? 'bg-gray-300' : 'bg-yellow-button'} h-2`}
+                    />
                     <div
                         className={`relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text ${mainLoyaltyPoints < 300 ? 'bg-gray-300' : 'bg-yellow-button'}`}
                     >
@@ -164,6 +148,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                             rewardModalOpened={rewardModalOpened}
                             setRewardModalOpened={setRewardModalOpened}
                             customerId={customerId}
+                            loading={loading}
                         />
                     ) : null}
                     <button
