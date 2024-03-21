@@ -1,11 +1,11 @@
 'use client'
 import { useState } from 'react'
 import { MdLock, MdOutlineLocalGasStation } from 'react-icons/md'
-import RewardsModal from '@/app/components/rewards-modal.ts/rewards-modal'
+import RewardsModal from '@/app/components/rewards-modal/rewards-modal'
 
 interface MilestoneChartProps {
     mainLoyaltyPoints: number
-    promoPoints: number
+    promoPoints?: number | null
     customerId: string | null | undefined
 }
 const MilestoneChart: React.FC<MilestoneChartProps> = ({
@@ -140,7 +140,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                     </div>
                 </li>
             </ol>
-            {promoPoints >= 1 && (
+            {promoPoints && promoPoints >= 1 && (
                 <div className="flex justify-center relative">
                     {rewardModalOpened ? (
                         <RewardsModal
