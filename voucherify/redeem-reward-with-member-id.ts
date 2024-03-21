@@ -1,4 +1,3 @@
-import { listCampaignMembers } from '@/voucherify/list-campaign-members'
 import { VoucherifyServerSide } from '@voucherify/sdk'
 
 type Params = {
@@ -11,11 +10,12 @@ type Params = {
 export const redeemRewardWithMemberId = async (params: Params) => {
     const { voucherify, campaignId, rewardId, memberId } = params
 
-    const redeemedReward = await voucherify.loyalties.redeemReward(
-        campaignId,
-        memberId,
-        { reward: { id: rewardId } }
-    )
-
-    return redeemedReward
+    try {
+        return await voucherify.loyalties.redeemReward(campaignId, memberId, {
+            reward: { id: rewardId },
+        })
+    } catch (err: any) {
+        console.error(err)
+        throw new Error(err?.message)
+    }
 }
