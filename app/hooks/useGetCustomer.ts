@@ -24,6 +24,8 @@ export const useGetCustomer = () => {
             }
 
             getCustomer()
+            const refetchInterval = setInterval(getCustomer, 10000)
+            return () => clearInterval(refetchInterval)
         }
     }, [userPhone])
 

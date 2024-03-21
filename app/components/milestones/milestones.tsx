@@ -4,8 +4,8 @@ import { useGetCustomer } from '@/app/hooks/useGetCustomer'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { useEffect, useState } from 'react'
 import { useLoyaltyCard } from '@/app/hooks/useLoyaltyCard'
-import { REWARDS } from '@/enum/rewards'
 import Toast from '@/app/components/ui/atoms/toast'
+import { REWARDS } from '@/enum/rewards'
 
 const Milestones = () => {
     const { customer } = useGetCustomer()
