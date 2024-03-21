@@ -4,6 +4,7 @@ import aeroplan from '@/public/images/aeroplan.png'
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import Toast from '@/app/components/ui/atoms/toast'
+import Loading from '@/app/components/loading/loading'
 
 const Aeroplan = () => {
     const [isLinkedToAeroplan, setIsLinkedToAeroplan] = useState<boolean>()
@@ -11,6 +12,7 @@ const Aeroplan = () => {
     const customerPhone = session?.user?.id
     const [error, setError] = useState<string | undefined>(undefined)
     const [success, setSuccess] = useState<boolean>(false)
+    const [loading, setLoading] = useState(false)
 
     const handleLinkToAeroplan = async () => {
         if (customerPhone) {
@@ -23,6 +25,7 @@ const Aeroplan = () => {
                     }),
                 })
                 setSuccess(true)
+                fetchCustomersAeroplanMetadata()
             } catch (err: any) {
                 console.error(err)
                 setError(err)
@@ -30,32 +33,38 @@ const Aeroplan = () => {
         }
     }
 
-    useEffect(() => {
-        const fetchCustomersAeroplanMetadata = async () => {
-            if (customerPhone) {
-                try {
-                    const res = await fetch(
-                        `/api/voucherify/get-customer?phone=${customerPhone}`,
-                        {
-                            method: 'GET',
-                        }
-                    )
-                    const { customer } = await res.json()
-                    if (customer.metadata?.aeroplan_member === true) {
-                        setIsLinkedToAeroplan(
-                            customer.metadata?.aeroplan_member
-                        )
+    const fetchCustomersAeroplanMetadata = async () => {
+        if (customerPhone) {
+            setLoading(true)
+            try {
+                const res = await fetch(
+                    `/api/voucherify/get-customer?phone=${customerPhone}`,
+                    {
+                        method: 'GET',
                     }
-                } catch (err) {
-                    if (err instanceof Error) {
-                        setError(err.message)
-                    }
-                    return err
+                )
+                const { customer } = await res.json()
+                if (customer.metadata?.aeroplan_member) {
+                    setIsLinkedToAeroplan(customer.metadata?.aeroplan_member)
                 }
+                setLoading(false)
+            } catch (err) {
+                if (err instanceof Error) {
+                    setError(err.message)
+                }
+                setLoading(false)
+                return err
             }
         }
+    }
+
+    useEffect(() => {
         fetchCustomersAeroplanMetadata().catch(console.error)
-    }, [handleLinkToAeroplan])
+    }, [])
+
+    if (loading) {
+        return <Loading />
+    }
 
     return (
         <div className="bottom-20 mx-4 text-blue-text text-18 font-bold flex justify-between py-2">
