@@ -140,7 +140,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                     </div>
                 </li>
             </ol>
-            {promoPoints && promoPoints >= 1 && (
+            {promoPoints && promoPoints >= 1 ? (
                 <div className="flex justify-center relative">
                     {rewardModalOpened ? (
                         <RewardsModal
@@ -161,7 +161,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                         Choose
                     </button>
                 </div>
-            )}
+            ) : null}
         </div>
     )
 }
