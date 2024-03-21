@@ -14,7 +14,7 @@ const Milestones = () => {
             ?.points || 0
     const promoPoints =
         customer?.loyalty.campaigns?.[CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM]
-            .points ?? null
+            ?.points ?? null
     const customerId = customer?.id
     const { cardNumber } = useLoyaltyCard({
         customerId,
