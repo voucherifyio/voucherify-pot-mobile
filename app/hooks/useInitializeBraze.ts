@@ -1,38 +1,32 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 import * as instanceBraze from '@braze/web-sdk'
 
 export const useInitalizeBraze = () => {
     const [braze, setBraze] = useState<
         typeof import('../../node_modules/@braze/web-sdk/index') | undefined
     >()
-    const { status, data } = useSession()
-
-    const handleBraze = useCallback(async () => {
-        if (
-            typeof window !== 'undefined' &&
-            status === 'authenticated' &&
-            data.user?.id
-        ) {
-            const isInit = instanceBraze.initialize(
-                process.env.NEXT_PUBLIC_BRAZE_API_KEY!,
-                {
-                    baseUrl: process.env.NEXT_PUBLIC_BRAZE_SDK_ENDPOINT!,
-                    enableLogging: true,
-                    allowUserSuppliedJavascript: true,
-                    minimumIntervalBetweenTriggerActionsInSeconds: 5,
-                }
-            )
-            if (isInit) {
-                instanceBraze.changeUser(data.user.id)
-                return setBraze(instanceBraze)
-            }
-        }
-    }, [status])
 
     useEffect(() => {
-        handleBraze()
-    }, [handleBraze])
+        if (typeof window !== 'undefined') {
+            instanceBraze.initialize(process.env.NEXT_PUBLIC_BRAZE_API_KEY!, {
+                baseUrl: process.env.NEXT_PUBLIC_BRAZE_SDK_ENDPOINT!,
+                enableLogging: true,
+                allowUserSuppliedJavascript: true,
+                minimumIntervalBetweenTriggerActionsInSeconds: 5,
+            })
+            setBraze(instanceBraze)
+        }
+    }, [])
 
-    return { braze }
+    const initializeBraze = async ({
+        customerId,
+    }: {
+        customerId: string | null | undefined
+    }) => {
+        if (typeof window !== 'undefined' && customerId && braze) {
+            instanceBraze.changeUser(customerId)
+        }
+    }
+
+    return { braze, initializeBraze }
 }
