@@ -22,6 +22,7 @@ export const getQualifications = async (params: Params) => {
                 mode: 'BASIC',
                 scenario: scenario,
                 options: {
+                    sorting_rule: 'BEST_DEAL',
                     limit: 100,
                     expand: ['redeemable'],
                 },
