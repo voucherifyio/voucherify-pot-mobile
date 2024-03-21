@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import Button from '@/app/components/ui/atoms/button'
 import Toast from '@/app/components/ui/atoms/toast'
 import { useActiveDeals } from '@/app/hooks/useActiveDeals'
-import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
-import { useSession } from 'next-auth/react'
+import { CAMPAIGNS } from '@/enum/campaigns'
+import { SEGMENTS } from '@/enum/segments'
 interface DealsProps {
     customerId: string
 }
@@ -22,11 +22,20 @@ export interface Deal {
     inapplicable_to?: {}
     active: boolean
     metadata: {}
+    promotion?: {
+        tiers?: { name?: string }[]
+    }
 }
 
 enum CurrentDeal {
     All = 'All',
     WithinReach = 'Within reach',
+}
+
+interface Segment {
+    id: string
+    name: string
+    object: string
 }
 
 const Deals: React.FC<DealsProps> = ({ customerId }) => {
@@ -38,51 +47,54 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
     )
     const [conditionalDeals, setConditionalDeals] = useState<Deal[]>([])
     const [
-        isEligibleForTheConditionalDeal,
-        setIsEligibleForTheConditionalDeal,
+        isNotEligibleForTheConditionalDeal,
+        setIsNotEligibleForTheConditionalDeal,
     ] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string | null>('')
-    const { data: session } = useSession()
-    const customerPhone = session?.user?.id
 
     useEffect(() => {
         const fetchNotYetApplicableDeals = async () => {
+            // Get the campaign
             if (customerId) {
                 try {
-                    const res = await fetch(`/api/voucherify/qualifications`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            customerId,
-                            scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
-                            customerMetadata: {
-                                unique_locations_purchased_at: 3,
-                            },
-                        }),
-                    })
+                    const res = await fetch(
+                        `/api/voucherify/get-campaign?campaignId=${CAMPAIGNS.FREE_COCA_COCA_CAMPAIGN_ID}`,
+                        {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json' },
+                        }
+                    )
 
                     const data = await res.json()
 
-                    setConditionalDeals(data.qualifications)
-
                     // Check if the customer is eligible for the discount
-                    try {
-                        const res = await fetch(
-                            `/api/voucherify/get-customer?phone=${customerPhone}`,
-                            {
-                                method: 'GET',
+                    // List customer's segments and check if the customer is in the segment
+                    if (customerId) {
+                        try {
+                            const res = await fetch(
+                                `/api/voucherify/list-customers-segments?customerId=${customerId}`,
+                                {
+                                    method: 'GET',
+                                }
+                            )
+                            const data = await res.json()
+                            if (
+                                !data.customersSegments.data.find(
+                                    (segment: Segment) =>
+                                        segment.name ===
+                                        SEGMENTS.CUSTOMER_PURCHASED_3_PLUS_LOCALISATIONS
+                                )
+                            ) {
+                                setIsNotEligibleForTheConditionalDeal(true)
+                            } else {
+                                setConditionalDeals([])
+                                return
                             }
-                        )
-                        const { customer } = await res.json()
-                        if (
-                            customer.metadata?.unique_locations_purchased_at >=
-                            3
-                        ) {
-                            setIsEligibleForTheConditionalDeal(true)
+                        } catch (err) {
+                            return err
                         }
-                    } catch (err) {
-                        return err
                     }
+                    setConditionalDeals([data.campaign])
                 } catch (err) {
                     if (err instanceof Error) {
                         setErrorMessage(err.message)
@@ -198,14 +210,13 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                         >
                             <div className="flex flex-col p-2">
                                 <h3 className="text-[18px] font-extrabold">
-                                    {deal?.banner || deal?.name || deal.id}
+                                    {(deal?.promotion?.tiers &&
+                                        deal?.promotion?.tiers[0].name) ||
+                                        deal?.name ||
+                                        deal.id}
                                 </h3>
-                                {/*<h3>{deal?.metadata?.eligibility_condition}</h3>*/}
-                                {isEligibleForTheConditionalDeal ? (
-                                    <h3 className="pt-1 text-green-700">
-                                        ✓ Available
-                                    </h3>
-                                ) : (
+                                {/*todo add metadata message here*/}
+                                {isNotEligibleForTheConditionalDeal && (
                                     <h3 className="pt-1">
                                         pump in 3 different locations
                                     </h3>
