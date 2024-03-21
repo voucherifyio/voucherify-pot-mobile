@@ -16,6 +16,6 @@ export const redeemRewardWithMemberId = async (params: Params) => {
         })
     } catch (err: any) {
         console.error(err)
-        throw new Error(err?.message)
+        throw new Error(err?.message || 'Failed to redeem reward.')
     }
 }

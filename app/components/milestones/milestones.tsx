@@ -19,7 +19,8 @@ const Milestones = () => {
     const { cardNumber } = useLoyaltyCard({
         customerId,
     })
-    const [successMessage, setSuccessMessage] = useState<string>('')
+    const [successMessage, setSuccessMessage] = useState<string | null>('')
+    const [errorMessage, setErrorMessage] = useState<string | null>()
 
     useEffect(() => {
         const autoRedeemReward = async (rewardId: string) => {
@@ -41,7 +42,10 @@ const Milestones = () => {
                 if (res.status !== 200) {
                     console.log(data)
                 }
-            } catch (err) {}
+            } catch (err) {
+                console.error(err)
+                setErrorMessage(`Error: ${err}`)
+            }
         }
         if (
             cardNumber &&
@@ -94,6 +98,9 @@ const Milestones = () => {
             />
             {successMessage && (
                 <Toast toastType="success" toastText={successMessage} />
+            )}
+            {errorMessage && (
+                <Toast toastType="error" toastText={errorMessage} />
             )}
         </div>
     )
