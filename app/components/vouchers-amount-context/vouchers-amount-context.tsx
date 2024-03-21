@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react'
 import { Reward } from '@/app/components/rewards/rewards'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { Deal } from '@/app/components/deals/deals'
+import { getQualifications } from '@/app/apiEndpoints/apiEndpoints'
 
 export type DealsAndRewards = {
     rewards: number
@@ -35,30 +36,28 @@ const VouchersAmount = ({ children }: { children: JSX.Element }) => {
     })
 
     useEffect(() => {
-        const handleStorage = async (customerId: string | null | undefined) => {
-            const res = await fetch(`api/voucherify/qualifications`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    customerId,
-                    scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
-                }),
-            })
-
-            const data = await res.json()
-            const qualifications: Reward[] = data.qualifications
-            const filteredRewards = qualifications.filter(
-                (reward: Reward) => reward.metadata.Reward
-            )
-            const filteredDeals = qualifications.filter(
-                (deal: Deal) => !deal.metadata.hasOwnProperty('Reward')
-            )
-            setDealsAndRewards({
-                rewards: filteredRewards.length,
-                deals: filteredDeals.length,
-            })
-        }
         if (customerId) {
+            const handleStorage = async (customerId: string) => {
+                const res = await getQualifications(
+                    customerId,
+                    QUALIFICATION_SCENARIO.AUDIENCE_ONLY
+                )
+                const data = await res.json()
+                const qualifications: Reward[] = data.qualifications
+                const filteredRewards =
+                    qualifications?.filter(
+                        (reward: Reward) => reward.metadata.Reward
+                    ) || []
+                const filteredDeals =
+                    qualifications?.filter(
+                        (deal: Deal) => !deal.metadata.hasOwnProperty('Reward')
+                    ) || []
+                setDealsAndRewards({
+                    rewards: filteredRewards.length,
+                    deals: filteredDeals.length,
+                })
+            }
+
             handleStorage(customerId)
         }
     }, [customerId])

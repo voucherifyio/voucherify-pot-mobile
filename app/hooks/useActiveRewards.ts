@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { Reward } from '@/app/components/rewards/rewards'
+import { getQualifications } from '../apiEndpoints/apiEndpoints'
 
 export const useActiveRewards = ({
     customerId,
@@ -13,15 +14,10 @@ export const useActiveRewards = ({
     useEffect(() => {
         if (customerId) {
             const fetchData = async () => {
-                const res = await fetch(`api/voucherify/qualifications`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        customerId,
-                        scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
-                    }),
-                })
-
+                const res = await getQualifications(
+                    customerId,
+                    QUALIFICATION_SCENARIO.AUDIENCE_ONLY
+                )
                 const data = await res.json()
                 const qualifications: Reward[] = data.qualifications
                 const filteredRewards = qualifications.filter(

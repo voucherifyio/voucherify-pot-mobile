@@ -6,6 +6,7 @@ import { useActiveDeals } from '@/app/hooks/useActiveDeals'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { useSession } from 'next-auth/react'
 import Loading from '@/app/components/loading/loading'
+import { getCustomer, getQualifications } from '@/app/apiEndpoints/apiEndpoints'
 interface DealsProps {
     customerId: string
 }
@@ -50,36 +51,29 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         const fetchNotYetApplicableDeals = async () => {
             if (customerId) {
                 try {
-                    const res = await fetch(`/api/voucherify/qualifications`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            customerId,
-                            scenario: QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
-                            customerMetadata: {
-                                unique_locations_purchased_at: 3,
-                            },
-                        }),
-                    })
-
+                    const customerMetadata = {
+                        unique_locations_purchased_at: 3,
+                    }
+                    const res = await getQualifications(
+                        customerId,
+                        QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
+                        customerMetadata
+                    )
                     const data = await res.json()
 
                     setConditionalDeals(data.qualifications)
 
                     // Check if the customer is eligible for the discount
                     try {
-                        const res = await fetch(
-                            `/api/voucherify/get-customer?phone=${customerPhone}`,
-                            {
-                                method: 'GET',
+                        if (customerPhone) {
+                            const res = await getCustomer(customerPhone)
+                            const { customer } = await res.json()
+                            if (
+                                customer.metadata
+                                    ?.unique_locations_purchased_at >= 3
+                            ) {
+                                setIsEligibleForTheConditionalDeal(true)
                             }
-                        )
-                        const { customer } = await res.json()
-                        if (
-                            customer.metadata?.unique_locations_purchased_at >=
-                            3
-                        ) {
-                            setIsEligibleForTheConditionalDeal(true)
                         }
                     } catch (err) {
                         return err
@@ -92,9 +86,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                 }
             }
         }
-        if (!conditionalDeals || conditionalDeals.length === 0) {
-            fetchNotYetApplicableDeals().catch(console.error)
-        }
+        fetchNotYetApplicableDeals().catch(console.error)
     }, [])
 
     const handleActivateCoupon = async (id: string) => {

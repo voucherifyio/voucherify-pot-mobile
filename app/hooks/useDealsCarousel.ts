@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
+import { getQualifications } from '../apiEndpoints/apiEndpoints'
 
 interface Deal {
     id: string
@@ -31,6 +32,7 @@ export const useDealsCarousel = ({
 }) => {
     const [activeDeals, setActiveDeals] = useState<Deal[]>([])
     const [error, setError] = useState<string | undefined>(undefined)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (customerId) {
@@ -43,17 +45,9 @@ export const useDealsCarousel = ({
                     setActiveDeals(filteredDeals)
                 } else {
                     try {
-                        const res = await fetch(
-                            `/api/voucherify/qualifications`,
-                            {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    customerId,
-                                    scenario:
-                                        QUALIFICATION_SCENARIO.AUDIENCE_ONLY,
-                                }),
-                            }
+                        const res = await getQualifications(
+                            customerId,
+                            QUALIFICATION_SCENARIO.AUDIENCE_ONLY
                         )
                         const data = await res.json()
                         filteredDeals = filterDealVouchers(data.qualifications)
@@ -65,10 +59,11 @@ export const useDealsCarousel = ({
                         return err
                     }
                 }
+                setLoading(false)
             }
             fetchData()
         }
     }, [customerId])
 
-    return { activeDeals, error }
+    return { activeDeals, error, loading }
 }

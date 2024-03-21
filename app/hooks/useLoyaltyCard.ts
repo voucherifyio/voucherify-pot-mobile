@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { getLoyaltyCard } from '../apiEndpoints/apiEndpoints'
 
 interface LoyaltyCardResponse {
     loyaltyCard: {
@@ -23,13 +24,7 @@ export const useLoyaltyCard = ({
         if (customerId) {
             const fetchData = async () => {
                 try {
-                    const res = await fetch(
-                        `/api/voucherify/loyalty-card?customerId=${customerId}`,
-                        {
-                            method: 'GET',
-                            headers: { 'Content-Type': 'application/json' },
-                        }
-                    )
+                    const res = await getLoyaltyCard(customerId)
                     const data: LoyaltyCardResponse = await res.json()
                     setCardUrl(data.loyaltyCard.barcode.url)
                     setCardNumber(data.loyaltyCard.code)
