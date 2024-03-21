@@ -52,7 +52,7 @@ const Milestones = () => {
             autoRedeemReward(REWARDS.AEROPLAN_TRANSFER_REWARD_ID)
                 .then(() =>
                     setSuccessMessage(
-                        `Successfully redeemed reward - ${REWARDS.SEVEN_CENTS_PER_LITER_REWARD}`
+                        `Successfully redeemed reward - ${REWARDS.AEROPLAN_TRANSFER_REWARD}`
                     )
                 )
                 .catch((err) => {
@@ -68,7 +68,7 @@ const Milestones = () => {
             autoRedeemReward(REWARDS.SEVEN_CENTS_PER_LITER_REWARD_ID)
                 .then(() =>
                     setSuccessMessage(
-                        `Successfully redeemed reward - ${REWARDS.AEROPLAN_TRANSFER_REWARD}`
+                        `Successfully redeemed reward - ${REWARDS.SEVEN_CENTS_PER_LITER_REWARD}`
                     )
                 )
                 .catch((err) => {
