@@ -23,7 +23,12 @@ export interface Deal {
     active: boolean
     metadata: {}
     promotion?: {
-        tiers?: { name?: string }[]
+        tiers?: {
+            name?: string
+            metadata?: {
+                promotion_details?: string
+            }
+        }[]
     }
 }
 
@@ -153,10 +158,12 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                                             deal?.name ||
                                             deal.id}
                                     </h3>
-                                    {/*todo add metadata message here*/}
                                     {isNotEligibleForTheConditionalDeal && (
                                         <h3 className="pt-1">
-                                            pump in 3 different locations
+                                            {deal?.promotion?.tiers &&
+                                                deal?.promotion?.tiers[0]
+                                                    .metadata
+                                                    ?.promotion_details}
                                         </h3>
                                     )}
                                 </div>

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { MdLock, MdOutlineLocalGasStation } from 'react-icons/md'
-import RewardsModal from '@/app/components/rewards-modal.ts/rewards-modal'
+import RewardsModal from '@/app/components/rewards-modal/rewards-modal'
 
 interface MilestoneChartProps {
     mainLoyaltyPoints: number
