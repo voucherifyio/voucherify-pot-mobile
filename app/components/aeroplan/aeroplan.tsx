@@ -25,7 +25,7 @@ const Aeroplan = () => {
                     }),
                 })
                 setSuccess(true)
-                fetchCustomersAeroplanMetadata()
+                setCustomersAeroplanMetadata()
             } catch (err: any) {
                 console.error(err)
                 setError(err)
@@ -33,33 +33,16 @@ const Aeroplan = () => {
         }
     }
 
-    const fetchCustomersAeroplanMetadata = async () => {
-        if (customerId) {
-            setLoading(true)
-            try {
-                const res = await fetch(
-                    `/api/voucherify/get-customer?phone=${customerId}`,
-                    {
-                        method: 'GET',
-                    }
-                )
-                const { customer } = await res.json()
-                if (customer.metadata?.aeroplan_member) {
-                    setIsLinkedToAeroplan(customer.metadata?.aeroplan_member)
-                }
-                setLoading(false)
-            } catch (err) {
-                if (err instanceof Error) {
-                    setError(err.message)
-                }
-                setLoading(false)
-                return err
-            }
+    const setCustomersAeroplanMetadata = async () => {
+        setLoading(true)
+        if (customer?.metadata?.aeroplan_member) {
+            setIsLinkedToAeroplan(customer.metadata?.aeroplan_member)
         }
+        setLoading(false)
     }
 
     useEffect(() => {
-        fetchCustomersAeroplanMetadata().catch(console.error)
+        setCustomersAeroplanMetadata().catch(console.error)
     }, [customer])
 
     if (loading) {
