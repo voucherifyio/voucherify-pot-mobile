@@ -3,7 +3,6 @@ import Image from 'next/image'
 import aeroplan from '@/public/images/aeroplan.png'
 import { useEffect, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
-import Loading from '@/app/components/loading/loading'
 import { useGetCustomer } from '@/app/hooks/useGetCustomer'
 
 const Aeroplan = () => {
@@ -62,56 +61,49 @@ const Aeroplan = () => {
         fetchCustomersAeroplanMetadata().catch(console.error)
     }, [customer])
 
-    if (loading) {
-        return <Loading />
-    }
-
     return (
         <>
-            <div className="mx-4 mt-40 text-blue-text text-18 font-bold flex justify-between py-2">
-                <div className="flex-col">
-                    <h1 className="mb-2 text-blue-text text-18 font-bold">
-                        Partner Hub
-                    </h1>
-                    {!isLinkedToAeroplan && (
-                        <h4 className="mb-4 text-blue-text text-14 font-normal">
-                            Get linked. Get more.
-                        </h4>
-                    )}
-                    {customer && (
-                        <>
-                            {isLinkedToAeroplan && (
-                                <h4 className="px-3 font-normal mt-5">
-                                    Your account is already connected to
-                                    Aeroplan.
-                                </h4>
-                            )}
-                            {!isLinkedToAeroplan && (
-                                <Button
-                                    onClick={handleLinkToAeroplan}
-                                    buttonType="yellow"
-                                    className="w-[140px] px-2"
-                                >
-                                    Link to Aeroplan
-                                </Button>
-                            )}
-                        </>
+            {customer && (
+                <div className="mx-4 mt-40 text-blue-text text-18 font-bold flex justify-between py-2">
+                    <div className="flex-col">
+                        <h1 className="mb-2 text-blue-text text-18 font-bold">
+                            Partner Hub
+                        </h1>
+                        {!isLinkedToAeroplan && (
+                            <h4 className="mb-4 text-blue-text text-14 font-normal">
+                                Get linked. Get more.
+                            </h4>
+                        )}
+                        {isLinkedToAeroplan && (
+                            <h4 className="px-3 font-normal mt-5">
+                                Your account is already connected to Aeroplan.
+                            </h4>
+                        )}
+                        {!isLinkedToAeroplan && (
+                            <Button
+                                onClick={handleLinkToAeroplan}
+                                buttonType="yellow"
+                                className="w-[140px] px-2"
+                            >
+                                Link to Aeroplan
+                            </Button>
+                        )}
+                    </div>
+
+                    <Image
+                        src={aeroplan}
+                        alt="aeroplan"
+                        className="h-[112px] w-[130px] object-cover object-right"
+                    />
+                    {error && <Toast toastText={error} toastType="error" />}
+                    {success && (
+                        <Toast
+                            toastText="Successfuly linked to Aeroplan!"
+                            toastType="success"
+                        />
                     )}
                 </div>
-
-                <Image
-                    src={aeroplan}
-                    alt="aeroplan"
-                    className="h-[112px] w-[130px] object-cover object-right"
-                />
-                {error && <Toast toastText={error} toastType="error" />}
-                {success && (
-                    <Toast
-                        toastText="Successfuly linked to Aeroplan!"
-                        toastType="success"
-                    />
-                )}
-            </div>
+            )}
         </>
     )
 }
