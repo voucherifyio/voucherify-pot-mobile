@@ -9,11 +9,15 @@ type Params = {
 
 export const redeemRewardWithMemberId = async (params: Params) => {
     const { voucherify, campaignId, rewardId, memberId } = params
-
     try {
-        return await voucherify.loyalties.redeemReward(campaignId, memberId, {
-            reward: { id: rewardId },
-        })
+        const response = await voucherify.loyalties.redeemReward(
+            campaignId,
+            memberId,
+            {
+                reward: { id: rewardId },
+            }
+        )
+        return response
     } catch (err: any) {
         console.error(err)
         throw new Error(err?.message || 'Failed to redeem reward.')

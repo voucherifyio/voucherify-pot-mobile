@@ -21,65 +21,89 @@ const Milestones = () => {
     })
     const [successMessage, setSuccessMessage] = useState<string | null>('')
     const [errorMessage, setErrorMessage] = useState<string | null>()
+    const [redeemedAeroplanRewardOnce, setRedeemedAeroplanRewardOnce] =
+        useState<boolean | undefined>(undefined)
+    const [
+        redeemedGasolineDiscountsRewardOnce,
+        setRedeemedGasolineDiscountRewardOnce,
+    ] = useState<boolean | undefined>(undefined)
+    const [autoredeemInProgress, setAutoredeemInProgress] = useState(false)
 
-    useEffect(() => {
-        const autoRedeemReward = async (rewardId: string) => {
-            try {
-                const res = await fetch(
-                    `/api/voucherify/redeem-reward-with-member-id`,
-                    {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            memberId: cardNumber,
-                            campaignId:
-                                CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM_ID,
-                            rewardId: rewardId,
-                        }),
-                    }
-                )
-                const data = await res.json()
-                if (res.status !== 200) {
-                    console.log(data)
-                }
-            } catch (err) {
-                console.error(err)
-                setErrorMessage(`Error: ${err}`)
-            }
-        }
+    const triggerRedeemReward = () => {
         if (
+            !redeemedAeroplanRewardOnce &&
             cardNumber &&
             mainLoyaltyPoints >= 300 &&
             promoPoints === 0 &&
             customer?.metadata?.aeroplan_member === true
         ) {
-            autoRedeemReward(REWARDS.AEROPLAN_TRANSFER_REWARD_ID)
-                .then(() =>
-                    setSuccessMessage(
-                        `Successfully redeemed reward - ${REWARDS.AEROPLAN_TRANSFER_REWARD}`
-                    )
-                )
+            autoRedeemReward(
+                REWARDS.AEROPLAN_TRANSFER_REWARD_ID,
+                REWARDS.AEROPLAN_TRANSFER_REWARD
+            )
+                .then(() => {
+                    setRedeemedAeroplanRewardOnce(true)
+                })
                 .catch((err) => {
                     console.error(err)
                 })
         } else if (
+            !redeemedGasolineDiscountsRewardOnce &&
             cardNumber &&
             mainLoyaltyPoints >= 300 &&
             promoPoints === 0 &&
             (customer?.metadata?.aeroplan_member === false ||
                 !customer?.metadata?.aeroplan_member)
         ) {
-            autoRedeemReward(REWARDS.SEVEN_CENTS_PER_LITER_REWARD_ID)
-                .then(() =>
-                    setSuccessMessage(
-                        `Successfully redeemed reward - ${REWARDS.SEVEN_CENTS_PER_LITER_REWARD}`
-                    )
-                )
+            autoRedeemReward(
+                REWARDS.SEVEN_CENTS_PER_LITER_REWARD_ID,
+                REWARDS.SEVEN_CENTS_PER_LITER_REWARD
+            )
+                .then(() => {
+                    setRedeemedGasolineDiscountRewardOnce(true)
+                })
                 .catch((err) => {
                     console.error(err)
                 })
         }
-    }, [mainLoyaltyPoints, promoPoints, cardNumber, customer])
+    }
+
+    const autoRedeemReward = async (rewardId: string, rewardName: string) => {
+        try {
+            setAutoredeemInProgress(true)
+            const res = await fetch(
+                `/api/voucherify/redeem-reward-with-member-id`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        memberId: cardNumber,
+                        campaignId: CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM_ID,
+                        rewardId: rewardId,
+                    }),
+                }
+            )
+            if (res.status !== 200) {
+                setErrorMessage(`Redemption failed.`)
+                setAutoredeemInProgress(false)
+            }
+            if (res.status === 200) {
+                setAutoredeemInProgress(false)
+                setSuccessMessage(
+                    `Successfully redeemed reward - ${rewardName}`
+                )
+                return
+            }
+        } catch (err) {
+            console.error(err)
+            setErrorMessage(`Error: ${err}`)
+            setAutoredeemInProgress(false)
+        }
+    }
+
+    useEffect(() => {
+        triggerRedeemReward()
+    }, [customer])
 
     return (
         <div className="p-4">

@@ -11,6 +11,7 @@ const Aeroplan = () => {
     const [success, setSuccess] = useState<boolean>(false)
     const [loading, setLoading] = useState(false)
     const { customer } = useGetCustomer()
+    const customerPhone = customer?.phone
     const customerId = customer?.id
 
     const handleLinkToAeroplan = async () => {
@@ -33,11 +34,11 @@ const Aeroplan = () => {
     }
 
     const fetchCustomersAeroplanMetadata = async () => {
-        if (customerId) {
+        if (customerPhone) {
             setLoading(true)
             try {
                 const res = await fetch(
-                    `/api/voucherify/get-customer?phone=${customerId}`,
+                    `/api/voucherify/get-customer?phone=${customerPhone}`,
                     {
                         method: 'GET',
                     }
@@ -57,9 +58,7 @@ const Aeroplan = () => {
         }
     }
 
-    useEffect(() => {
-        fetchCustomersAeroplanMetadata().catch(console.error)
-    }, [customer])
+    useEffect(() => {}, [customer])
 
     return (
         <>

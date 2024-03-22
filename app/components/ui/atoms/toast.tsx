@@ -24,7 +24,7 @@ const Toast = (props: ToastProps) => {
 
             const timer = setTimeout(() => {
                 setShowToast(false)
-            }, 4000)
+            }, 5000)
 
             return () => clearTimeout(timer)
         }
