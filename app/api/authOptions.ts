@@ -41,6 +41,7 @@ export const authOptions: NextAuthOptions = {
             type: 'credentials',
             credentials: {
                 phone: { label: 'Phone number', type: 'text' },
+                firstName: { label: 'First name', type: 'text' },
             },
             async authorize(credentials, req) {
                 if (!credentials?.phone) {

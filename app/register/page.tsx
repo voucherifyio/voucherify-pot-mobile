@@ -1,11 +1,12 @@
 'use client'
 import Button from '@/app/components/ui/atoms/button'
-import { signIn, useSession } from 'next-auth/react'
+import { getSession, signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { signOut } from 'next-auth/react'
 import Loading from '../components/loading/loading'
+import { useInitalizeBraze } from '../hooks/useInitializeBraze'
 
 type Inputs = {
     firstName?: string
@@ -25,6 +26,7 @@ export default function RegisterPage() {
     const { status } = useSession()
     const [loading, setLoading] = useState(false)
     const form = useForm<Inputs>()
+    const { initializeBraze } = useInitalizeBraze()
     const {
         register,
         handleSubmit,
@@ -66,9 +68,11 @@ export default function RegisterPage() {
                 })
 
                 if (res?.status !== 200 || res.error || !res.ok) {
-                    return setError('ERRRR')
+                    return setError('Could not login, please try again.')
                 }
-
+                const session = await getSession()
+                const customerId = session?.user?.id
+                await initializeBraze({ customerId })
                 router.push('/home')
             } catch (err) {
                 if (err instanceof Error) {
