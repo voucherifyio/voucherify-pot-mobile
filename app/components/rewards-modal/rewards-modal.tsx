@@ -2,6 +2,11 @@ import { LoyaltiesListMemberRewardsResponseBody } from '@voucherify/sdk'
 import { Dispatch, FC, SetStateAction, useContext, useState } from 'react'
 import Button from '@/app/components/ui/atoms/button'
 import { VouchersAmountContext } from '@/app/components/vouchers-amount-context/vouchers-amount-context'
+import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
+import {
+    getQualifications,
+    redeemReward,
+} from '@/app/apiEndpoints/apiEndpoints'
 
 type RewardsModalProps = {
     rewards: LoyaltiesListMemberRewardsResponseBody['data']
@@ -17,6 +22,7 @@ type ChoiceConfirmationProps = {
     rewardId: string
     confirmation: boolean
     setConfirmation: Dispatch<SetStateAction<boolean>>
+    isVoucherGenerationProcess: boolean
 }
 
 const RewardsModal: FC<RewardsModalProps> = ({
@@ -28,30 +34,57 @@ const RewardsModal: FC<RewardsModalProps> = ({
 }) => {
     const [confirmation, setConfirmation] = useState<boolean>(false)
     const [rewardId, setRewardId] = useState<string | null>(null)
+    const [isVoucherGenerationProcess, setIsVoucherGenerationProcess] =
+        useState(false)
     const { dealsAndRewards, setDealsAndRewards } = useContext(
         VouchersAmountContext
     )
 
-    const redeemReward = async (customerId: string, rewardId: string) => {
-        const res = await fetch(`/api/voucherify/redeem-reward`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                customerId,
-                rewardId,
-            }),
-        })
-
+    const fetchQualifications = async (
+        voucherCode: string,
+        interval: NodeJS.Timeout
+    ) => {
+        const res = await getQualifications(
+            customerId,
+            QUALIFICATION_SCENARIO.AUDIENCE_ONLY
+        )
         const data = await res.json()
-        if (res.status !== 200) {
-            console.log(data)
+        const qualifications = data.qualifications
+        for (const qualification of qualifications) {
+            if (qualification.id === voucherCode) {
+                clearInterval(interval)
+                setConfirmation(false)
+                setDealsAndRewards({
+                    ...dealsAndRewards,
+                    rewards: dealsAndRewards.rewards + 1,
+                })
+                setRewardModalOpened(false)
+                setIsVoucherGenerationProcess(false)
+            }
         }
-        setConfirmation(false)
-        setDealsAndRewards({
-            ...dealsAndRewards,
-            rewards: dealsAndRewards.rewards + 1,
-        })
-        setRewardModalOpened(false)
+    }
+
+    const redeemCustomerReward = async (
+        customerId: string,
+        rewardId: string
+    ) => {
+        setIsVoucherGenerationProcess(true)
+        const res = await redeemReward(customerId, rewardId)
+        const { redeemedReward } = await res.json()
+        if (res.status !== 200) {
+            console.log(redeemedReward)
+        }
+
+        if (redeemedReward.reward.voucher.code) {
+            const interval: NodeJS.Timeout = setInterval(
+                async () =>
+                    await fetchQualifications(
+                        redeemedReward.reward.voucher.code,
+                        interval
+                    ),
+                3000
+            )
+        }
     }
 
     const pattern = /\(150\s*Point[s]*\s*Reward\)/
@@ -60,7 +93,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
 
     return (
         <div className="flex w-full min-h-80 flex-col items-end bg-[#173C9F] absolute z-50 rounded-lg px-6 py-4 gap-4 bottom-0 left-2/4 -translate-x-2/4">
-            {loading && <ModalLoading />}
+            {loading && <ModalLoading message="Loading..." />}
             {!loading && rewards?.length <= 0 && (
                 <NoRewardsState setRewardModalOpened={setRewardModalOpened} />
             )}
@@ -68,9 +101,10 @@ const RewardsModal: FC<RewardsModalProps> = ({
                 <ChoiceConfimartion
                     customerId={customerId}
                     rewardId={rewardId}
-                    redeemReward={redeemReward}
+                    redeemReward={redeemCustomerReward}
                     confirmation={confirmation}
                     setConfirmation={setConfirmation}
+                    isVoucherGenerationProcess={isVoucherGenerationProcess}
                 />
             )}
             {!loading && !confirmation && rewards?.length >= 1 && (
@@ -110,7 +144,12 @@ const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
     rewardId,
     confirmation,
     setConfirmation,
+    isVoucherGenerationProcess,
 }) => {
+    if (isVoucherGenerationProcess) {
+        return <ModalLoading message="Voucher generation process..." />
+    }
+
     if (!confirmation) return null
 
     return (
@@ -134,9 +173,9 @@ const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
     )
 }
 
-const ModalLoading = () => (
+const ModalLoading = ({ message }: { message: string }) => (
     <div className="flex justify-center items-center w-full h-full">
-        <p className="text-white">Loading...</p>
+        <p className="text-white">{message}</p>
     </div>
 )
 

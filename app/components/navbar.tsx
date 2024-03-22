@@ -51,13 +51,13 @@ const Navbar = () => {
                             href={item.href}
                         >
                             {dealsAndRewards.deals && item.text === 'Deals' ? (
-                                <span className="absolute top-2 right-3 text-xs bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white">
+                                <span className="absolute top-2 right-3 text-xs bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white text-[10px]">
                                     {dealsAndRewards.deals}
                                 </span>
                             ) : null}
                             {dealsAndRewards.rewards &&
                             item.text === 'Rewards' ? (
-                                <span className="absolute top-2 right-6 text-xs bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white">
+                                <span className="absolute top-2 right-6 text-xs bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white text-[10px]">
                                     {dealsAndRewards.rewards}
                                 </span>
                             ) : null}

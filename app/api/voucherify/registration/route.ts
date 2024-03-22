@@ -32,10 +32,10 @@ export async function POST(req: NextRequest) {
         customer: { ...body },
         voucherify: getVoucherify(),
     })
-
+    
     if (
         voucherifyCustomer?.source_id === body.phone &&
-        voucherifyCustomer?.metadata?.customer_registered === true
+        voucherifyCustomer?.metadata?.registered_customer === true
     ) {
         return NextResponse.json(
             { error: 'Customer already registered, please login.' },
@@ -43,7 +43,11 @@ export async function POST(req: NextRequest) {
         )
     }
 
-    if (!voucherifyCustomer?.id || (voucherifyCustomer.id && !voucherifyCustomer.metadata?.registered_customer)) {
+    if (
+        !voucherifyCustomer?.id ||
+        (voucherifyCustomer.id &&
+            !voucherifyCustomer.metadata?.registered_customer)
+    ) {
         const analitycs = getAnalytics()
         analitycs.identify({
             userId: body.phone,

@@ -1,10 +1,11 @@
 'use client'
 import Button from '@/app/components/ui/atoms/button'
-import { useSession, signIn } from 'next-auth/react'
+import { useSession, signIn, getSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import Loading from '../components/loading/loading'
+import { useInitalizeBraze } from '../hooks/useInitializeBraze'
 
 interface Inputs {
     phone: string
@@ -17,6 +18,7 @@ export default function LoginPage() {
     const router = useRouter()
     const { status } = useSession()
     const [loading, setLoading] = useState(false)
+    const { initializeBraze } = useInitalizeBraze()
     const {
         register,
         handleSubmit,
@@ -43,10 +45,13 @@ export default function LoginPage() {
 
         if (res?.status !== 200) {
             setLoading(false)
-            setError(`Customer does not exist, please register.`)
+            return setError(`Customer does not exist, please register.`)
         }
 
         if (res?.ok) {
+            const session = await getSession()
+            const customerId = session?.user?.id
+            await initializeBraze({ customerId })
             router.push('/home')
         }
     }

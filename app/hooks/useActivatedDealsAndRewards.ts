@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Deal } from '@/app/components/deals/deals'
+import { getBarcode } from '../apiEndpoints/apiEndpoints'
 
 interface ActivatedReward {
     id: string
@@ -33,22 +34,17 @@ export const useActivatedDealsAndRewards = () => {
                 })
                 .filter((item: Deal) => !!item)
 
-            const fetchBarcode = async (item: Deal) => {
-                const barcodesRes = await fetch(
-                    `/api/voucherify/voucher-barcode?coupon=${item.id}`,
-                    {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' },
-                    }
-                )
-                const data = await barcodesRes.json()
+            const retrievedBarcode = async (item: Deal) => {
+                const res = await getBarcode(item)
+                const data = await res.json()
                 return {
                     ...item,
                     barcode: data.barcode,
                 }
             }
 
-            const barcodePromises = activatedDealsAndRewards.map(fetchBarcode)
+            const barcodePromises =
+                activatedDealsAndRewards.map(retrievedBarcode)
             const updatedDeals = await Promise.all(barcodePromises)
             setActivatedRewards(updatedDeals)
             setLoading(false)

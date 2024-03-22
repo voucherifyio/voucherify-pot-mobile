@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { MdLock, MdOutlineLocalGasStation } from 'react-icons/md'
 import RewardsModal from '@/app/components/rewards-modal/rewards-modal'
+import { getMemberRewards } from '@/app/apiEndpoints/apiEndpoints'
 
 interface MilestoneChartProps {
     mainLoyaltyPoints: number
@@ -18,15 +19,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
     const [loading, setLoading] = useState(true)
 
     const listMemberRewards = async (customerId: string | null | undefined) => {
-        const res = await fetch(
-            `api/voucherify/list-member-rewards?customerId=${customerId}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-        )
+        const res = await getMemberRewards(customerId)
         const { rewards } = await res.json()
         if (res.status !== 200) {
             return false

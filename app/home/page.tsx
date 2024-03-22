@@ -20,21 +20,22 @@ export default function HomePage() {
             router.push('/')
         },
     })
+    const customerId = data?.user?.id
     const { braze } = useInitalizeBraze()
 
     const handleLocalStorage = () => {
         localStorage.setItem('dealsAndRewards', JSON.stringify([]))
         localStorage.setItem('activeDealsAndRewards', JSON.stringify([]))
     }
-
+    
     if (status === 'loading') {
         return <Loading />
     }
 
     return (
         <div className="flex-1 items-center justify-center bg-[#ecf0fb] overflow-hidden">
-            {(data.user?.id && !braze?.isPushPermissionGranted()) ||
-            data.user?.id !== braze?.getUser()?.getUserId() ? (
+            {(customerId && !braze?.isPushPermissionGranted()) ||
+            customerId !== braze?.getUser()?.getUserId() ? (
                 <BrazePermissionModal braze={braze} />
             ) : null}
             <div className="flex justify-between px-4 py-2 border-b-2 w-full bg-white">

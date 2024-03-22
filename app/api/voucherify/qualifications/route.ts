@@ -1,7 +1,17 @@
 import { getVoucherify } from '@/voucherify/voucherify-config'
 import { getQualifications } from '@/voucherify/get-qualifications'
-export async function POST(req: Request) {
+import { CAMPAIGNS } from '@/enum/campaigns'
+import { NextRequest } from 'next/server'
+
+export async function POST(req: NextRequest) {
     const { customerId, scenario, customerMetadata } = await req.json()
+
+    if (!customerId) {
+        return Response.json(
+            { error: 'Customer does not exist.' },
+            { status: 400 }
+        )
+    }
 
     try {
         const qualifications = await getQualifications({
