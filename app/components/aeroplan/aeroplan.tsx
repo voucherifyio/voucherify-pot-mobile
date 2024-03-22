@@ -63,7 +63,7 @@ const Aeroplan = () => {
     return (
         <>
             {customer && (
-                <div className="mx-4 mt-40 text-blue-text text-18 font-bold flex justify-between py-2">
+                <div className="mx-4 text-blue-text text-18 font-bold flex justify-between py-2">
                     <div className="flex-col">
                         <h1 className="mb-2 text-blue-text text-18 font-bold">
                             Partner Hub
