@@ -82,7 +82,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
                         redeemedReward.reward.voucher.code,
                         interval
                     ),
-                3000
+                2000
             )
         }
     }
