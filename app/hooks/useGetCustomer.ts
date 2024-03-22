@@ -20,7 +20,7 @@ export const useGetCustomer = () => {
             }
 
             fetchData()
-            const refetchInterval = setInterval(fetchData, 3000)
+            const refetchInterval = setInterval(fetchData, 7000)
             return () => clearInterval(refetchInterval)
         }
     }, [userPhone])
