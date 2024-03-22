@@ -4,7 +4,7 @@ import { CAMPAIGNS } from '@/enum/campaigns'
 import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
-    const { customerId, scenario, customerMetadata } = await req.json()
+    const { customerId, scenario } = await req.json()
 
     if (!customerId) {
         return Response.json(

@@ -115,12 +115,12 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                     {activeDeals.map((deal) => (
                         <div
                             key={deal.id}
-                            className="shadow-md min-h-[80px] rounded-xl m-2 flex bg-white text-blue-text w-[95%]"
+                            className="flex flex-col justify-end shadow-md min-h-[80px] rounded-xl m-2 flex bg-white text-blue-text w-[95%] p-2 gap-4"
                         >
-                            <div className="flex flex-col p-2">
-                                <h3 className="text-[18px] font-extrabold">
-                                    {deal?.banner || deal?.name || deal.id}
-                                </h3>
+                            <h3 className="text-[16px] font-bold">
+                                {deal.campaign_name}
+                            </h3>
+                            <div className="flex gap-4 items-end w-full">
                                 {deal.object === 'voucher' && (
                                     <Button
                                         onClick={() =>
@@ -131,13 +131,16 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                                                 ? 'activeCoupon'
                                                 : 'yellow'
                                         }
-                                        className="mt-4 px-2 max-h-[32px] max-w-[149px] text-[16px]"
+                                        className="px-2 max-h-[32px] max-w-[149px] text-[16px]"
                                     >
                                         {deal.active
                                             ? '✓ Active coupon'
                                             : 'Activate coupon'}
                                     </Button>
                                 )}
+                                <h3 className="text-[18px] font-extrabold">
+                                    {deal?.banner || deal?.name || deal.id}
+                                </h3>
                             </div>
                         </div>
                     ))}
@@ -172,12 +175,12 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                     {activeDeals.map((deal) => (
                         <div
                             key={deal.id}
-                            className="shadow-md min-h-[80px] rounded-xl m-2 flex bg-white text-blue-text w-[95%]"
+                            className="flex flex-col justify-end shadow-md min-h-[80px] rounded-xl m-2 flex bg-white text-blue-text w-[95%] p-2 gap-4"
                         >
-                            <div className="flex flex-col p-2">
-                                <h3 className="text-[18px] font-extrabold">
-                                    {deal?.banner || deal?.name || deal.id}
-                                </h3>
+                            <h3 className="text-[16px] font-bold">
+                                {deal.campaign_name}
+                            </h3>
+                            <div className="flex gap-4 items-end w-full">
                                 {deal.object === 'voucher' && (
                                     <Button
                                         onClick={() =>
@@ -188,13 +191,16 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
                                                 ? 'activeCoupon'
                                                 : 'yellow'
                                         }
-                                        className="mt-4 px-2 max-h-[32px] max-w-[149px] text-[16px]"
+                                        className="px-2 max-h-[32px] max-w-[149px] text-[16px]"
                                     >
                                         {deal.active
                                             ? '✓ Active coupon'
                                             : 'Activate coupon'}
                                     </Button>
                                 )}
+                                <h3 className="text-[18px] font-extrabold">
+                                    {deal?.banner || deal?.name || deal.id}
+                                </h3>
                             </div>
                         </div>
                     ))}

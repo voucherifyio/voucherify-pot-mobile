@@ -118,9 +118,9 @@ const RewardsModal: FC<RewardsModalProps> = ({
                             Close
                         </Button>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 w-full justify-center">
                         {rewards.map(({ reward }) => (
-                            <p
+                            <button
                                 key={reward.id}
                                 className="text-white text-center text-sm bg-[#fbbc05] rounded-lg py-0.5 px-1"
                                 onClick={() => {
@@ -129,7 +129,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
                                 }}
                             >
                                 {reward.name?.replace(pattern, '')}
-                            </p>
+                            </button>
                         ))}
                     </div>
                 </>

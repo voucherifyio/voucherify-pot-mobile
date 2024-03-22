@@ -19,7 +19,7 @@ const ActiveRewards = () => {
     if (loading) {
         return <Loading />
     }
-
+    console.log(activatedRewards)
     return (
         <div className="mt-4">
             <header>
@@ -39,20 +39,27 @@ const ActiveRewards = () => {
                     <div
                         key={reward.id}
                         onClick={() => handleExpandCoupon(reward.id)}
-                        className="shadow-md rounded-xl flex-row justify-between bg-white mt-4 text-blue-text w-full min-h-[92px] items-center"
+                        className="flex flex-col shadow-md rounded-xl flex-row bg-white mt-4 text-blue-text w-full min-h-[92px] p-2"
                     >
-                        <h3 className="text-[18px] font-extrabold p-2">
-                            {reward?.id}
+                        <h3 className="text-[16px] font-bold">
+                            {reward.campaign_name}
                         </h3>
-                        {expandedReward !== reward.id && (
-                            <Button
-                                onClick={() => handleExpandCoupon(reward.id)}
-                                buttonType="yellow"
-                                className="h-[24px] px-2 m-2 text-[16px] rounded-md"
-                            >
-                                Scan in-store
-                            </Button>
-                        )}
+                        <div className="flex items-center gap-4 mt-2">
+                            {expandedReward !== reward.id && (
+                                <Button
+                                    onClick={() =>
+                                        handleExpandCoupon(reward.id)
+                                    }
+                                    buttonType="yellow"
+                                    className="h-[24px] text-[16px] rounded-md px-2"
+                                >
+                                    Scan in-store
+                                </Button>
+                            )}
+                            <h3 className="text-[18px] font-extrabold">
+                                {reward?.id}
+                            </h3>
+                        </div>
                         {expandedReward === reward.id &&
                             reward?.barcode?.url && (
                                 <Image

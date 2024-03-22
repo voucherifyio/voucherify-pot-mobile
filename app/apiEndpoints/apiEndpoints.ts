@@ -2,8 +2,7 @@ import { Deal } from '../components/deals/deals'
 
 const getQualifications = async (
     customerId: string | null | undefined,
-    scenario: string,
-    customerMetadata?: { unique_locations_purchased_at?: number }
+    scenario: string
 ) => {
     return await fetch(`/api/voucherify/qualifications`, {
         method: 'POST',
@@ -11,9 +10,6 @@ const getQualifications = async (
         body: JSON.stringify({
             customerId,
             scenario,
-            customerMetadata: customerMetadata?.unique_locations_purchased_at
-                ? customerMetadata
-                : undefined,
         }),
     })
 }
