@@ -65,7 +65,7 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
                     >
                         <div className="flex flex-col p-2">
                             <h3 className="text-[18px] font-extrabold">
-                                {reward.name || reward.id}
+                                {reward.id} - {reward.campaign_name}
                             </h3>
                             {reward.object === 'voucher' && (
                                 <Button
