@@ -3,11 +3,20 @@ import { Deal } from '@/app/components/deals/deals'
 import { getBarcode } from '../apiEndpoints/apiEndpoints'
 
 interface ActivatedReward {
+    active: boolean
+    applicable_to: {}
+    campaign_id: string
+    campaign_name: string
+    created_at: string
     id: string
+    inapplicable_to: {}
+    metadata: {}
+    object: string
     barcode?: {
         url?: string
         id?: string
     }
+    result: {}
 }
 
 export const useActivatedDealsAndRewards = () => {
