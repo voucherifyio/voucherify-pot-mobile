@@ -57,7 +57,9 @@ export default function LoginPage() {
     }
 
     const handleResetError = () => {
-        setError(undefined)
+        if(error){
+            setError(undefined)
+        }
     }
 
     const handleRegisterClick = () => {
@@ -90,8 +92,8 @@ export default function LoginPage() {
                             className={inputStyle}
                             {...register('phone', {
                                 required: 'Please fill in the phone number',
+                                onChange: handleResetError
                             })}
-                            onChange={handleResetError}
                         />
                         {errors.phone ? (
                             <p className="text-xs mt-1 text-red-500">
@@ -107,8 +109,11 @@ export default function LoginPage() {
                             type="password"
                             id="password"
                             className={inputStyle}
-                            {...register('password', { required: false })}
-                            onChange={handleResetError}
+                            {...register('password', { 
+                                required: false,
+                                onChange: handleResetError
+                                
+                            })}
                         />
                     </div>
                     {error ? <p className="text-center mt-2">{error}</p> : null}
