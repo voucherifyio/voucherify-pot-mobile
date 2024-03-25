@@ -9,7 +9,7 @@ const Aeroplan = () => {
     const [isLinkedToAeroplan, setIsLinkedToAeroplan] = useState<boolean>()
     const [error, setError] = useState<string | undefined>(undefined)
     const [success, setSuccess] = useState<boolean>(false)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const { customer } = useGetCustomer()
     const customerPhone = customer?.phone
     const customerId = customer?.id
@@ -58,7 +58,9 @@ const Aeroplan = () => {
         }
     }
 
-    useEffect(() => {}, [customer])
+    useEffect(() => {
+        fetchCustomersAeroplanMetadata()
+    }, [customer])
 
     return (
         <>
@@ -68,17 +70,17 @@ const Aeroplan = () => {
                         <h1 className="mb-2 text-blue-text text-18 font-bold">
                             Partner Hub
                         </h1>
-                        {!isLinkedToAeroplan && (
+                        {!isLinkedToAeroplan && !loading && (
                             <h4 className="mb-4 text-blue-text text-14 font-normal">
                                 Get linked. Get more.
                             </h4>
                         )}
-                        {isLinkedToAeroplan && (
+                        {isLinkedToAeroplan && !loading && (
                             <h4 className="px-3 font-normal mt-5">
                                 Your account is already connected to Aeroplan.
                             </h4>
                         )}
-                        {!isLinkedToAeroplan && (
+                        {!isLinkedToAeroplan && !loading && (
                             <Button
                                 onClick={handleLinkToAeroplan}
                                 buttonType="yellow"
