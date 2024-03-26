@@ -32,12 +32,14 @@ export default function HomePage() {
         return <Loading />
     }
 
+    const showBrazePermissionModal = (customerId && !braze?.isPushPermissionGranted()) 
+    || customerId !== braze?.getUser()?.getUserId()
+
     return (
         <div className="flex-1 items-center justify-center bg-[#ecf0fb] overflow-hidden">
-            {(customerId && !braze?.isPushPermissionGranted()) ||
-            customerId !== braze?.getUser()?.getUserId() ? (
+            { showBrazePermissionModal && (
                 <BrazePermissionModal braze={braze} />
-            ) : null}
+            )}
             <div className="flex justify-between px-4 py-2 border-b-2 w-full bg-white">
                 <div>
                     <h1 className="text-blue-text text-2xl font-extrabold">
