@@ -14,13 +14,13 @@ import Loading from '@/app/components/loading/loading'
 
 export default function HomePage() {
     const router = useRouter()
-    const { status, data } = useSession({
+    const { status, data: session } = useSession({
         required: true,
         onUnauthenticated() {
             router.push('/')
         },
     })
-    const customerId = data?.user?.id
+    const customerId = session?.user?.id
     const { braze } = useInitalizeBraze()
 
     const handleLocalStorage = () => {
@@ -46,7 +46,7 @@ export default function HomePage() {
                         My Journie
                     </h1>
                     <h4 className="text-blue-text text-[15px] font-normal">
-                        Hello {data.user?.name || 'User'}!
+                        Hello {session.user?.name || 'User'}!
                     </h4>
                 </div>
                 <div className="flex items-center gap-2">
@@ -64,7 +64,7 @@ export default function HomePage() {
             </div>
             <div className="flex-row  mx-border-b-2 w-full">
                 <Milestones />
-                <DealsCarousel customerId={data.user?.id} />
+                <DealsCarousel customerId={session.user?.id} />
                 <EarningRulesCarousel />
                 <Aeroplan />
             </div>

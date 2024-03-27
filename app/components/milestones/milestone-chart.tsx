@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { MdLock, MdOutlineLocalGasStation } from 'react-icons/md'
 import RewardsModal from '@/app/components/rewards-modal/rewards-modal'
 import { getMemberRewards } from '@/app/apiEndpoints/apiEndpoints'
+import { CAMPAIGNS } from '@/enum/campaigns'
 
 interface MilestoneChartProps {
     mainLoyaltyPoints: number
@@ -19,7 +20,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
     const [loading, setLoading] = useState(true)
 
     const listMemberRewards = async (customerId: string | null | undefined) => {
-        const res = await getMemberRewards(customerId)
+        const res = await getMemberRewards(customerId, CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM)
         const { rewards } = await res.json()
         if (res.status !== 200) {
             return false

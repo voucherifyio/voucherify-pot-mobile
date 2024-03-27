@@ -19,7 +19,7 @@ const ActiveRewards = () => {
     if (loading) {
         return <Loading />
     }
-    console.log(activatedRewards)
+
     return (
         <div className="mt-4">
             <header>

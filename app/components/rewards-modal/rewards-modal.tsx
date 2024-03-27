@@ -1,12 +1,13 @@
 import { LoyaltiesListMemberRewardsResponseBody } from '@voucherify/sdk'
 import { Dispatch, FC, SetStateAction, useContext, useState } from 'react'
 import Button from '@/app/components/ui/atoms/button'
-import { VouchersAmountContext } from '@/app/components/vouchers-amount-context/vouchers-amount-context'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import {
     getQualifications,
     redeemReward,
 } from '@/app/apiEndpoints/apiEndpoints'
+import { MobileAppContext } from '../app-context/app-context'
+import { CAMPAIGNS } from '@/enum/campaigns'
 
 type RewardsModalProps = {
     rewards: LoyaltiesListMemberRewardsResponseBody['data']
@@ -17,7 +18,7 @@ type RewardsModalProps = {
 }
 
 type ChoiceConfirmationProps = {
-    redeemReward: (customerId: string, rewardId: string) => void
+    redeemReward: (customerId: string, rewardId: string, campaignName: string) => void
     customerId: string
     rewardId: string
     confirmation: boolean
@@ -36,9 +37,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
     const [rewardId, setRewardId] = useState<string | null>(null)
     const [isVoucherGenerationProcess, setIsVoucherGenerationProcess] =
         useState(false)
-    const { dealsAndRewards, setDealsAndRewards } = useContext(
-        VouchersAmountContext
-    )
+    const { dealsAndRewards, setDealsAndRewards } = useContext(MobileAppContext)
 
     const fetchQualifications = async (
         voucherCode: string,
@@ -66,10 +65,15 @@ const RewardsModal: FC<RewardsModalProps> = ({
 
     const redeemCustomerReward = async (
         customerId: string,
-        rewardId: string
+        rewardId: string,
+        campaignName: string
     ) => {
         setIsVoucherGenerationProcess(true)
-        const res = await redeemReward(customerId, rewardId)
+        const res = await redeemReward(
+            customerId,
+            rewardId,
+            campaignName
+        )
         const { redeemedReward } = await res.json()
         if (res.status !== 200) {
             console.log(redeemedReward)
@@ -157,7 +161,7 @@ const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
             <p className="text-white">Are you sure?</p>
             <div className="flex w-full justify-evenly">
                 <button
-                    onClick={() => redeemReward(customerId, rewardId)}
+                    onClick={() => redeemReward(customerId, rewardId, CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM)}
                     className="text-white bg-[#fbbc05] rounded-lg px-2 py-1"
                 >
                     Choose reward

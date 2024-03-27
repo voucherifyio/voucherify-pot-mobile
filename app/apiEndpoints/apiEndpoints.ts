@@ -1,3 +1,4 @@
+import { CAMPAIGNS } from '@/enum/campaigns'
 import { Deal } from '../components/deals/deals'
 
 const getQualifications = async (
@@ -21,8 +22,8 @@ const getBarcode = async (item: Deal) => {
     })
 }
 
-const getCustomer = async (userPhone: string) => {
-    return await fetch(`/api/voucherify/get-customer?phone=${userPhone}`, {
+const getCustomer = async (customerPhone: string) => {
+    return await fetch(`/api/voucherify/get-customer?phone=${customerPhone}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
     })
@@ -48,13 +49,34 @@ const getLoyaltyCard = async (customerId: string) => {
     )
 }
 
-const redeemReward = async (customerId: string, rewardId: string) => {
+const redeemReward = async (
+    customerId: string | undefined,
+    rewardId: string,
+    campaignName: string
+) => {
     return await fetch(`/api/voucherify/redeem-reward`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             customerId,
             rewardId,
+            campaignName,
+        }),
+    })
+}
+
+const redeemRewardWithMemberId = async (
+    cardNumber: string,
+    campaignId: string,
+    rewardId: string
+) => {
+    return await fetch(`/api/voucherify/redeem-reward-with-member-id`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            memberId: cardNumber,
+            campaignId: CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM_ID,
+            rewardId: rewardId,
         }),
     })
 }
@@ -66,9 +88,12 @@ const getReward = async (rewardId: string) => {
     })
 }
 
-const getMemberRewards = async (customerId: string | null | undefined) => {
+const getMemberRewards = async (
+    customerId: string | null | undefined,
+    campaignName: string
+) => {
     return await fetch(
-        `api/voucherify/list-member-rewards?customerId=${customerId}`,
+        `api/voucherify/list-member-rewards?customerId=${customerId}&campaignName=${campaignName}`,
         {
             method: 'GET',
             headers: {
@@ -86,5 +111,6 @@ export {
     getLoyaltyCard,
     getReward,
     redeemReward,
+    redeemRewardWithMemberId,
     getMemberRewards,
 }

@@ -1,27 +1,25 @@
 import { VoucherifyServerSide } from '@voucherify/sdk'
-import { listCampaignMembers } from './list-campaign-members'
+import { listVouchers } from './list-vouchers'
 
 type Params = {
     voucherify: ReturnType<typeof VoucherifyServerSide>
     customerId: string
     rewardId: string
+    campaignName: string
 }
 
 export const redeemReward = async (params: Params) => {
-    const { voucherify, customerId, rewardId } = params
+    const { voucherify, customerId, rewardId, campaignName } = params
+    const { vouchers } = await listVouchers({ voucherify, campaignName })
+    const data = vouchers.find((voucher) => voucher.holder_id === customerId)
 
-    const members = await listCampaignMembers({ voucherify })
-    const campaign = members.vouchers.find(
-        (voucher) => voucher.holder_id === customerId
-    )
-
-    if (!campaign?.id) {
+    if (!data?.campaign_id) {
         return null
     }
 
     const redeemedReward = await voucherify.loyalties.redeemReward(
-        campaign.campaign_id,
-        campaign.code,
+        data.campaign_id,
+        data.code,
         { reward: { id: rewardId } }
     )
 

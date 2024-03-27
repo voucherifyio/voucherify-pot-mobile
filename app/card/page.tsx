@@ -5,17 +5,18 @@ import ActiveRewards from '@/app/components/loyalty-card/active-rewards'
 import JournieHeader from '@/app/components/journie-header/journie-header'
 import LoyaltyCard from '@/app/components/loyalty-card/loyalty-card'
 import Loading from '@/app/components/loading/loading'
-import { useGetCustomer } from '@/app/hooks/useGetCustomer'
+import { useContext } from 'react'
+import { MobileAppContext } from '../components/app-context/app-context'
 
 export default function CardPage() {
     const router = useRouter()
-    const { data: session, status } = useSession({
+    const { status } = useSession({
         required: true,
         onUnauthenticated() {
             router.push('/')
         },
     })
-    const { customer } = useGetCustomer()
+    const { customer } = useContext(MobileAppContext)
     const customerId = customer?.id
 
     if (status === 'loading') {

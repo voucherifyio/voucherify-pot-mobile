@@ -3,12 +3,13 @@ import { getVoucherify } from '@/voucherify/voucherify-config'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
-    const { customerId, rewardId } = await req.json()
+    const { customerId, rewardId, campaignName } = await req.json()
 
     const redeemedReward = await redeemReward({
         customerId,
         rewardId,
         voucherify: getVoucherify(),
+        campaignName
     })
 
     if (redeemedReward?.result === 'FAILURE') {
