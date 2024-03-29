@@ -4,6 +4,7 @@ import { MdLock, MdOutlineLocalGasStation } from 'react-icons/md'
 import RewardsModal from '@/app/components/rewards-modal/rewards-modal'
 import { getMemberRewards } from '@/app/apiEndpoints/apiEndpoints'
 import { CAMPAIGNS } from '@/enum/campaigns'
+import Toast from '@/app/components/ui/atoms/toast'
 
 interface MilestoneChartProps {
     journiePoints: number
@@ -18,6 +19,9 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
     const [rewards, setRewards] = useState([])
     const [rewardModalOpened, setRewardModalOpened] = useState(false)
     const [loading, setLoading] = useState(true)
+    const [rewardGeneratedMessage, setRewardGeneratedMessage] = useState<
+        string | undefined
+    >(undefined)
 
     const listMemberRewards = async (customerId: string | null | undefined) => {
         const res = await getMemberRewards(
@@ -137,6 +141,13 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                     </div>
                 </li>
             </ol>
+            {rewardGeneratedMessage && (
+                <Toast
+                    toastType="success"
+                    toastText={rewardGeneratedMessage}
+                    customStyles="font-bold border border-gray-300 rounded-lg shadow-lg fixed top-[15%] left-[50%] -translate-x-2/4 flex items-center justify-center w-full max-w-xs p-4 bg-white z-50"
+                />
+            )}
             {promoPoints && promoPoints >= 1 ? (
                 <div className="flex justify-center relative">
                     {rewardModalOpened ? (
@@ -146,6 +157,9 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                             setRewardModalOpened={setRewardModalOpened}
                             customerId={customerId}
                             loading={loading}
+                            setRewardGeneratedMessage={
+                                setRewardGeneratedMessage
+                            }
                         />
                     ) : null}
                     <button
@@ -155,7 +169,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                         }}
                         className="text-white bg-[#173C9F] h-[32px] rounded text-[16px] px-2"
                     >
-                        Choose
+                        Choose reward
                     </button>
                 </div>
             ) : null}

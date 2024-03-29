@@ -38,14 +38,14 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
     })
 
     useEffect(() => {
-        const fetchMobileAppData = async () => {
-            await getCurrentCustomer()
+        getCurrentCustomer()
+        const interval: NodeJS.Timeout = setInterval(async () => {
+            if (!document.hidden) {
+                getCurrentCustomer()
+            }
+        }, 3000)
 
-        }
-
-        fetchMobileAppData()
-        const refetchInterval = setInterval(fetchMobileAppData, 3000)
-        return () => clearInterval(refetchInterval)
+        return () => clearInterval(interval)
     }, [customerPhone])
 
     return (

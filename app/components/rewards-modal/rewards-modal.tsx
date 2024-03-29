@@ -15,10 +15,15 @@ type RewardsModalProps = {
     setRewardModalOpened: Dispatch<SetStateAction<boolean>>
     customerId: string | null | undefined
     loading: boolean
+    setRewardGeneratedMessage: Dispatch<SetStateAction<string | undefined>>
 }
 
 type ChoiceConfirmationProps = {
-    redeemReward: (customerId: string, rewardId: string, campaignName: string) => void
+    redeemCustomerReward: (
+        customerId: string,
+        rewardId: string,
+        campaignName: string
+    ) => void
     customerId: string
     rewardId: string
     confirmation: boolean
@@ -32,6 +37,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
     setRewardModalOpened,
     customerId,
     loading,
+    setRewardGeneratedMessage,
 }) => {
     const [confirmation, setConfirmation] = useState<boolean>(false)
     const [rewardId, setRewardId] = useState<string | null>(null)
@@ -59,6 +65,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
                 })
                 setRewardModalOpened(false)
                 setIsVoucherGenerationProcess(false)
+                setRewardGeneratedMessage('Reward voucher has been generated')
             }
         }
     }
@@ -69,11 +76,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
         campaignName: string
     ) => {
         setIsVoucherGenerationProcess(true)
-        const res = await redeemReward(
-            customerId,
-            rewardId,
-            campaignName
-        )
+        const res = await redeemReward(customerId, rewardId, campaignName)
         const { redeemedReward } = await res.json()
         if (res.status !== 200) {
             console.error('Cannot redeem reward')
@@ -105,7 +108,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
                 <ChoiceConfimartion
                     customerId={customerId}
                     rewardId={rewardId}
-                    redeemReward={redeemCustomerReward}
+                    redeemCustomerReward={redeemCustomerReward}
                     confirmation={confirmation}
                     setConfirmation={setConfirmation}
                     isVoucherGenerationProcess={isVoucherGenerationProcess}
@@ -143,7 +146,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
 }
 
 const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
-    redeemReward,
+    redeemCustomerReward,
     customerId,
     rewardId,
     confirmation,
@@ -161,7 +164,13 @@ const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
             <p className="text-white">Are you sure?</p>
             <div className="flex w-full justify-evenly">
                 <button
-                    onClick={() => redeemReward(customerId, rewardId, CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM)}
+                    onClick={() =>
+                        redeemCustomerReward(
+                            customerId,
+                            rewardId,
+                            CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM
+                        )
+                    }
                     className="text-white bg-[#fbbc05] rounded-lg px-2 py-1"
                 >
                     Choose reward

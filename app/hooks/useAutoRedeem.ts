@@ -37,9 +37,11 @@ export const useAutoRedeem = () => {
             } = pointsCalculation(activities)
 
             if (!activities[0].data.balance && currentJourniePoints < 300) {
+                console.log('1')
                 return false
             }
             if (!activities[0].data.balance && currentJourniePoints >= 300) {
+                console.log('2')
                 return autoRedeemReward(customer, currentJourniePoints)
             }
             if (
@@ -59,6 +61,7 @@ export const useAutoRedeem = () => {
                 ).isAfter(lastDateJourniePoints)
 
                 if (isPromoPointsAfterJourniePoints) {
+                    console.log('3')
                     return autoRedeemReward(customer, currentJourniePoints)
                 }
             }

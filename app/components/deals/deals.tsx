@@ -78,7 +78,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
     }
 
     return (
-        <div className="pt-2">
+        <div className="pt-2 flex-1 flex flex-col">
             {error && <Toast toastText={error} toastType="error" />}
             <ul className="my-2 justify-center flex text-[16px] font-bold text-center text-gray-500">
                 <li>
@@ -112,42 +112,48 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
             </ul>
             {currentDealType === CurrentDeal.WithinReach && (
                 <>
-                    {activeDeals.map((deal) => (
-                        <div
-                            key={deal.id}
-                            className="flex flex-col justify-end shadow-md min-h-[80px] rounded-xl m-2 flex bg-white text-blue-text w-[95%] p-2 gap-4"
-                        >
-                            <h3 className="text-[16px] font-bold">
-                                {deal.campaign_name}
-                            </h3>
-                            <div className="flex gap-4 items-end w-full">
-                                {deal.object === 'voucher' && (
-                                    <Button
-                                        onClick={() =>
-                                            handleActivateCoupon(deal.id)
-                                        }
-                                        buttonType={
-                                            deal.active
-                                                ? 'activeCoupon'
-                                                : 'yellow'
-                                        }
-                                        className="px-2 max-h-[32px] max-w-[149px] text-[16px]"
-                                    >
-                                        {deal.active
-                                            ? '✓ Active coupon'
-                                            : 'Activate coupon'}
-                                    </Button>
-                                )}
-                                <h3 className="text-[18px] font-extrabold">
-                                    {deal?.banner || deal?.name || deal.id}
+                    {activeDeals.length > 0 ? (
+                        activeDeals.map((deal) => (
+                            <div
+                                key={deal.id}
+                                className="flex flex-col justify-end shadow-md min-h-[80px] rounded-xl m-2 flex bg-white text-blue-text w-[95%] p-2 gap-4"
+                            >
+                                <h3 className="text-[16px] font-bold">
+                                    {deal.campaign_name}
                                 </h3>
+                                <div className="flex gap-4 items-end w-full">
+                                    {deal.object === 'voucher' && (
+                                        <Button
+                                            onClick={() =>
+                                                handleActivateCoupon(deal.id)
+                                            }
+                                            buttonType={
+                                                deal.active
+                                                    ? 'activeCoupon'
+                                                    : 'yellow'
+                                            }
+                                            className="px-2 max-h-[32px] max-w-[149px] text-[16px]"
+                                        >
+                                            {deal.active
+                                                ? '✓ Active coupon'
+                                                : 'Activate coupon'}
+                                        </Button>
+                                    )}
+                                    <h3 className="text-[18px] font-extrabold">
+                                        {deal?.banner || deal?.name || deal.id}
+                                    </h3>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    ) : (
+                        <EmptyDealsState />
+                    )}
                 </>
             )}
             {currentDealType === CurrentDeal.All && (
                 <>
+                    {conditionalDeals.length === 0 &&
+                        activeDeals.length === 0 && <EmptyDealsState />}
                     {conditionalDeals.length > 0 &&
                         conditionalDeals.map((deal) => (
                             <div
@@ -209,5 +215,13 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         </div>
     )
 }
+
+const EmptyDealsState = () => (
+    <div className="flex-1 w-full h-full flex justify-center items-center">
+        <p className="mb-4 text-[14px] font-bold text-blue-text">
+            You don't have any deals.
+        </p>
+    </div>
+)
 
 export default Deals

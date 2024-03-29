@@ -46,7 +46,7 @@ export default function HomePage() {
                         My Journie
                     </h1>
                     <h4 className="text-blue-text text-[15px] font-normal">
-                        Hello {session.user?.name || 'User'}!
+                        Hello {session.user?.name || session.user?.id}
                     </h4>
                 </div>
                 <div className="flex items-center gap-2">
