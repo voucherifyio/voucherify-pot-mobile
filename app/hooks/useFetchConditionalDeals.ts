@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { SEGMENTS } from '@/enum/segments'
 import { Deal } from '@/app/components/deals/deals'
+import { getCampaign, listCustomerSegments } from '../apiEndpoints/apiEndpoints'
 
 interface Segment {
     id: string
@@ -9,7 +10,7 @@ interface Segment {
     object: string
 }
 
-export const useFetchConditionalDeals = ({
+export const useConditionalDeals = ({
     customerId,
 }: {
     customerId: string | null | undefined
@@ -23,30 +24,17 @@ export const useFetchConditionalDeals = ({
 
     useEffect(() => {
         const fetchConditionalDeals = async () => {
-            // Get the campaign
             if (customerId) {
                 try {
-                    const res = await fetch(
-                        `/api/voucherify/get-campaign?campaignId=${CAMPAIGNS.FREE_COCA_COCA_CAMPAIGN_ID}`,
-                        {
-                            method: 'GET',
-                            headers: { 'Content-Type': 'application/json' },
-                        }
+                    const res = await getCampaign(
+                        CAMPAIGNS.FREE_COCA_COCA_CAMPAIGN_ID
                     )
                     const data = await res.json()
-
-                    // Check if the customer is eligible for the discount
-                    // List customer's segments and check if the customer is in the segment
                     try {
-                        const res = await fetch(
-                            `/api/voucherify/list-customers-segments?customerId=${customerId}`,
-                            {
-                                method: 'GET',
-                            }
-                        )
-                        const data = await res.json()
+                        const res = await listCustomerSegments(customerId)
+                        const { customerSegments } = await res.json()
                         if (
-                            !data.customersSegments.data.find(
+                            !customerSegments.data.find(
                                 (segment: Segment) =>
                                     segment.name ===
                                     SEGMENTS.CUSTOMER_PURCHASED_3_PLUS_LOCALISATIONS

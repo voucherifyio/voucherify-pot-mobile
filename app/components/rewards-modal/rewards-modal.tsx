@@ -76,7 +76,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
         )
         const { redeemedReward } = await res.json()
         if (res.status !== 200) {
-            console.log(redeemedReward)
+            console.error('Cannot redeem reward')
         }
 
         if (redeemedReward.reward.voucher.code) {

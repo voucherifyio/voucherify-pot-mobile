@@ -10,7 +10,11 @@ type Params = {
 
 export const redeemReward = async (params: Params) => {
     const { voucherify, customerId, rewardId, campaignName } = params
-    const { vouchers } = await listVouchers({ voucherify, campaignName })
+    const { vouchers } = await listVouchers({
+        voucherify,
+        campaignName,
+        customerId,
+    })
     const data = vouchers.find((voucher) => voucher.holder_id === customerId)
 
     if (!data?.campaign_id) {

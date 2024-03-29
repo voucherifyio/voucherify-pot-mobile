@@ -11,7 +11,8 @@ export const listMemberRewards = async (params: Params) => {
     const { voucherify, customerId, campaignName } = params
     const { vouchers } = await listVouchers({
         voucherify,
-        campaignName
+        campaignName,
+        customerId,
     })
     const customerMemberId = vouchers.find(
         (voucher) => voucher.holder_id === customerId

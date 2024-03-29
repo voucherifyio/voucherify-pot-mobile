@@ -4,7 +4,7 @@ import Button from '@/app/components/ui/atoms/button'
 import Toast from '@/app/components/ui/atoms/toast'
 import { useActiveDeals } from '@/app/hooks/useActiveDeals'
 import Loading from '@/app/components/loading/loading'
-import { useFetchConditionalDeals } from '@/app/hooks/useFetchConditionalDeals'
+import { useConditionalDeals } from '@/app/hooks/useFetchConditionalDeals'
 interface DealsProps {
     customerId: string
 }
@@ -45,7 +45,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         CurrentDeal.WithinReach
     )
     const { conditionalDeals, isNotEligibleForTheConditionalDeal, loading } =
-        useFetchConditionalDeals({
+        useConditionalDeals({
             customerId,
         })
 

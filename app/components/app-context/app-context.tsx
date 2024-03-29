@@ -23,7 +23,7 @@ export const MobileAppContext = createContext<MobileAppContextType>({
     setDealsAndRewards: () => {},
     customer: undefined,
     getCurrentCustomer: async () => true,
-    isLinkedToAeroplan: false
+    isLinkedToAeroplan: false,
 })
 
 const MobileApp = ({ children }: { children: JSX.Element }) => {
@@ -40,10 +40,11 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
     useEffect(() => {
         const fetchMobileAppData = async () => {
             await getCurrentCustomer()
+
         }
 
         fetchMobileAppData()
-        const refetchInterval = setInterval(fetchMobileAppData, 5000)
+        const refetchInterval = setInterval(fetchMobileAppData, 3000)
         return () => clearInterval(refetchInterval)
     }, [customerPhone])
 
@@ -54,7 +55,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 setDealsAndRewards,
                 customer,
                 getCurrentCustomer,
-                isLinkedToAeroplan
+                isLinkedToAeroplan,
             }}
         >
             {children}

@@ -1,4 +1,3 @@
-import { CAMPAIGNS } from '@/enum/campaigns'
 import { Deal } from '../components/deals/deals'
 
 const getQualifications = async (
@@ -65,22 +64,6 @@ const redeemReward = async (
     })
 }
 
-const redeemRewardWithMemberId = async (
-    cardNumber: string,
-    campaignId: string,
-    rewardId: string
-) => {
-    return await fetch(`/api/voucherify/redeem-reward-with-member-id`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            memberId: cardNumber,
-            campaignId: CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM_ID,
-            rewardId: rewardId,
-        }),
-    })
-}
-
 const getReward = async (rewardId: string) => {
     return await fetch(`api/voucherify/get-reward?rewardId=${rewardId}`, {
         method: 'GET',
@@ -103,6 +86,34 @@ const getMemberRewards = async (
     )
 }
 
+const getCampaign = async (campaignName: string) => {
+    return await fetch(
+        `/api/voucherify/get-campaign?campaignId=${campaignName}`,
+        {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        }
+    )
+}
+
+const listCustomerSegments = async (customerId: string) => {
+    return await fetch(
+        `/api/voucherify/list-customers-segments?customerId=${customerId}`,
+        {
+            method: 'GET',
+        }
+    )
+}
+
+const listCustomerActivities = async (customerId: string) => {
+    return await fetch(
+        `/api/voucherify/list-customer-activities?customerId=${customerId}`,
+        {
+            method: 'GET',
+        }
+    )
+}
+
 export {
     getQualifications,
     getBarcode,
@@ -111,6 +122,8 @@ export {
     getLoyaltyCard,
     getReward,
     redeemReward,
-    redeemRewardWithMemberId,
     getMemberRewards,
+    getCampaign,
+    listCustomerSegments,
+    listCustomerActivities,
 }

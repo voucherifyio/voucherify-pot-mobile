@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import { CustomerObject } from '@voucherify/sdk'
 import { getCustomer } from '../apiEndpoints/apiEndpoints'
-import { CAMPAIGNS } from '@/enum/campaigns'
+import {
+    ifJourniePointsAmountHasChanged,
+    ifPromoPointsAmountHasChanged,
+    isNoAeroplanMember,
+} from '../utils/customer'
 
 export const useCustomer = ({
     customerPhone,
@@ -11,32 +15,6 @@ export const useCustomer = ({
     const [currentCustomer, setCurrentCustomer] = useState<CustomerObject>()
     const [isLinkedToAeroplan, setIsLinkedToAeroplan] = useState<boolean>(false)
 
-    const isNoAeroplanMember = (
-        prevCustomer: CustomerObject,
-        customer: CustomerObject
-    ) =>
-        prevCustomer.metadata?.aeroplan_member !==
-        customer.metadata?.aeroplan_member
-
-    const ifJourniePointsAmountHasChanged = (
-        prevCustomer: CustomerObject,
-        customer: CustomerObject
-    ) =>
-        prevCustomer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
-            ?.points !==
-        customer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
-            ?.points
-
-    const ifPromoPointsAmountHasChanged = (
-        prevCustomer: CustomerObject,
-        customer: CustomerObject
-    ) =>
-        prevCustomer?.loyalty.campaigns?.[
-            CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM
-        ]?.points !==
-        customer?.loyalty.campaigns?.[CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM]
-            ?.points
-
     const getCurrentCustomer = async () => {
         if (customerPhone) {
             const res = await getCustomer(customerPhone)
@@ -44,6 +22,7 @@ export const useCustomer = ({
             if (res.status !== 200) {
                 return true
             }
+
             return setCurrentCustomer((prevCustomer) => {
                 if (
                     !prevCustomer?.id ||
