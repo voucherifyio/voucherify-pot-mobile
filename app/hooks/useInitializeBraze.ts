@@ -25,6 +25,7 @@ export const useInitalizeBraze = () => {
     }) => {
         if (typeof window !== 'undefined' && customerId && braze) {
             instanceBraze.changeUser(customerId)
+            return instanceBraze.getUser()?.getUserId()
         }
     }
 
