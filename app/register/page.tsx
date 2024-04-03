@@ -2,9 +2,8 @@
 import Button from '@/app/components/ui/atoms/button'
 import { getSession, signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { signOut } from 'next-auth/react'
 import Loading from '../components/loading/loading'
 import { useInitalizeBraze } from '../hooks/useInitializeBraze'
 
@@ -33,6 +32,12 @@ export default function RegisterPage() {
         formState: { errors },
     } = form
     const router = useRouter()
+
+    useEffect(() => {
+        if (status === 'authenticated') {
+            router.push('/home')
+        }
+    }, [status, router])
 
     const registerCustomer = async (values: Inputs) => {
         try {
@@ -74,6 +79,7 @@ export default function RegisterPage() {
                 const customerId = session?.user?.id
                 await initializeBraze({ customerId })
                 router.push('/home')
+                setLoading(false)
             } catch (err) {
                 if (err instanceof Error) {
                     setError(err.message)
@@ -81,7 +87,6 @@ export default function RegisterPage() {
                 return err
             }
         }
-        setLoading(false)
     }
 
     const handleLoginClick = () => {
@@ -93,149 +98,137 @@ export default function RegisterPage() {
     const labelStyle =
         'text-blue-formInput font-14 h-[16px] mb-2 block text-sm font-normal'
 
-    const handleLocalStorage = () => {
-        localStorage.setItem('dealsAndRewards', JSON.stringify([]))
-        localStorage.setItem('activeDealsAndRewards', JSON.stringify([]))
-    }
-
-    if (status === 'loading' || loading) {
+    if (loading || status === 'loading') {
         return <Loading />
     }
 
     if (status === 'authenticated') {
+        return <Loading />
+    }
+
+    if (status === 'unauthenticated') {
         return (
-            <div className="flex-1 flex flex-col items-center justify-center gap-10">
-                <p>You are logged in, logout first.</p>
-                <Button
-                    onClick={() => {
-                        signOut()
-                        handleLocalStorage()
-                    }}
-                    buttonType="primary"
-                    className="px-4 py-2 w-full max-w-[200px]"
-                >
-                    Logout
-                </Button>
+            <div className="flex-1 py-4">
+                <div className="border-bottom-gray-200 flex w-full flex-col items-center justify-center border-b bg-white pb-4">
+                    <h1 className="text-blue-text  text-xl font-extrabold">
+                        Create your account
+                    </h1>
+                    <h4 className="text-blue-text">to start earning rewards</h4>
+                </div>
+                <div className="bg-blue-background flex max-h-full w-full flex-col items-center justify-center">
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="bg-blue-background mt-6 h-[100%] w-full rounded-md px-2 shadow-md"
+                    >
+                        <div className="mb-6">
+                            <label htmlFor="firstName" className={labelStyle}>
+                                First name
+                            </label>
+                            <input
+                                type="text"
+                                id="firstName"
+                                className={inputStyle}
+                                {...register('firstName')}
+                            />
+                        </div>
+                        <div className="mb-6">
+                            <label htmlFor="lastName" className={labelStyle}>
+                                Last name
+                            </label>
+                            <input
+                                type="text"
+                                id="lastName"
+                                className={inputStyle}
+                                {...register('lastName')}
+                            />
+                        </div>
+                        <div className="mb-6">
+                            <label htmlFor="phone" className={labelStyle}>
+                                Phone number
+                            </label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                className={inputStyle}
+                                {...register('phone', {
+                                    required: 'Please fill in the phone number',
+                                })}
+                            />
+                            {errors.phone ? (
+                                <p className="text-xs mt-1 text-red-500">
+                                    {errors.phone.message}
+                                </p>
+                            ) : null}
+                        </div>
+                        <div className="mb-6">
+                            <label htmlFor="email" className={labelStyle}>
+                                E-mail
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                className={inputStyle}
+                                {...register('email')}
+                            />
+                        </div>
+                        <div className="mb-6">
+                            <label htmlFor="postalCode" className={labelStyle}>
+                                Postal code
+                            </label>
+                            <input
+                                {...register('postalCode')}
+                                id="postalCode"
+                                name="postalCode"
+                                type="text"
+                                className={inputStyle}
+                            />
+                        </div>
+
+                        <div className="mb-6">
+                            <label htmlFor="password" className={labelStyle}>
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                id="password"
+                                className={inputStyle}
+                                {...register('password')}
+                            />
+                        </div>
+                        <div className="mb-6">
+                            <label
+                                htmlFor="repeatPassword"
+                                className={labelStyle}
+                            >
+                                Repeat password
+                            </label>
+                            <input
+                                type="password"
+                                id="repeatPassword"
+                                name="repeatPassword"
+                                className={inputStyle}
+                            />
+                        </div>
+                        {error ? (
+                            <p className="text-center mt-2">{error}</p>
+                        ) : null}
+                        <Button
+                            buttonType="primary"
+                            type="submit"
+                            className="px-4 py-2 w-full mb-1"
+                        >
+                            Register
+                        </Button>
+                        <Button
+                            buttonType="primary"
+                            onClick={handleLoginClick}
+                            className="px-4 py-2 w-full bg-green-500"
+                        >
+                            Login
+                        </Button>
+                    </form>
+                </div>
             </div>
         )
     }
-
-    return (
-        <div className="flex-1 py-4">
-            <div className="border-bottom-gray-200 flex w-full flex-col items-center justify-center border-b bg-white pb-4">
-                <h1 className="text-blue-text  text-xl font-extrabold">
-                    Create your account
-                </h1>
-                <h4 className="text-blue-text">to start earning rewards</h4>
-            </div>
-            <div className="bg-blue-background flex max-h-full w-full flex-col items-center justify-center">
-                <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="bg-blue-background mt-6 h-[100%] w-full rounded-md px-2 shadow-md"
-                >
-                    <div className="mb-6">
-                        <label htmlFor="firstName" className={labelStyle}>
-                            First name
-                        </label>
-                        <input
-                            type="text"
-                            id="firstName"
-                            className={inputStyle}
-                            {...register('firstName')}
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label htmlFor="lastName" className={labelStyle}>
-                            Last name
-                        </label>
-                        <input
-                            type="text"
-                            id="lastName"
-                            className={inputStyle}
-                            {...register('lastName')}
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label htmlFor="phone" className={labelStyle}>
-                            Phone number
-                        </label>
-                        <input
-                            type="tel"
-                            id="phone"
-                            className={inputStyle}
-                            {...register('phone', {
-                                required: 'Please fill in the phone number',
-                            })}
-                        />
-                        {errors.phone ? (
-                            <p className="text-xs mt-1 text-red-500">
-                                {errors.phone.message}
-                            </p>
-                        ) : null}
-                    </div>
-                    <div className="mb-6">
-                        <label htmlFor="email" className={labelStyle}>
-                            E-mail
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            className={inputStyle}
-                            {...register('email')}
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label htmlFor="postalCode" className={labelStyle}>
-                            Postal code
-                        </label>
-                        <input
-                            {...register('postalCode')}
-                            id="postalCode"
-                            name="postalCode"
-                            type="text"
-                            className={inputStyle}
-                        />
-                    </div>
-
-                    <div className="mb-6">
-                        <label htmlFor="password" className={labelStyle}>
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            id="password"
-                            className={inputStyle}
-                            {...register('password')}
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label htmlFor="repeatPassword" className={labelStyle}>
-                            Repeat password
-                        </label>
-                        <input
-                            type="password"
-                            id="repeatPassword"
-                            name="repeatPassword"
-                            className={inputStyle}
-                        />
-                    </div>
-                    {error ? <p className="text-center mt-2">{error}</p> : null}
-                    <Button
-                        buttonType="primary"
-                        type="submit"
-                        className="px-4 py-2 w-full mb-1"
-                    >
-                        Register
-                    </Button>
-                    <Button
-                        buttonType="primary"
-                        onClick={handleLoginClick}
-                        className="px-4 py-2 w-full bg-green-500"
-                    >
-                        Login
-                    </Button>
-                </form>
-            </div>
-        </div>
-    )
 }
