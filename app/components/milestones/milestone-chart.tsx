@@ -1,5 +1,5 @@
 'use client'
-import { useContext, useEffect, useState } from 'react'
+import { Dispatch, FC, SetStateAction, useContext, useState } from 'react'
 import { MdLock, MdOutlineLocalGasStation } from 'react-icons/md'
 import RewardsModal from '@/app/components/rewards-modal/rewards-modal'
 import { getMemberRewards } from '@/app/apiEndpoints/apiEndpoints'
@@ -7,22 +7,24 @@ import { CAMPAIGNS } from '@/enum/campaigns'
 import Toast from '@/app/components/ui/atoms/toast'
 import { MobileAppContext } from '../app-context/app-context'
 
-const MilestoneChart = () => {
-    const { customer } = useContext(MobileAppContext)
+type MilestoneChartProps = {
+    calculatedJourniePoints: number
+    isRewardButtonVisible: boolean
+    setIsRewardButtonVisible: Dispatch<SetStateAction<boolean>>
+}
+
+const MilestoneChart: FC<MilestoneChartProps> = ({
+    calculatedJourniePoints,
+    isRewardButtonVisible,
+    setIsRewardButtonVisible,
+}) => {
+    const { customer, promoPoints } = useContext(MobileAppContext)
     const [rewards, setRewards] = useState([])
     const [rewardModalOpened, setRewardModalOpened] = useState(false)
     const [loading, setLoading] = useState(true)
     const [rewardGeneratedMessage, setRewardGeneratedMessage] = useState<
         string | undefined
     >(undefined)
-    const [isRewardButtonVisible, setIsRewardButtonVisible] = useState(false)
-    
-    const journiePoints =
-        customer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
-            ?.points
-    const promoPoints =
-        customer?.loyalty.campaigns?.[CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM]
-            ?.points
 
     const listMemberRewards = async (customerId: string | null | undefined) => {
         const res = await getMemberRewards(
@@ -36,14 +38,6 @@ const MilestoneChart = () => {
         setRewards(rewards)
         setLoading(false)
     }
-
-    useEffect(() => {
-        if (promoPoints !== undefined && promoPoints >= 1) {
-            setIsRewardButtonVisible(true)
-        }
-    }, [promoPoints])
-
-    const calculatedJourniePoints = journiePoints ? journiePoints : 0
 
     return (
         <div className="py-2">

@@ -1,32 +1,33 @@
 'use client'
 import MilestoneChart from '@/app/components/milestones/milestone-chart'
-import { CAMPAIGNS } from '@/enum/campaigns'
 import { useContext, useEffect, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
 import { MobileAppContext } from '../app-context/app-context'
 
 const Milestones = () => {
     const {
-        customer,
         autoRedeemError,
         autoRedeemSuccessMessage,
-        unredeemedBalance,
+        unredeemedPoints,
+        isCustomerUpdated,
+        journiePoints,
+        promoPoints,
     } = useContext(MobileAppContext)
-    const [journiePointsCalculated, setJourniePointsCalculated] =
-        useState<number>(0)
+    const [calculatedJourniePoints, setCalculatedJourniePoints] =
+        useState<number>(journiePoints || 0)
+    const [isRewardButtonVisible, setIsRewardButtonVisible] = useState(false)
 
-    const journiePoints =
-        customer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
-            ?.points
-
-    //USEEFFECT HAVE TO BE CHANGED
     useEffect(() => {
-        if (journiePoints && unredeemedBalance) {
-            setJourniePointsCalculated(journiePoints - unredeemedBalance)
-        } else {
-            setJourniePointsCalculated(journiePoints || 0)
+        if (journiePoints && isCustomerUpdated) {
+            setCalculatedJourniePoints(journiePoints)
         }
-    }, [journiePoints, unredeemedBalance])
+        if (unredeemedPoints && !isCustomerUpdated) {
+            setCalculatedJourniePoints(unredeemedPoints)
+        }
+        if (promoPoints && promoPoints >= 1) {
+            setIsRewardButtonVisible(true)
+        }
+    }, [journiePoints, unredeemedPoints, promoPoints])
 
     return (
         <div className="p-4">
@@ -34,11 +35,16 @@ const Milestones = () => {
                 <h4 className="text-blue-text text-16">
                     Your Points
                     <span className="pl-2 font-extrabold">
-                        {journiePointsCalculated}
+                        {calculatedJourniePoints}
                     </span>
                 </h4>
             </header>
-            <MilestoneChart />
+
+            <MilestoneChart
+                calculatedJourniePoints={calculatedJourniePoints}
+                isRewardButtonVisible={isRewardButtonVisible}
+                setIsRewardButtonVisible={setIsRewardButtonVisible}
+            />
             {autoRedeemSuccessMessage && (
                 <Toast
                     toastType="success"

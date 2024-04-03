@@ -7,7 +7,7 @@ import {
 import dayjs from 'dayjs'
 import { REWARDS } from '@/enum/rewards'
 import { CAMPAIGNS } from '@/enum/campaigns'
-import { pointsCalculation } from '../utils/customer'
+import { customerPointsCalculation } from '../utils/customer'
 import { EVENT_TYPES } from '@/enum/customer-event-types'
 
 export const useAutoRedeem = () => {
@@ -15,7 +15,7 @@ export const useAutoRedeem = () => {
     const [autoRedeemSuccessMessage, setAutoRedeemSuccessMessage] = useState<
         string | undefined
     >()
-    const [unredeemedBalance, setUnredemeedBalance] = useState<number | null>(
+    const [unredeemedPoints, setUnredemeedPoints] = useState<number | null>(
         null
     )
 
@@ -42,8 +42,8 @@ export const useAutoRedeem = () => {
             const {
                 lastRewardedJourniePoints,
                 lastRewardedPromoPoints,
-                penultimateCustomerRewardedPromoPoints,
-            } = pointsCalculation(activities)
+                penultimateRewardedPromoPoints,
+            } = customerPointsCalculation(activities)
 
             if (!activities[0].data.balance && currentJourniePoints < 300) {
                 return false
@@ -66,8 +66,9 @@ export const useAutoRedeem = () => {
                 const lastDateJourniePoints = dayjs(
                     lastRewardedJourniePoints?.created_at
                 ).format('YYYY-DD-MM HH:mm:ss')
+
                 const lastDatePenultimatePoints = dayjs(
-                    penultimateCustomerRewardedPromoPoints?.created_at
+                    penultimateRewardedPromoPoints?.created_at
                 ).format('YYYY-DD-MM HH:mm:ss')
 
                 const isPromoPointsAfterJourniePoints = dayjs(
@@ -95,18 +96,21 @@ export const useAutoRedeem = () => {
 
         while (redeemQuantity > 0) {
             const res = await redeemReward(customerId, rewardId, campaignName)
-            if (res && res.status !== 200) {
+            if (res.status !== 200) {
                 return setAutoRedeemError('Redemption failed')
             }
 
-            if (res?.ok && redeemQuantity === 1) {
-                setUnredemeedBalance(currentJourniePoints % 300)
+            if (res.ok && redeemQuantity === 1) {
+                setUnredemeedPoints(currentJourniePoints % 300)
                 setAutoRedeemSuccessMessage(
                     `Successfully redeemed reward - ${aeroplan ? REWARDS.AEROPLAN_TRANSFER_REWARD : REWARDS.SEVEN_CENTS_PER_LITER_REWARD}`
                 )
-                setTimeout(() => setAutoRedeemSuccessMessage(undefined), 5000)
+                return setTimeout(
+                    () => setAutoRedeemSuccessMessage(undefined),
+                    5000
+                )
             }
-            if (res?.ok) {
+            if (res.ok) {
                 redeemQuantity--
             }
         }
@@ -119,7 +123,7 @@ export const useAutoRedeem = () => {
         const aeroplan = customer?.metadata.aeroplan_member
 
         if (aeroplan) {
-            await redeemDependOnAeroplan(
+            return await redeemDependOnAeroplan(
                 customer?.id,
                 REWARDS.AEROPLAN_TRANSFER_REWARD_ID,
                 CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM,
@@ -128,7 +132,7 @@ export const useAutoRedeem = () => {
             )
         }
         if (!aeroplan) {
-            await redeemDependOnAeroplan(
+            return await redeemDependOnAeroplan(
                 customer?.id,
                 REWARDS.SEVEN_CENTS_PER_LITER_REWARD_ID,
                 CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM,
@@ -139,9 +143,10 @@ export const useAutoRedeem = () => {
     }
 
     return {
-        unredeemedBalance,
+        unredeemedPoints,
         autoRedeemCalculation,
         autoRedeemSuccessMessage,
         autoRedeemError,
+        setUnredemeedPoints,
     }
 }

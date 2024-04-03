@@ -2,6 +2,7 @@
 import { useAutoRedeem } from '@/app/hooks/useAutoRedeem'
 import { useCustomer } from '@/app/hooks/useCustomer'
 import { useLocalStorage } from '@/app/hooks/useLocalStorage'
+import { CAMPAIGNS } from '@/enum/campaigns'
 import { CustomerObject } from '@voucherify/sdk'
 import { useSession } from 'next-auth/react'
 import { Dispatch, SetStateAction, createContext, useEffect } from 'react'
@@ -19,7 +20,10 @@ type MobileAppContextType = {
     isLinkedToAeroplan: boolean
     autoRedeemError: string | undefined
     autoRedeemSuccessMessage: string | undefined
-    unredeemedBalance: number | null
+    unredeemedPoints: number | null
+    isCustomerUpdated: boolean
+    journiePoints: number | undefined
+    promoPoints: number | undefined
 }
 
 export const MobileAppContext = createContext<MobileAppContextType>({
@@ -30,7 +34,10 @@ export const MobileAppContext = createContext<MobileAppContextType>({
     isLinkedToAeroplan: false,
     autoRedeemError: undefined,
     autoRedeemSuccessMessage: undefined,
-    unredeemedBalance: null,
+    unredeemedPoints: null,
+    isCustomerUpdated: false,
+    journiePoints: undefined,
+    promoPoints: undefined,
 })
 
 const MobileApp = ({ children }: { children: JSX.Element }) => {
@@ -53,8 +60,16 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         autoRedeemCalculation,
         autoRedeemError,
         autoRedeemSuccessMessage,
-        unredeemedBalance,
+        unredeemedPoints,
+        setUnredemeedPoints,
     } = useAutoRedeem()
+
+    const journiePoints =
+        customer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
+            ?.points
+    const promoPoints =
+        customer?.loyalty.campaigns?.[CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM]
+            ?.points
 
     useEffect(() => {
         getCurrentCustomer()
@@ -62,6 +77,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
             if (!document.hidden) {
                 await getCurrentCustomer()
                 if (isCustomerUpdated) {
+                    setUnredemeedPoints(null)
                     await autoRedeemCalculation(customer)
                     setIsCustomerUpdated(false)
                 }
@@ -81,7 +97,10 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 isLinkedToAeroplan,
                 autoRedeemError,
                 autoRedeemSuccessMessage,
-                unredeemedBalance,
+                unredeemedPoints,
+                isCustomerUpdated,
+                journiePoints,
+                promoPoints,
             }}
         >
             {children}
