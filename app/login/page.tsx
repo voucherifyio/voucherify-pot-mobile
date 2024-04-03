@@ -6,7 +6,6 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import Loading from '../components/loading/loading'
 import { useInitalizeBraze } from '../hooks/useInitializeBraze'
-import braze from '@/braze/initalizeBraze'
 
 export interface Inputs {
     phone: string
