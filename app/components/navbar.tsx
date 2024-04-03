@@ -9,11 +9,11 @@ import {
     MdStars,
 } from 'react-icons/md'
 import Link from 'next/link'
-import { VouchersAmountContext } from '@/app/components/vouchers-amount-context/vouchers-amount-context'
+import { MobileAppContext } from './app-context/app-context'
 
 const Navbar = () => {
     const { status } = useSession()
-    const { dealsAndRewards } = useContext(VouchersAmountContext)
+    const { dealsAndRewards } = useContext(MobileAppContext)
 
     //todo change the icon color as well
     const pathname = usePathname()

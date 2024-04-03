@@ -1,35 +1,15 @@
-'use client'
-import {
-    Dispatch,
-    SetStateAction,
-    createContext,
-    useEffect,
-    useState,
-} from 'react'
-import { useSession } from 'next-auth/react'
-import { Reward } from '@/app/components/rewards/rewards'
+import { useEffect, useState } from 'react'
+import { DealsAndRewards } from '../components/app-context/app-context'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
-import { Deal } from '@/app/components/deals/deals'
-import { getQualifications } from '@/app/apiEndpoints/apiEndpoints'
+import { Reward } from '../components/rewards/rewards'
+import { Deal } from '../components/deals/deals'
+import { getQualifications } from '../apiEndpoints/apiEndpoints'
 
-export type DealsAndRewards = {
-    rewards: number
-    deals: number
-}
-
-export type VouchersAmount = {
-    dealsAndRewards: DealsAndRewards
-    setDealsAndRewards: Dispatch<SetStateAction<DealsAndRewards>>
-}
-
-export const VouchersAmountContext = createContext<VouchersAmount>({
-    dealsAndRewards: { rewards: 0, deals: 0 },
-    setDealsAndRewards: () => {},
-})
-
-const VouchersAmount = ({ children }: { children: JSX.Element }) => {
-    const { data } = useSession()
-    const customerId = data?.user?.id
+export const useLocalStorage = ({
+    customerId,
+}: {
+    customerId: string | null | undefined
+}) => {
     const [dealsAndRewards, setDealsAndRewards] = useState<DealsAndRewards>({
         rewards: 0,
         deals: 0,
@@ -62,13 +42,8 @@ const VouchersAmount = ({ children }: { children: JSX.Element }) => {
         }
     }, [customerId])
 
-    return (
-        <VouchersAmountContext.Provider
-            value={{ dealsAndRewards, setDealsAndRewards }}
-        >
-            {children}
-        </VouchersAmountContext.Provider>
-    )
+    return {
+        dealsAndRewards,
+        setDealsAndRewards,
+    }
 }
-
-export default VouchersAmount

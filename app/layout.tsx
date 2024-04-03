@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import SessionWrapper from '@/app/components/session-wrapper'
 import Navbar from '@/app/components/navbar'
 import { inter } from '@/app/components/ui/fonts'
-import LocalStorage from '@/app/components/vouchers-amount-context/vouchers-amount-context'
+import MobileApp from './components/app-context/app-context'
 
 export const metadata: Metadata = {
     title: {
@@ -27,12 +27,12 @@ export default function RootLayout({
                 <body
                     className={`${inter.className} flex flex-col min-h-screen justify-between mx-auto max-w-screen-sm antialiased`}
                 >
-                    <LocalStorage>
+                    <MobileApp>
                         <>
                             {children}
                             <Navbar />
                         </>
-                    </LocalStorage>
+                    </MobileApp>
                 </body>
             </html>
         </SessionWrapper>

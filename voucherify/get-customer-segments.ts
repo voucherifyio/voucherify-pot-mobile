@@ -5,7 +5,7 @@ type Params = {
     customerId: string
 }
 
-export const getCustomersSegments = async (params: Params) => {
+export const listCustomerSegments = async (params: Params) => {
     const { voucherify, customerId } = params
 
     try {

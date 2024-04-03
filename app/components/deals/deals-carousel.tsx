@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import { FaArrowRight } from 'react-icons/fa'
 import { useDealsCarousel } from '@/app/hooks/useDealsCarousel'
 import ScrollContainer from 'react-indiana-drag-scroll'
-import { ImSpinner8 } from 'react-icons/im'
 
 type DealsCarouselProps = {
     customerId: string | null | undefined
@@ -12,7 +11,7 @@ type DealsCarouselProps = {
 
 const DealsCarousel: FC<DealsCarouselProps> = ({ customerId }) => {
     const router = useRouter()
-    const { activeDeals, error, loading } = useDealsCarousel({
+    const { activeDeals, loading } = useDealsCarousel({
         customerId,
     })
 
@@ -34,6 +33,13 @@ const DealsCarousel: FC<DealsCarouselProps> = ({ customerId }) => {
                     </span>
                 </button>
             </div>
+            {activeDeals?.length === 0 && (
+                <div className="py-3 flex justify-center items-center">
+                    <p className="text-[14px] font-bold text-blue-text">
+                        No active deals
+                    </p>
+                </div>
+            )}
             {loading ? (
                 <DealsLoading />
             ) : (
@@ -59,7 +65,7 @@ const DealsCarousel: FC<DealsCarouselProps> = ({ customerId }) => {
 }
 
 const DealsLoading = () => (
-    <div className='w-full flex justify-center items-center bg-inherit m-2'>
+    <div className="w-full flex justify-center items-center bg-inherit m-2">
         <p>Loading...</p>
     </div>
 )

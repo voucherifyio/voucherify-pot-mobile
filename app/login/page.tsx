@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import Loading from '../components/loading/loading'
 import { useInitalizeBraze } from '../hooks/useInitializeBraze'
 
-interface Inputs {
+export interface Inputs {
     phone: string
     password?: string
 }

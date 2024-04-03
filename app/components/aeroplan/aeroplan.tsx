@@ -1,17 +1,15 @@
 import Button from '@/app/components/ui/atoms/button'
 import Image from 'next/image'
 import aeroplan from '@/public/images/aeroplan.png'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
-import { useGetCustomer } from '@/app/hooks/useGetCustomer'
+import { MobileAppContext } from '../app-context/app-context'
 
 const Aeroplan = () => {
-    const [isLinkedToAeroplan, setIsLinkedToAeroplan] = useState<boolean>()
     const [error, setError] = useState<string | undefined>(undefined)
     const [success, setSuccess] = useState<boolean>(false)
-    const [loading, setLoading] = useState(true)
-    const { customer } = useGetCustomer()
-    const customerPhone = customer?.phone
+    const [loading, setLoading] = useState(false)
+    const { customer, getCurrentCustomer, isLinkedToAeroplan } = useContext(MobileAppContext)
     const customerId = customer?.id
 
     const handleLinkToAeroplan = async () => {
@@ -25,42 +23,14 @@ const Aeroplan = () => {
                     }),
                 })
                 setSuccess(true)
-                fetchCustomersAeroplanMetadata()
+                await getCurrentCustomer()
+                setLoading(false)
             } catch (err: any) {
                 console.error(err)
                 setError(err)
             }
         }
     }
-
-    const fetchCustomersAeroplanMetadata = async () => {
-        if (customerPhone) {
-            setLoading(true)
-            try {
-                const res = await fetch(
-                    `/api/voucherify/get-customer?phone=${customerPhone}`,
-                    {
-                        method: 'GET',
-                    }
-                )
-                const { customer } = await res.json()
-                if (customer.metadata?.aeroplan_member) {
-                    setIsLinkedToAeroplan(customer.metadata?.aeroplan_member)
-                }
-                setLoading(false)
-            } catch (err) {
-                if (err instanceof Error) {
-                    setError(err.message)
-                }
-                setLoading(false)
-                return err
-            }
-        }
-    }
-
-    useEffect(() => {
-        fetchCustomersAeroplanMetadata()
-    }, [customer])
 
     return (
         <>
