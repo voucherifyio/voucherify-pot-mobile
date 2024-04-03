@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { Reward } from '@/app/components/rewards/rewards'
 import { getQualifications } from '../apiEndpoints/apiEndpoints'
+import { MobileAppContext } from '../components/app-context/app-context'
 
 export const useActiveRewards = ({
     customerId,
 }: {
     customerId: string | null | undefined
 }) => {
+    const { setDealsAndRewards, dealsAndRewards } = useContext(MobileAppContext)
     const [activeRewards, setActiveRewards] = useState<Reward[]>([])
     const [loading, setLoading] = useState(true)
 
@@ -41,6 +43,10 @@ export const useActiveRewards = ({
                 })
 
                 setActiveRewards(updatedRewards)
+                setDealsAndRewards({
+                    ...dealsAndRewards,
+                    deals: updatedRewards.length,
+                })
                 setLoading(false)
             }
 
