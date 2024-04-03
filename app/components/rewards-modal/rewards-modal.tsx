@@ -16,6 +16,7 @@ type RewardsModalProps = {
     customerId: string | null | undefined
     loading: boolean
     setRewardGeneratedMessage: Dispatch<SetStateAction<string | undefined>>
+    setIsRewardButtonVisible: Dispatch<SetStateAction<boolean>>
 }
 
 type ChoiceConfirmationProps = {
@@ -38,6 +39,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
     customerId,
     loading,
     setRewardGeneratedMessage,
+    setIsRewardButtonVisible,
 }) => {
     const [confirmation, setConfirmation] = useState<boolean>(false)
     const [rewardId, setRewardId] = useState<string | null>(null)
@@ -66,6 +68,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
                 setRewardModalOpened(false)
                 setIsVoucherGenerationProcess(false)
                 setRewardGeneratedMessage('Reward voucher has been generated')
+                setIsRewardButtonVisible(false)
             }
         }
     }

@@ -1,34 +1,32 @@
 'use client'
 import MilestoneChart from '@/app/components/milestones/milestone-chart'
 import { CAMPAIGNS } from '@/enum/campaigns'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
 import { MobileAppContext } from '../app-context/app-context'
-import { useAutoRedeem } from '@/app/hooks/useAutoRedeem'
 
 const Milestones = () => {
-    const { customer } = useContext(MobileAppContext)
     const {
-        restNotRedeemedPoints,
-        autoRedeemCalculation,
-        error,
-        successMessage,
-    } = useAutoRedeem()
+        customer,
+        autoRedeemError,
+        autoRedeemSuccessMessage,
+        unredeemedBalance,
+    } = useContext(MobileAppContext)
+    const [journiePointsCalculated, setJourniePointsCalculated] =
+        useState<number>(0)
+
     const journiePoints =
         customer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
-            ?.points || 0
-    const promoPoints =
-        customer?.loyalty.campaigns?.[CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM]
-            ?.points || 0
+            ?.points
 
+    //USEEFFECT HAVE TO BE CHANGED
     useEffect(() => {
-        autoRedeemCalculation(customer)
-    }, [journiePoints, promoPoints])
-
-    const journiePointsCalculated =
-        restNotRedeemedPoints === 0 || restNotRedeemedPoints
-            ? restNotRedeemedPoints
-            : journiePoints
+        if (journiePoints && unredeemedBalance) {
+            setJourniePointsCalculated(journiePoints - unredeemedBalance)
+        } else {
+            setJourniePointsCalculated(journiePoints || 0)
+        }
+    }, [journiePoints, unredeemedBalance])
 
     return (
         <div className="p-4">
@@ -40,15 +38,16 @@ const Milestones = () => {
                     </span>
                 </h4>
             </header>
-            <MilestoneChart
-                journiePoints={journiePointsCalculated}
-                customerId={customer?.id}
-                promoPoints={promoPoints}
-            />
-            {successMessage && (
-                <Toast toastType="success" toastText={successMessage} />
+            <MilestoneChart />
+            {autoRedeemSuccessMessage && (
+                <Toast
+                    toastType="success"
+                    toastText={autoRedeemSuccessMessage}
+                />
             )}
-            {error && <Toast toastType="error" toastText={error} />}
+            {autoRedeemError && (
+                <Toast toastType="error" toastText={autoRedeemError} />
+            )}
         </div>
     )
 }

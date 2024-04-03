@@ -27,14 +27,14 @@ export const ifPromoPointsAmountHasChanged = (
         ?.points
 
 export const pointsCalculation = (activities: Record<string, any>[]) => {
-    const lastCustomerRewardedJourniePoints = activities.find(
+    const lastRewardedJourniePoints = activities.find(
         (event) =>
             event.type ===
                 EVENT_TYPES.CUSTOMER_VOUCHER_LOYALTY_CARD_POINTS_ADDED &&
             event.data.voucher.campaign ===
                 CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM
     )
-    const lastCustomerRewardedPromoPoints = activities.find(
+    const lastRewardedPromoPoints = activities.find(
         (event) =>
             event.type ===
                 EVENT_TYPES.CUSTOMER_VOUCHER_LOYALTY_CARD_POINTS_ADDED &&
@@ -51,8 +51,8 @@ export const pointsCalculation = (activities: Record<string, any>[]) => {
     )
 
     return {
-        lastCustomerRewardedJourniePoints,
-        lastCustomerRewardedPromoPoints,
+        lastRewardedJourniePoints,
+        lastRewardedPromoPoints,
         penultimateCustomerRewardedPromoPoints,
     }
 }

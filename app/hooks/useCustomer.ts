@@ -12,7 +12,10 @@ export const useCustomer = ({
 }: {
     customerPhone: string | null | undefined
 }) => {
-    const [currentCustomer, setCurrentCustomer] = useState<CustomerObject>()
+    const [currentCustomer, setCurrentCustomer] = useState<
+        CustomerObject | undefined
+    >(undefined)
+    const [isCustomerUpdated, setIsCustomerUpdated] = useState(false)
     const [isLinkedToAeroplan, setIsLinkedToAeroplan] = useState<boolean>(false)
 
     const getCurrentCustomer = async () => {
@@ -20,24 +23,28 @@ export const useCustomer = ({
             const res = await getCustomer(customerPhone)
             const { customer }: { customer: CustomerObject } = await res.json()
             if (res.status !== 200) {
-                return true
+                return undefined
             }
 
-            return setCurrentCustomer((prevCustomer) => {
-                if (
-                    !prevCustomer?.id ||
-                    prevCustomer.id !== customer.id ||
-                    isNoAeroplanMember(prevCustomer, customer) ||
-                    ifJourniePointsAmountHasChanged(prevCustomer, customer) ||
-                    ifPromoPointsAmountHasChanged(prevCustomer, customer)
-                ) {
-                    setIsLinkedToAeroplan(customer.metadata?.aeroplan_member)
-                    return customer
-                }
-                return prevCustomer
-            })
+            if (
+                !currentCustomer ||
+                currentCustomer.id !== customer.id ||
+                isNoAeroplanMember(currentCustomer, customer) ||
+                ifJourniePointsAmountHasChanged(currentCustomer, customer) ||
+                ifPromoPointsAmountHasChanged(currentCustomer, customer)
+            ) {
+                setIsCustomerUpdated(true)
+                setIsLinkedToAeroplan(customer.metadata?.aeroplan_member)
+                setCurrentCustomer(customer)
+            }
         }
     }
 
-    return { customer: currentCustomer, getCurrentCustomer, isLinkedToAeroplan }
+    return {
+        customer: currentCustomer,
+        getCurrentCustomer,
+        isLinkedToAeroplan,
+        isCustomerUpdated,
+        setIsCustomerUpdated,
+    }
 }

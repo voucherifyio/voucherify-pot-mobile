@@ -1,27 +1,28 @@
 'use client'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { MdLock, MdOutlineLocalGasStation } from 'react-icons/md'
 import RewardsModal from '@/app/components/rewards-modal/rewards-modal'
 import { getMemberRewards } from '@/app/apiEndpoints/apiEndpoints'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import Toast from '@/app/components/ui/atoms/toast'
+import { MobileAppContext } from '../app-context/app-context'
 
-interface MilestoneChartProps {
-    journiePoints: number
-    promoPoints?: number | null
-    customerId: string | null | undefined
-}
-const MilestoneChart: React.FC<MilestoneChartProps> = ({
-    journiePoints,
-    promoPoints,
-    customerId,
-}) => {
+const MilestoneChart = () => {
+    const { customer } = useContext(MobileAppContext)
     const [rewards, setRewards] = useState([])
     const [rewardModalOpened, setRewardModalOpened] = useState(false)
     const [loading, setLoading] = useState(true)
     const [rewardGeneratedMessage, setRewardGeneratedMessage] = useState<
         string | undefined
     >(undefined)
+    const [isRewardButtonVisible, setIsRewardButtonVisible] = useState(false)
+    
+    const journiePoints =
+        customer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
+            ?.points
+    const promoPoints =
+        customer?.loyalty.campaigns?.[CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM]
+            ?.points
 
     const listMemberRewards = async (customerId: string | null | undefined) => {
         const res = await getMemberRewards(
@@ -36,6 +37,14 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
         setLoading(false)
     }
 
+    useEffect(() => {
+        if (promoPoints !== undefined && promoPoints >= 1) {
+            setIsRewardButtonVisible(true)
+        }
+    }, [promoPoints])
+
+    const calculatedJourniePoints = journiePoints ? journiePoints : 0
+
     return (
         <div className="py-2">
             <ol className="items-center flex">
@@ -46,7 +55,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                         </p>
                     </div>
                     <div
-                        className={`${journiePoints < 37.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2 z-0`}
+                        className={`${calculatedJourniePoints < 37.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2 z-0`}
                     />
                     <div
                         className={`relative bottom-4 w-6 h-6 bg-yellow-button z-10 rounded-full flex items-center justify-center text-blue-text`}
@@ -56,7 +65,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                 </li>
                 <li className="relative w-full">
                     <div
-                        className={`${journiePoints < 75 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        className={`${calculatedJourniePoints < 75 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                     />
                     <div
                         className={`bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
@@ -64,7 +73,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                 </li>
                 <li className="relative w-full">
                     <div
-                        className={`${journiePoints < 112.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        className={`${calculatedJourniePoints < 112.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                     />
                     <div
                         className={`bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
@@ -72,7 +81,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                 </li>
                 <li className="relative w-full">
                     <div
-                        className={`${journiePoints < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        className={`${calculatedJourniePoints < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                     />
                     <div
                         className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
@@ -85,12 +94,12 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                         </p>
                     </div>
                     <div
-                        className={`${journiePoints < 187.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        className={`${calculatedJourniePoints < 187.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                     />
                     <div
-                        className={`${journiePoints < 150 ? 'bg-gray-300' : 'bg-yellow-button'} relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text`}
+                        className={`${calculatedJourniePoints < 150 ? 'bg-gray-300' : 'bg-yellow-button'} relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     >
-                        {journiePoints < 150 ? (
+                        {calculatedJourniePoints < 150 ? (
                             <MdLock />
                         ) : (
                             <MdOutlineLocalGasStation />
@@ -99,7 +108,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                 </li>
                 <li className="relative w-full">
                     <div
-                        className={`${journiePoints < 225 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        className={`${calculatedJourniePoints < 225 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                     />
                     <div
                         className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
@@ -107,7 +116,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                 </li>
                 <li className="relative w-full">
                     <div
-                        className={`${journiePoints < 262.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        className={`${calculatedJourniePoints < 262.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                     />
                     <div
                         className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
@@ -115,7 +124,7 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                 </li>
                 <li className="relative w-full">
                     <div
-                        className={`${journiePoints < 300 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        className={`${calculatedJourniePoints < 300 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
                     />
                     <div
                         className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
@@ -128,12 +137,12 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                         </p>
                     </div>
                     <div
-                        className={`flex  ${journiePoints < 10000 ? 'bg-gray-300' : 'bg-yellow-button'} h-2`}
+                        className={`flex  ${calculatedJourniePoints < 10000 ? 'bg-gray-300' : 'bg-yellow-button'} h-2`}
                     />
                     <div
-                        className={`relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text ${journiePoints < 300 ? 'bg-gray-300' : 'bg-yellow-button'}`}
+                        className={`relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text ${calculatedJourniePoints < 300 ? 'bg-gray-300' : 'bg-yellow-button'}`}
                     >
-                        {journiePoints < 300 ? (
+                        {calculatedJourniePoints < 300 ? (
                             <MdLock />
                         ) : (
                             <MdOutlineLocalGasStation />
@@ -148,23 +157,24 @@ const MilestoneChart: React.FC<MilestoneChartProps> = ({
                     customStyles="font-bold border border-gray-300 rounded-lg shadow-lg fixed top-[15%] left-[50%] -translate-x-2/4 flex items-center justify-center w-full max-w-xs p-4 bg-white z-50"
                 />
             )}
-            {promoPoints && promoPoints >= 1 ? (
+            {isRewardButtonVisible ? (
                 <div className="flex justify-center relative">
                     {rewardModalOpened ? (
                         <RewardsModal
                             rewards={rewards}
                             rewardModalOpened={rewardModalOpened}
                             setRewardModalOpened={setRewardModalOpened}
-                            customerId={customerId}
+                            customerId={customer?.id}
                             loading={loading}
                             setRewardGeneratedMessage={
                                 setRewardGeneratedMessage
                             }
+                            setIsRewardButtonVisible={setIsRewardButtonVisible}
                         />
                     ) : null}
                     <button
                         onClick={() => {
-                            listMemberRewards(customerId)
+                            listMemberRewards(customer?.id)
                             setRewardModalOpened(true)
                         }}
                         className="text-white bg-[#173C9F] h-[32px] rounded text-[16px] px-2"

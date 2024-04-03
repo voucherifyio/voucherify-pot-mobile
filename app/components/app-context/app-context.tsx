@@ -1,4 +1,5 @@
 'use client'
+import { useAutoRedeem } from '@/app/hooks/useAutoRedeem'
 import { useCustomer } from '@/app/hooks/useCustomer'
 import { useLocalStorage } from '@/app/hooks/useLocalStorage'
 import { CustomerObject } from '@voucherify/sdk'
@@ -14,8 +15,11 @@ type MobileAppContextType = {
     dealsAndRewards: DealsAndRewards
     setDealsAndRewards: Dispatch<SetStateAction<DealsAndRewards>>
     customer: CustomerObject | undefined
-    getCurrentCustomer: () => Promise<void | true>
+    getCurrentCustomer: () => Promise<true | void>
     isLinkedToAeroplan: boolean
+    autoRedeemError: string | undefined
+    autoRedeemSuccessMessage: string | undefined
+    unredeemedBalance: number | null
 }
 
 export const MobileAppContext = createContext<MobileAppContextType>({
@@ -24,29 +28,48 @@ export const MobileAppContext = createContext<MobileAppContextType>({
     customer: undefined,
     getCurrentCustomer: async () => true,
     isLinkedToAeroplan: false,
+    autoRedeemError: undefined,
+    autoRedeemSuccessMessage: undefined,
+    unredeemedBalance: null,
 })
 
 const MobileApp = ({ children }: { children: JSX.Element }) => {
     const { data: session } = useSession()
     const customerPhone = session?.user?.id
-    const { customer, getCurrentCustomer, isLinkedToAeroplan } = useCustomer({
+    const {
+        customer,
+        getCurrentCustomer,
+        isLinkedToAeroplan,
+        isCustomerUpdated,
+        setIsCustomerUpdated,
+    } = useCustomer({
         customerPhone: customerPhone,
     })
     const customerId = customer?.id
     const { dealsAndRewards, setDealsAndRewards } = useLocalStorage({
         customerId,
     })
+    const {
+        autoRedeemCalculation,
+        autoRedeemError,
+        autoRedeemSuccessMessage,
+        unredeemedBalance,
+    } = useAutoRedeem()
 
     useEffect(() => {
         getCurrentCustomer()
         const interval: NodeJS.Timeout = setInterval(async () => {
             if (!document.hidden) {
-                getCurrentCustomer()
+                await getCurrentCustomer()
+                if (isCustomerUpdated) {
+                    await autoRedeemCalculation(customer)
+                    setIsCustomerUpdated(false)
+                }
             }
         }, 3000)
 
         return () => clearInterval(interval)
-    }, [customerPhone])
+    }, [customerPhone, isCustomerUpdated])
 
     return (
         <MobileAppContext.Provider
@@ -56,6 +79,9 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 customer,
                 getCurrentCustomer,
                 isLinkedToAeroplan,
+                autoRedeemError,
+                autoRedeemSuccessMessage,
+                unredeemedBalance,
             }}
         >
             {children}
