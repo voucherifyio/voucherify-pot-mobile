@@ -1,18 +1,17 @@
 'use client'
-import { FC } from 'react'
+import { useContext } from 'react'
 import { useRouter } from 'next/navigation'
 import { FaArrowRight } from 'react-icons/fa'
 import { useDealsCarousel } from '@/app/hooks/useDealsCarousel'
 import ScrollContainer from 'react-indiana-drag-scroll'
+import { MobileAppContext } from '../app-context/app-context'
 
-type DealsCarouselProps = {
-    customerId: string | null | undefined
-}
-
-const DealsCarousel: FC<DealsCarouselProps> = ({ customerId }) => {
+const DealsCarousel = () => {
     const router = useRouter()
+    const { customer } = useContext(MobileAppContext)
+    const customerSourceId = customer?.source_id
     const { activeDeals, loading } = useDealsCarousel({
-        customerId,
+        customerSourceId,
     })
 
     const handleDealsRedirectClick = () => {
@@ -53,7 +52,7 @@ const DealsCarousel: FC<DealsCarouselProps> = ({ customerId }) => {
                             key={deal.id}
                             className="shadow-md min-h-[60px] min-w-[70%] rounded-xl my-4 mx-2 bg-white text-blue-text p-2"
                         >
-                            <h3 className="text-[18px] font-extrabold">
+                            <h3 className="font-extrabold">
                                 {deal?.name || deal?.id}
                             </h3>
                         </div>
