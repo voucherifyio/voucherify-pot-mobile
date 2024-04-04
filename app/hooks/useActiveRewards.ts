@@ -45,7 +45,7 @@ export const useActiveRewards = ({
                 setActiveRewards(updatedRewards)
                 setDealsAndRewards({
                     ...dealsAndRewards,
-                    deals: updatedRewards.length,
+                    rewards: updatedRewards.length,
                 })
                 setLoading(false)
             }
