@@ -45,7 +45,7 @@ const EarningRulesCarousel: React.FC<EarningRulesCarouselProps> = () => {
                             key={earningRule.id}
                             className="p-2 shadow-md min-h-[60px] rounded-xl my-4 mx-2 bg-white text-blue-text min-w-[70%]"
                         >
-                            <h3 className="text-[18px] font-extrabold">
+                            <h3 className="font-extrabold">
                                 {earningRule?.source?.banner || earningRule?.id}
                             </h3>
                         </div>
