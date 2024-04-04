@@ -11,6 +11,8 @@ import DealsCarousel from '@/app/components/deals/deals-carousel'
 import Aeroplan from '@/app/components/aeroplan/aeroplan'
 import EarningRulesCarousel from '@/app/components/earning-rules/earning-rules-carousel'
 import Loading from '@/app/components/loading/loading'
+import { useContext } from 'react'
+import { MobileAppContext } from '../components/app-context/app-context'
 
 export default function HomePage() {
     const router = useRouter()
@@ -20,6 +22,8 @@ export default function HomePage() {
             router.push('/')
         },
     })
+    const { setDealsAndRewards, setCurrentCustomer } =
+        useContext(MobileAppContext)
     const { braze } = useInitalizeBraze()
 
     const handleLocalStorage = () => {
@@ -50,6 +54,8 @@ export default function HomePage() {
                     <Button
                         onClick={() => {
                             signOut({ redirect: false })
+                            setDealsAndRewards({ deals: 0, rewards: 0 })
+                            setCurrentCustomer(undefined)
                             handleLocalStorage()
                         }}
                         className="bg-slate-300 h-auto py-1 px-2"
@@ -60,7 +66,7 @@ export default function HomePage() {
             </div>
             <div className="flex-row  mx-border-b-2 w-full">
                 <Milestones />
-                <DealsCarousel customerId={session.user?.id} />
+                <DealsCarousel />
                 <EarningRulesCarousel />
                 <Aeroplan />
             </div>

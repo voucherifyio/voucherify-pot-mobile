@@ -24,6 +24,7 @@ type MobileAppContextType = {
     isCustomerUpdated: boolean
     journiePoints: number | undefined
     promoPoints: number | undefined
+    setCurrentCustomer: Dispatch<SetStateAction<CustomerObject | undefined>>
 }
 
 export const MobileAppContext = createContext<MobileAppContextType>({
@@ -38,6 +39,7 @@ export const MobileAppContext = createContext<MobileAppContextType>({
     isCustomerUpdated: false,
     journiePoints: undefined,
     promoPoints: undefined,
+    setCurrentCustomer: () => undefined,
 })
 
 const MobileApp = ({ children }: { children: JSX.Element }) => {
@@ -49,8 +51,9 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         isLinkedToAeroplan,
         isCustomerUpdated,
         setIsCustomerUpdated,
+        setCurrentCustomer,
     } = useCustomer({
-        customerPhone: customerPhone,
+        customerPhone,
     })
     const customerId = customer?.id
     const { dealsAndRewards, setDealsAndRewards } = useLocalStorage({
@@ -101,6 +104,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 isCustomerUpdated,
                 journiePoints,
                 promoPoints,
+                setCurrentCustomer,
             }}
         >
             {children}
