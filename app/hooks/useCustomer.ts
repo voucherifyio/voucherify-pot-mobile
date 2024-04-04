@@ -46,5 +46,6 @@ export const useCustomer = ({
         isLinkedToAeroplan,
         isCustomerUpdated,
         setIsCustomerUpdated,
+        setCurrentCustomer,
     }
 }

@@ -26,16 +26,17 @@ const filterDealVouchers = (dealsAndRewards: Deal[]) => {
 }
 
 export const useDealsCarousel = ({
-    customerId,
+    customerSourceId,
 }: {
-    customerId: string | null | undefined
+    customerSourceId: string | null | undefined
 }) => {
     const [activeDeals, setActiveDeals] = useState<Deal[]>([])
     const [error, setError] = useState<string | undefined>(undefined)
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (customerId) {
+        if (customerSourceId) {
+            setLoading(true)
             const fetchData = async () => {
                 const dealsAndRewards = JSON.parse(
                     localStorage.getItem('dealsAndRewards') || '[]'
@@ -46,7 +47,7 @@ export const useDealsCarousel = ({
                 } else {
                     try {
                         const res = await getQualifications(
-                            customerId,
+                            customerSourceId,
                             QUALIFICATION_SCENARIO.AUDIENCE_ONLY
                         )
                         const data = await res.json()
@@ -63,7 +64,7 @@ export const useDealsCarousel = ({
             }
             fetchData()
         }
-    }, [customerId])
+    }, [customerSourceId])
 
     return { activeDeals, error, loading }
 }

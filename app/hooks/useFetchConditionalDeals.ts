@@ -11,11 +11,11 @@ interface Segment {
 }
 
 export const useConditionalDeals = ({
-    customerId,
+    customerSourceId,
 }: {
-    customerId: string | null | undefined
+    customerSourceId: string | null | undefined
 }) => {
-    const [loading, setLoading] = useState(true)
+    const [conditionalDealsLoading, setConditionalDealsLoading] = useState(true)
     const [
         isNotEligibleForTheConditionalDeal,
         setIsNotEligibleForTheConditionalDeal,
@@ -24,14 +24,15 @@ export const useConditionalDeals = ({
 
     useEffect(() => {
         const fetchConditionalDeals = async () => {
-            if (customerId) {
+            if (customerSourceId) {
+                console.log(customerSourceId, '???HGALOLGLALGLA')
                 try {
                     const res = await getCampaign(
                         CAMPAIGNS.FREE_COCA_COCA_CAMPAIGN_ID
                     )
                     const data = await res.json()
                     try {
-                        const res = await listCustomerSegments(customerId)
+                        const res = await listCustomerSegments(customerSourceId)
                         const { customerSegments } = await res.json()
                         if (
                             !customerSegments.data.find(
@@ -43,31 +44,31 @@ export const useConditionalDeals = ({
                             setIsNotEligibleForTheConditionalDeal(true)
                         } else {
                             setConditionalDeals([])
-                            setLoading(false)
+                            setConditionalDealsLoading(false)
                             return
                         }
                     } catch (err) {
                         return err
                     }
                     setConditionalDeals([data.campaign])
-                    setLoading(false)
+                    setConditionalDealsLoading(false)
                 } catch (err) {
                     if (err instanceof Error) {
                         console.error(err)
                     }
-                    setLoading(false)
+                    setConditionalDealsLoading(false)
                     return err
                 }
             }
         }
         fetchConditionalDeals()
-    }, [])
+    }, [customerSourceId])
 
     return {
         conditionalDeals,
         setConditionalDeals,
         isNotEligibleForTheConditionalDeal,
         setIsNotEligibleForTheConditionalDeal,
-        loading,
+        conditionalDealsLoading,
     }
 }

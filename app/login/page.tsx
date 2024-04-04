@@ -24,13 +24,12 @@ export default function LoginPage() {
         handleSubmit,
         formState: { errors },
     } = form
-    const [isUserAuthorized, setIsUserAuthorized] = useState(false)
 
     useEffect(() => {
-        if (status === 'authenticated' && isUserAuthorized) {
+        if (status === 'authenticated') {
             router.push('/home')
         }
-    }, [status, router, isUserAuthorized])
+    }, [status, router])
 
     const inputStyle =
         'border-blue-inputOutlineDefault h-[44px] w-full rounded-md px-3 py-2 bg-blue-background'
@@ -54,7 +53,6 @@ export default function LoginPage() {
             const customerId = session?.user?.id
             const brazeUser = await initializeBraze({ customerId })
             if (brazeUser === customerId) {
-                setIsUserAuthorized(true)
                 router.push('/home')
             }
         }
@@ -70,7 +68,7 @@ export default function LoginPage() {
         router.push('/register')
     }
 
-    if (status === 'loading' || loading) {
+    if (status === 'loading' || status === 'authenticated' || loading) {
         return <Loading />
     }
 

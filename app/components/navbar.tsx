@@ -13,9 +13,8 @@ import { MobileAppContext } from './app-context/app-context'
 
 const Navbar = () => {
     const { status } = useSession()
-    const { dealsAndRewards } = useContext(MobileAppContext)
+    const { dealsAndRewards, customer } = useContext(MobileAppContext)
 
-    //todo change the icon color as well
     const pathname = usePathname()
     const MENU_LIST = [
         {
@@ -40,6 +39,10 @@ const Navbar = () => {
         },
     ]
 
+    if (status === 'loading') {
+        return null
+    }
+
     if (status === 'authenticated') {
         return (
             <div className="w-full h-16 bg-white border-t border-gray-200 sticky bottom-0">
@@ -52,13 +55,13 @@ const Navbar = () => {
                         >
                             {dealsAndRewards.deals && item.text === 'Deals' ? (
                                 <span className="absolute top-2 right-3 bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white text-[10px]">
-                                    {dealsAndRewards.deals}
+                                    {!customer ? null : dealsAndRewards.deals}
                                 </span>
                             ) : null}
                             {dealsAndRewards.rewards &&
                             item.text === 'Rewards' ? (
                                 <span className="absolute top-2 right-6 bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white text-[10px]">
-                                    {dealsAndRewards.rewards}
+                                    {!customer ? null : dealsAndRewards.rewards}
                                 </span>
                             ) : null}
                             {item.icon}

@@ -1,13 +1,11 @@
 'use client'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Button from '@/app/components/ui/atoms/button'
 import Toast from '@/app/components/ui/atoms/toast'
 import { useActiveDeals } from '@/app/hooks/useActiveDeals'
 import Loading from '@/app/components/loading/loading'
 import { useConditionalDeals } from '@/app/hooks/useFetchConditionalDeals'
-interface DealsProps {
-    customerId: string
-}
+import { MobileAppContext } from '../app-context/app-context'
 
 export interface Deal {
     name?: string
@@ -37,17 +35,24 @@ enum CurrentDeal {
     WithinReach = 'Within reach',
 }
 
-const Deals: React.FC<DealsProps> = ({ customerId }) => {
-    const { activeDeals, setActiveDeals, error } = useActiveDeals({
-        customerId,
-    })
+const Deals = () => {
+    const { customer } = useContext(MobileAppContext)
+    const customerSourceId = customer?.source_id
+    const { activeDeals, setActiveDeals, error, dealsLoading } = useActiveDeals(
+        {
+            customerSourceId,
+        }
+    )
     const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
         CurrentDeal.WithinReach
     )
-    const { conditionalDeals, isNotEligibleForTheConditionalDeal, loading } =
-        useConditionalDeals({
-            customerId,
-        })
+    const {
+        conditionalDeals,
+        isNotEligibleForTheConditionalDeal,
+        conditionalDealsLoading,
+    } = useConditionalDeals({
+        customerSourceId,
+    })
 
     const handleActivateCoupon = async (id: string) => {
         const activeDealsAndRewards = JSON.parse(
@@ -73,7 +78,7 @@ const Deals: React.FC<DealsProps> = ({ customerId }) => {
         setActiveDeals(updatedDeals)
     }
 
-    if (loading) {
+    if (conditionalDealsLoading || dealsLoading) {
         return <Loading />
     }
 

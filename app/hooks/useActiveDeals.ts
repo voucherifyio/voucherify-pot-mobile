@@ -4,20 +4,21 @@ import { Deal } from '@/app/components/deals/deals'
 import { getQualifications } from '../apiEndpoints/apiEndpoints'
 
 export const useActiveDeals = ({
-    customerId,
+    customerSourceId,
 }: {
-    customerId: string | null | undefined
+    customerSourceId: string | null | undefined
 }) => {
     const [activeDeals, setActiveDeals] = useState<Deal[]>([])
     const [error, setError] = useState<string | undefined>(undefined)
-    const [loading, setLoading] = useState(true)
+    const [dealsLoading, setDealsLoading] = useState(true)
 
     useEffect(() => {
-        if (customerId) {
+        if (customerSourceId) {
+            console.log(customerSourceId, 'dEALS')
             const fetchData = async () => {
                 try {
                     const res = await getQualifications(
-                        customerId,
+                        customerSourceId,
                         QUALIFICATION_SCENARIO.AUDIENCE_ONLY
                     )
                     const data = await res.json()
@@ -41,18 +42,20 @@ export const useActiveDeals = ({
                         }
                         return { ...deal, active: false }
                     })
+                    console.log(updatedDeals, '???')
                     setActiveDeals(updatedDeals)
+                    setDealsLoading(false)
                 } catch (err) {
                     if (err instanceof Error) {
                         setError(err.message)
                     }
                     return err
                 }
-                setLoading(false)
+                setDealsLoading(false)
             }
             fetchData()
         }
-    }, [customerId])
+    }, [customerSourceId])
 
-    return { activeDeals, setActiveDeals, error, loading }
+    return { activeDeals, setActiveDeals, error, dealsLoading }
 }
