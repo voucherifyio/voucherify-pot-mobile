@@ -4,12 +4,14 @@ import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { Reward } from '../components/rewards/rewards'
 import { Deal } from '../components/deals/deals'
 import { getQualifications } from '../apiEndpoints/apiEndpoints'
+import { useSession } from 'next-auth/react'
 
 export const useLocalStorage = ({
     customerId,
 }: {
     customerId: string | null | undefined
 }) => {
+    const { status } = useSession()
     const [dealsAndRewards, setDealsAndRewards] = useState<DealsAndRewards>({
         rewards: 0,
         deals: 0,
@@ -40,7 +42,7 @@ export const useLocalStorage = ({
 
             handleStorage(customerId)
         }
-    }, [customerId])
+    }, [customerId, status])
 
     return {
         dealsAndRewards,
