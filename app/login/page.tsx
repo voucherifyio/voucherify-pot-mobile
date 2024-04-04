@@ -24,12 +24,13 @@ export default function LoginPage() {
         handleSubmit,
         formState: { errors },
     } = form
+    const [isUserAuthorized, setIsUserAuthorized] = useState(false)
 
     useEffect(() => {
-        if (status === 'authenticated') {
+        if (status === 'authenticated' && isUserAuthorized) {
             router.push('/home')
         }
-    }, [status])
+    }, [status, router, isUserAuthorized])
 
     const inputStyle =
         'border-blue-inputOutlineDefault h-[44px] w-full rounded-md px-3 py-2 bg-blue-background'
@@ -51,13 +52,16 @@ export default function LoginPage() {
         if (res?.ok) {
             const session = await getSession()
             const customerId = session?.user?.id
-            await initializeBraze({ customerId })
-            router.push('/home')
+            const brazeUser = await initializeBraze({ customerId })
+            if (brazeUser === customerId) {
+                setIsUserAuthorized(true)
+                router.push('/home')
+            }
         }
     }
 
     const handleResetError = () => {
-        if(error){
+        if (error) {
             setError(undefined)
         }
     }
@@ -92,7 +96,7 @@ export default function LoginPage() {
                             className={inputStyle}
                             {...register('phone', {
                                 required: 'Please fill in the phone number',
-                                onChange: handleResetError
+                                onChange: handleResetError,
                             })}
                         />
                         {errors.phone ? (
@@ -109,10 +113,9 @@ export default function LoginPage() {
                             type="password"
                             id="password"
                             className={inputStyle}
-                            {...register('password', { 
+                            {...register('password', {
                                 required: false,
-                                onChange: handleResetError
-                                
+                                onChange: handleResetError,
                             })}
                         />
                     </div>

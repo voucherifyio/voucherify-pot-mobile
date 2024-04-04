@@ -5,10 +5,17 @@ import { useRouter } from 'next/navigation'
 import loginPage from '@/public/images/login-page.jpeg'
 import Button from '@/app/components/ui/atoms/button'
 import Loading from '@/app/components/loading/loading'
+import { useEffect } from 'react'
 
 export default function LoginPage() {
     const { status } = useSession()
     const router = useRouter()
+
+    useEffect(() => {
+        if (status === 'authenticated') {
+            router.push('/home')
+        }
+    }, [status, router])
 
     const handleRegisterClick = () => {
         router.push('/register')
@@ -19,10 +26,6 @@ export default function LoginPage() {
 
     if (status === 'loading') {
         return <Loading />
-    }
-
-    if (status === 'authenticated') {
-        router.push('/home')
     }
 
     return (
