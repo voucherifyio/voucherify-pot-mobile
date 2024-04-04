@@ -79,7 +79,6 @@ export default function RegisterPage() {
                 const customerId = session?.user?.id
                 await initializeBraze({ customerId })
                 router.push('/home')
-                setLoading(false)
             } catch (err) {
                 if (err instanceof Error) {
                     setError(err.message)
@@ -87,6 +86,7 @@ export default function RegisterPage() {
                 return err
             }
         }
+        setLoading(false)
     }
 
     const handleLoginClick = () => {
