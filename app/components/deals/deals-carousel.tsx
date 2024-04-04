@@ -32,7 +32,7 @@ const DealsCarousel = () => {
                     </span>
                 </button>
             </div>
-            {activeDeals?.length === 0 && (
+            {activeDeals?.length === 0 && !loading && (
                 <div className="py-3 flex justify-center items-center">
                     <p className="text-[14px] font-bold text-blue-text">
                         No active deals
