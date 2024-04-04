@@ -12,6 +12,7 @@ const Milestones = () => {
         isCustomerUpdated,
         journiePoints,
         promoPoints,
+        customer,
     } = useContext(MobileAppContext)
     const [calculatedJourniePoints, setCalculatedJourniePoints] =
         useState<number>(journiePoints || 0)
@@ -30,12 +31,12 @@ const Milestones = () => {
     }, [journiePoints, unredeemedPoints, promoPoints])
 
     return (
-        <div className="p-4">
+        <div className="px-4 pt-2">
             <header className="mb-2">
                 <h4 className="text-blue-text text-16">
                     Your Points
                     <span className="pl-2 font-extrabold">
-                        {calculatedJourniePoints}
+                        {!customer ? null : calculatedJourniePoints}
                     </span>
                 </h4>
             </header>
