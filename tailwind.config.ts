@@ -24,6 +24,12 @@ const config: Config = {
                 yellow: {
                     button: '#FBBC05',
                 },
+                gray: {
+                    background: '#64729d'
+                },
+                green: {
+                    background: '#22c55e'
+                }
             },
         },
         keyframes: {

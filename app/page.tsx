@@ -39,7 +39,7 @@ export default function LoginPage() {
 
             <div className="flex-1 max-h-60 mt-6 w-full max-w-screen-sm text-center">
                 <h1 className="text-blue-text mb-6 px-5 text-left text-xl font-bold leading-7">
-                    Register to Journie
+                    Register to Voucherify Mobile
                 </h1>
                 <Button
                     buttonType="secondary"
