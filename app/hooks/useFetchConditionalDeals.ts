@@ -25,7 +25,6 @@ export const useConditionalDeals = ({
     useEffect(() => {
         const fetchConditionalDeals = async () => {
             if (customerSourceId) {
-                console.log(customerSourceId, '???HGALOLGLALGLA')
                 try {
                     const res = await getCampaign(
                         CAMPAIGNS.FREE_COCA_COCA_CAMPAIGN_ID
