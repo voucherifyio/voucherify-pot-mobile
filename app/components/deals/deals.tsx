@@ -135,7 +135,7 @@ const Deals = () => {
                                             buttonType={
                                                 deal.active
                                                     ? 'activeCoupon'
-                                                    : 'yellow'
+                                                    : 'green'
                                             }
                                             className="px-2 max-h-[32px] max-w-[149px] text-[16px]"
                                         >
@@ -200,7 +200,7 @@ const Deals = () => {
                                         buttonType={
                                             deal.active
                                                 ? 'activeCoupon'
-                                                : 'yellow'
+                                                : 'green'
                                         }
                                         className="px-2 max-h-[32px] max-w-[149px] text-[16px]"
                                     >

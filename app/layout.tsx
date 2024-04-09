@@ -7,12 +7,12 @@ import MobileApp from './components/app-context/app-context'
 
 export const metadata: Metadata = {
     title: {
-        template: '%s | Journie',
-        default: 'Journie',
+        template: '%s',
+        default: 'Voucherify POT Mobile',
     },
-    description: 'Parkland POT',
+    description: 'Voucherify POT',
     icons: {
-        icon: '/images/favicon-32x32.png',
+        icon: '/images/favicon.ico',
     },
 }
 

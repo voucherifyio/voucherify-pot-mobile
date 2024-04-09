@@ -102,7 +102,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
     if (!rewardModalOpened) return null
 
     return (
-        <div className="flex w-full min-h-80 flex-col items-end bg-[#173C9F] absolute z-50 rounded-lg px-6 py-4 gap-4 bottom-0 left-2/4 -translate-x-2/4">
+        <div className="flex w-full min-h-80 flex-col items-end bg-[#173C9F] absolute z-50 rounded-lg px-4 py-4 gap-4 bottom-0 left-2/4 -translate-x-2/4">
             {loading && <ModalLoading message="Loading..." />}
             {!loading && rewards?.length <= 0 && (
                 <NoRewardsState setRewardModalOpened={setRewardModalOpened} />
@@ -122,24 +122,26 @@ const RewardsModal: FC<RewardsModalProps> = ({
                     <div className="flex w-full justify-between">
                         <p className="text-white">Choose your reward</p>
                         <Button
+                            buttonType="gray"
                             onClick={() => setRewardModalOpened(false)}
-                            className="h-auto text-white"
+                            className="h-auto text-white py-1 px-2"
                         >
                             Close
                         </Button>
                     </div>
-                    <div className="flex gap-4 w-full justify-center">
+                    <div className="flex gap-3 w-full justify-center">
                         {rewards.map(({ reward }) => (
-                            <button
+                            <Button
+                                buttonType="green"
                                 key={reward.id}
-                                className="text-white text-center text-sm bg-[#fbbc05] rounded-lg py-0.5 px-1"
+                                className="text-white text-center text-sm rounded-lg py-0.5 px-1"
                                 onClick={() => {
                                     setRewardId(reward.id)
                                     setConfirmation(true)
                                 }}
                             >
                                 {reward.name?.replace(pattern, '')}
-                            </button>
+                            </Button>
                         ))}
                     </div>
                 </>
@@ -163,10 +165,11 @@ const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
     if (!confirmation) return null
 
     return (
-        <div className="flex flex-col items-center justify-center h-full w-full gap-6">
+        <div className="flex flex-col items-center justify-center h-full w-full gap-4">
             <p className="text-white">Are you sure?</p>
             <div className="flex w-full justify-evenly">
-                <button
+                <Button
+                    buttonType="green"
                     onClick={() =>
                         redeemCustomerReward(
                             customerId,
@@ -174,16 +177,17 @@ const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
                             CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM
                         )
                     }
-                    className="text-white bg-[#fbbc05] rounded-lg px-2 py-1"
+                    className="text-white rounded-lg px-2 h-8"
                 >
                     Choose reward
-                </button>
-                <button
+                </Button>
+                <Button
+                    buttonType="gray"
                     onClick={() => setConfirmation(false)}
-                    className="text-white bg-[#fbbc05] rounded-lg px-2 py-1"
+                    className="text-white rounded-lg px-2 h-8"
                 >
                     Cancel
-                </button>
+                </Button>
             </div>
         </div>
     )

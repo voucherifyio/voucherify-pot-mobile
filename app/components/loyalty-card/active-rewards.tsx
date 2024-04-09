@@ -38,7 +38,7 @@ const ActiveRewards = () => {
                     <div
                         key={reward.id}
                         onClick={() => handleExpandCoupon(reward.id)}
-                        className="flex flex-col shadow-md rounded-xl flex-row bg-white mt-4 text-blue-text w-full min-h-[92px] p-2"
+                        className="flex flex-col shadow-md rounded-xl flex bg-white mt-4 text-blue-text w-full min-h-[92px] p-2"
                     >
                         <h3 className="text-[16px] font-bold">
                             {reward.campaign_name}
@@ -49,7 +49,7 @@ const ActiveRewards = () => {
                                     onClick={() =>
                                         handleExpandCoupon(reward.id)
                                     }
-                                    buttonType="yellow"
+                                    buttonType="green"
                                     className="h-[24px] text-[16px] rounded-md px-2"
                                 >
                                     Scan in-store

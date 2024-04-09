@@ -75,7 +75,7 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
                                     buttonType={
                                         reward.active
                                             ? 'activeCoupon'
-                                            : 'yellow'
+                                            : 'green'
                                     }
                                     className="px-2 max-h-[32px] max-w-[149px] text-[16px]"
                                 >

@@ -22,7 +22,7 @@ export default function RewardsPage() {
     if (status === 'authenticated') {
         return (
             <div className="flex-1 flex flex-col bg-[#ecf0fb]">
-                <JournieHeader headerText={'Journie REWARDS'} />
+                <JournieHeader headerText={'Rewards'} />
                 <Rewards customerId={customerId} />
             </div>
         )

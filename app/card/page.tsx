@@ -26,7 +26,7 @@ export default function CardPage() {
     if (status === 'authenticated') {
         return (
             <div className="flex-1 bg-blue-background">
-                <JournieHeader headerText={'My JOURNIE Card'} />
+                <JournieHeader headerText={'Loyalty card'} />
                 {customer ? (
                     <div className="p-4 w-full">
                         <header>
