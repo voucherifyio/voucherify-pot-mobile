@@ -1,6 +1,7 @@
 'use client'
 import { useAutoRedeem } from '@/app/hooks/useAutoRedeem'
 import { useCustomer } from '@/app/hooks/useCustomer'
+import { useInitalizeBraze } from '@/app/hooks/useInitializeBraze'
 import { useLocalStorage } from '@/app/hooks/useLocalStorage'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { CustomerObject } from '@voucherify/sdk'
@@ -25,6 +26,14 @@ type MobileAppContextType = {
     journiePoints: number | undefined
     promoPoints: number | undefined
     setCurrentCustomer: Dispatch<SetStateAction<CustomerObject | undefined>>
+    braze:
+        | typeof import('../../../node_modules/@braze/web-sdk/index')
+        | undefined
+    changeBrazeUser: ({
+        customerId,
+    }: {
+        customerId: string | null | undefined
+    }) => Promise<string | null | undefined>
 }
 
 export const MobileAppContext = createContext<MobileAppContextType>({
@@ -40,6 +49,8 @@ export const MobileAppContext = createContext<MobileAppContextType>({
     journiePoints: undefined,
     promoPoints: undefined,
     setCurrentCustomer: () => undefined,
+    braze: undefined,
+    changeBrazeUser: async () => null,
 })
 
 const MobileApp = ({ children }: { children: JSX.Element }) => {
@@ -66,6 +77,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         unredeemedPoints,
         setUnredemeedPoints,
     } = useAutoRedeem()
+    const { braze, changeBrazeUser } = useInitalizeBraze()
 
     const journiePoints =
         customer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
@@ -105,6 +117,8 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 journiePoints,
                 promoPoints,
                 setCurrentCustomer,
+                braze,
+                changeBrazeUser,
             }}
         >
             {children}

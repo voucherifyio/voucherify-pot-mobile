@@ -2,10 +2,10 @@
 import Button from '@/app/components/ui/atoms/button'
 import { getSession, signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import Loading from '../components/loading/loading'
-import { useInitalizeBraze } from '../hooks/useInitializeBraze'
+import { MobileAppContext } from '../components/app-context/app-context'
 
 type Inputs = {
     firstName?: string
@@ -25,7 +25,7 @@ export default function RegisterPage() {
     const { status } = useSession()
     const [loading, setLoading] = useState(false)
     const form = useForm<Inputs>()
-    const { initializeBraze } = useInitalizeBraze()
+    const { changeBrazeUser } = useContext(MobileAppContext)
     const {
         register,
         handleSubmit,
@@ -77,7 +77,7 @@ export default function RegisterPage() {
                 }
                 const session = await getSession()
                 const customerId = session?.user?.id
-                await initializeBraze({ customerId })
+                await changeBrazeUser({ customerId })
                 router.push('/home')
             } catch (err) {
                 if (err instanceof Error) {
@@ -220,6 +220,7 @@ export default function RegisterPage() {
                             Register
                         </Button>
                         <Button
+                            type="button"
                             buttonType="primary"
                             onClick={handleLoginClick}
                             className="px-4 py-2 w-full bg-green-500"
