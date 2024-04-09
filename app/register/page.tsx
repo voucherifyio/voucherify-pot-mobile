@@ -220,6 +220,7 @@ export default function RegisterPage() {
                             Register
                         </Button>
                         <Button
+                            type="button"
                             buttonType="primary"
                             onClick={handleLoginClick}
                             className="px-4 py-2 w-full bg-green-500"

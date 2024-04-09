@@ -126,6 +126,7 @@ export default function LoginPage() {
                         Login
                     </Button>
                     <Button
+                        type="button"
                         buttonType="primary"
                         className="px-4 py-2 w-full mb-1"
                         onClick={handleRegisterClick}
