@@ -14,7 +14,6 @@ export const useActiveDeals = ({
 
     useEffect(() => {
         if (customerSourceId) {
-            console.log(customerSourceId, 'dEALS')
             const fetchData = async () => {
                 try {
                     const res = await getQualifications(
@@ -42,7 +41,6 @@ export const useActiveDeals = ({
                         }
                         return { ...deal, active: false }
                     })
-                    console.log(updatedDeals, '???')
                     setActiveDeals(updatedDeals)
                     setDealsLoading(false)
                 } catch (err) {

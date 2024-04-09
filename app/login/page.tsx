@@ -1,11 +1,11 @@
 'use client'
 import Button from '@/app/components/ui/atoms/button'
 import { useSession, signIn, getSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import Loading from '../components/loading/loading'
-import { useInitalizeBraze } from '../hooks/useInitializeBraze'
+import { MobileAppContext } from '../components/app-context/app-context'
 
 export interface Inputs {
     phone: string
@@ -18,7 +18,7 @@ export default function LoginPage() {
     const router = useRouter()
     const { status } = useSession()
     const [loading, setLoading] = useState(false)
-    const { initializeBraze } = useInitalizeBraze()
+    const { changeBrazeUser } = useContext(MobileAppContext)
     const {
         register,
         handleSubmit,
@@ -51,7 +51,7 @@ export default function LoginPage() {
         if (res?.ok) {
             const session = await getSession()
             const customerId = session?.user?.id
-            const brazeUser = await initializeBraze({ customerId })
+            const brazeUser = await changeBrazeUser({ customerId })
             if (brazeUser === customerId) {
                 router.push('/home')
             }
@@ -126,6 +126,7 @@ export default function LoginPage() {
                         Login
                     </Button>
                     <Button
+                        type="button"
                         buttonType="primary"
                         className="px-4 py-2 w-full mb-1"
                         onClick={handleRegisterClick}

@@ -3,7 +3,6 @@ import { useSession } from 'next-auth/react'
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { MdOutlineAccountCircle } from 'react-icons/md'
-import { useInitalizeBraze } from '@/app/hooks/useInitializeBraze'
 import Button from '@/app/components/ui/atoms/button'
 import Milestones from '@/app/components/milestones/milestones'
 import BrazePermissionModal from '@/app/components/braze-permission-modal/braze-permission-modal'
@@ -22,9 +21,8 @@ export default function HomePage() {
             router.push('/')
         },
     })
-    const { setDealsAndRewards, setCurrentCustomer } =
+    const { setDealsAndRewards, setCurrentCustomer, braze } =
         useContext(MobileAppContext)
-    const { braze } = useInitalizeBraze()
 
     const handleLocalStorage = () => {
         localStorage.setItem('dealsAndRewards', JSON.stringify([]))
