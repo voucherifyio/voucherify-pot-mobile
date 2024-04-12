@@ -1,11 +1,12 @@
 'use client'
 import Button from '@/app/components/ui/atoms/button'
-import { useSession, signIn, getSession } from 'next-auth/react'
+import { useSession, signIn } from 'next-auth/react'
 import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import Loading from '../components/loading/loading'
-import { MobileAppContext } from '../components/app-context/app-context'
+//COMMENTED UNTIL BRAZE WILL BE ENABLED
+// import { MobileAppContext } from '../components/app-context/app-context'
 
 export interface Inputs {
     phone: string
@@ -18,7 +19,8 @@ export default function LoginPage() {
     const router = useRouter()
     const { status } = useSession()
     const [loading, setLoading] = useState(false)
-    const { changeBrazeUser } = useContext(MobileAppContext)
+    //COMMENTED UNTIL BRAZE WILL BE ENABLED
+    // const { changeBrazeUser } = useContext(MobileAppContext)
     const {
         register,
         handleSubmit,
@@ -49,12 +51,12 @@ export default function LoginPage() {
         }
 
         if (res?.ok) {
-            const session = await getSession()
-            const customerId = session?.user?.id
-            const brazeUser = await changeBrazeUser({ customerId })
-            if (brazeUser === customerId) {
-                router.push('/home')
-            }
+            //COMMENTED UNTIL BRAZE WILL BE ENABLED
+            // const brazeUser = await changeBrazeUser({ customerId: data.phone })
+            // if (brazeUser === data.phone) {
+            //     router.push('/home')
+            // }
+            router.push('/home')
         }
     }
 

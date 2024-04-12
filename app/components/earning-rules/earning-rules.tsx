@@ -22,7 +22,7 @@ const EarningRules: React.FC<EarningRulesProps> = ({ customerId }) => {
         const fetchEarningRules = async () => {
             try {
                 const res = await fetch(
-                    `/api/voucherify/list-earning-rules?campaignId=${CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM_ID}`,
+                    `/api/voucherify/list-earning-rules?campaignId=${CAMPAIGNS.LOYALTY_PROGRAM_ID}`,
                     {
                         method: 'GET',
                         headers: { 'Content-Type': 'application/json' },

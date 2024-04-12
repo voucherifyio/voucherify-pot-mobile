@@ -9,52 +9,48 @@ export const isNoAeroplanMember = (
     prevCustomer.metadata?.aeroplan_member !==
     customer.metadata?.aeroplan_member
 
-export const ifJourniePointsAmountHasChanged = (
+export const ifLoyaltyPointsAmountHasChanged = (
     prevCustomer: CustomerObject,
     customer: CustomerObject
 ) =>
-    prevCustomer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
-        ?.points !==
-    customer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]?.points
+    prevCustomer?.loyalty.campaigns?.[CAMPAIGNS.LOYALTY_PROGRAM]?.points !==
+    customer?.loyalty.campaigns?.[CAMPAIGNS.LOYALTY_PROGRAM]?.points
 
-export const ifPromoPointsAmountHasChanged = (
+export const ifRewardPointsAmountHasChanged = (
     prevCustomer: CustomerObject,
     customer: CustomerObject
 ) =>
-    prevCustomer?.loyalty.campaigns?.[CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM]
+    prevCustomer?.loyalty.campaigns?.[CAMPAIGNS.MILESTONE_REWARDS_PROGRAM]
         ?.points !==
-    customer?.loyalty.campaigns?.[CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM]
-        ?.points
+    customer?.loyalty.campaigns?.[CAMPAIGNS.MILESTONE_REWARDS_PROGRAM]?.points
 
 export const customerPointsCalculation = (
     activities: Record<string, any>[]
 ) => {
-    const lastRewardedJourniePoints = activities.find(
+    const lastRewardedLoyaltyPoints = activities.find(
         (event) =>
             event.type ===
                 EVENT_TYPES.CUSTOMER_VOUCHER_LOYALTY_CARD_POINTS_ADDED &&
-            event.data.voucher.campaign ===
-                CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM
+            event.data.voucher.campaign === CAMPAIGNS.LOYALTY_PROGRAM
     )
-    const lastRewardedPromoPoints = activities.find(
+    const lastRewardedRewardPoints = activities.find(
         (event) =>
             event.type ===
                 EVENT_TYPES.CUSTOMER_VOUCHER_LOYALTY_CARD_POINTS_ADDED &&
-            event.data.voucher.campaign ===
-                CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM
+            event.data.voucher.campaign === CAMPAIGNS.MILESTONE_REWARDS_PROGRAM
     )
-    const penultimateRewardedPromoPoints = activities.find(
+    const penultimateRewardedRewardPoints = activities.find(
         (event) =>
             event.type ===
                 EVENT_TYPES.CUSTOMER_VOUCHER_LOYALTY_CARD_POINTS_ADDED &&
             event.data.voucher.campaign ===
-                CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM &&
+                CAMPAIGNS.MILESTONE_REWARDS_PROGRAM &&
             event.data.balance.points >= 1
     )
 
     return {
-        lastRewardedJourniePoints,
-        lastRewardedPromoPoints,
-        penultimateRewardedPromoPoints,
+        lastRewardedLoyaltyPoints,
+        lastRewardedRewardPoints,
+        penultimateRewardedRewardPoints,
     }
 }

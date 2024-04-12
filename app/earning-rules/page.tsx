@@ -1,5 +1,5 @@
 'use client'
-import JournieHeader from '@/app/components/journie-header/journie-header'
+import VoucherifyHeader from '@/app/components/voucherify-header/voucherify-header'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Loading from '../components/loading/loading'
@@ -21,7 +21,7 @@ export default function EarningRulesPage() {
 
     return (
         <div className="flex flex-col flex-1 bg-blue-background">
-            <JournieHeader headerText={'Earning Rules'} />
+            <VoucherifyHeader headerText={'Earning Rules'} />
             {customerId && <EarningRules customerId={customerId} />}
         </div>
     )
