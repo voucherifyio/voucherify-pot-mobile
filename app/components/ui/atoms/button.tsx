@@ -17,7 +17,7 @@ const Button = (props: ButtonProps) => {
         gray: 'bg-gray-background text-white',
     }
 
-    const buttonClassName = `${className} text-16 rounded-[5px] font-medium ${
+    const buttonClassName = `text-16 rounded-[5px] font-medium h-12 ${className} ${
         buttonType ? buttonStyles[buttonType] : ''
     }`
 

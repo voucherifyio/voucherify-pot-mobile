@@ -134,7 +134,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
                             <Button
                                 buttonType="green"
                                 key={reward.id}
-                                className="text-white text-center text-sm rounded-lg py-0.5 px-1"
+                                className="h-auto text-white text-center text-sm rounded-lg py-0.5 px-1"
                                 onClick={() => {
                                     setRewardId(reward.id)
                                     setConfirmation(true)
