@@ -18,20 +18,23 @@ const Milestones = () => {
         useState<number>(journiePoints || 0)
     const [isRewardButtonVisible, setIsRewardButtonVisible] = useState(false)
 
+    const existingPromoPoints = promoPoints && promoPoints >= 1
+
     useEffect(() => {
-        if (journiePoints && isCustomerUpdated) {
+        if (journiePoints && journiePoints <= 150 && isCustomerUpdated) {
             setCalculatedJourniePoints(journiePoints)
         }
         if (unredeemedPoints && !isCustomerUpdated) {
             setCalculatedJourniePoints(unredeemedPoints)
         }
-        if (promoPoints && promoPoints >= 1) {
+        if (existingPromoPoints && journiePoints) {
+            setCalculatedJourniePoints(journiePoints)
             setIsRewardButtonVisible(true)
         }
     }, [journiePoints, unredeemedPoints, promoPoints])
 
     return (
-        <div className="px-4 pt-2">
+        <div className="px-4 p-4">
             <header className="mb-2">
                 <h4 className="text-blue-text text-16">
                     Your Points

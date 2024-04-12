@@ -1,6 +1,4 @@
 import Button from '@/app/components/ui/atoms/button'
-import Image from 'next/image'
-import aeroplan from '@/public/images/aeroplan.png'
 import { useContext, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
 import { MobileAppContext } from '../app-context/app-context'
@@ -27,37 +25,31 @@ const Aeroplan = () => {
     }
 
     return (
-        <div className="mx-4 text-blue-text text-18 font-bold flex justify-between py-2">
+        <div className="mx-5 text-blue-text text-18 font-bold flex justify-between py-2">
             <div className="flex-col">
-                <h1 className="mb-2 text-blue-text text-18 font-bold">
+                <h1 className="text-blue-text text-18 font-bold">
                     Partner Hub
                 </h1>
                 {!isLinkedToAeroplan && !loading && (
-                    <h4 className="mb-4 text-blue-text text-14 font-normal">
+                    <h4 className="mb-2 text-blue-text text-14 font-normal">
                         Get linked. Get more.
                     </h4>
                 )}
                 {isLinkedToAeroplan && !loading && customer && (
-                    <h4 className="px-3 font-normal mt-5">
+                    <h4 className="font-normal mt-5">
                         Your account is already connected to Aeroplan.
                     </h4>
                 )}
                 {!isLinkedToAeroplan && !loading && customer && (
                     <Button
                         onClick={handleLinkToAeroplan}
-                        buttonType="yellow"
-                        className="w-[140px] px-2"
+                        buttonType="green"
+                        className="px-2"
                     >
                         Link to Aeroplan
                     </Button>
                 )}
             </div>
-
-            <Image
-                src={aeroplan}
-                alt="aeroplan"
-                className="h-[112px] w-[130px] object-cover object-right"
-            />
             {error && <Toast toastText={error} toastType="error" />}
             {success && (
                 <Toast

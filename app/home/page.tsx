@@ -36,12 +36,12 @@ export default function HomePage() {
     const showBrazePermissionModal = !braze?.isPushPermissionGranted()
 
     return (
-        <div className="flex-1 items-center justify-center bg-[#ecf0fb] overflow-hidden">
+        <div className="flex flex-col flex-1 items-center justify-center bg-[#ecf0fb] overflow-hidden">
             {showBrazePermissionModal && <BrazePermissionModal braze={braze} />}
-            <div className="flex justify-between px-4 py-2 border-b-2 w-full bg-white">
+            <div className="flex justify-between px-4 py-2 w-full bg-white">
                 <div>
                     <h1 className="text-blue-text text-2xl font-extrabold">
-                        My Journie
+                        My Voucherify
                     </h1>
                     <h4 className="text-blue-text text-[15px] font-normal">
                         Hello {session.user?.name || session.user?.id}
@@ -50,23 +50,24 @@ export default function HomePage() {
                 <div className="flex items-center gap-2">
                     <MdOutlineAccountCircle size={24} color="blue" />
                     <Button
+                        buttonType="primary"
                         onClick={() => {
                             signOut({ redirect: false })
                             setDealsAndRewards({ deals: 0, rewards: 0 })
                             setCurrentCustomer(undefined)
                             handleLocalStorage()
                         }}
-                        className="bg-slate-300 h-auto py-1 px-2"
+                        className="h-auto py-1 px-2"
                     >
                         Logout
                     </Button>
                 </div>
             </div>
-            <div className="flex-row  mx-border-b-2 w-full">
+            <div className="flex-1 flex flex-col w-full">
                 <Milestones />
                 <DealsCarousel />
                 <EarningRulesCarousel />
-                <Aeroplan />
+                {/* <Aeroplan /> */}
             </div>
         </div>
     )

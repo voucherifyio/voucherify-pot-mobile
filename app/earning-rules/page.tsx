@@ -21,7 +21,7 @@ export default function EarningRulesPage() {
 
     return (
         <div className="flex flex-col flex-1 bg-blue-background">
-            <JournieHeader headerText={'JOURNIE Earning Rules'} />
+            <JournieHeader headerText={'Earning Rules'} />
             {customerId && <EarningRules customerId={customerId} />}
         </div>
     )

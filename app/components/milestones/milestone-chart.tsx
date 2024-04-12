@@ -6,6 +6,7 @@ import { getMemberRewards } from '@/app/apiEndpoints/apiEndpoints'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import Toast from '@/app/components/ui/atoms/toast'
 import { MobileAppContext } from '../app-context/app-context'
+import Button from '../ui/atoms/button'
 
 type MilestoneChartProps = {
     calculatedJourniePoints: number
@@ -40,107 +41,85 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
     }
 
     return (
-        <div className="py-2">
-            <ol className="items-center flex">
-                <li className="relative w-full mb-6">
-                    <div className="text-left text-blue-text mb-2 ml-2 font-bold">
-                        <p className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
+        <div className="flex flex-col gap-8 py-3">
+            <ol className="flex items-center">
+                <li className="relative w-full">
+                    <div
+                        className={`${calculatedJourniePoints < 1 ? 'bg-gray-300' : 'bg-green-background'} absolute top-1/2 -left-1 -translate-y-1/2 w-7 h-7 z-10 rounded-full flex items-center justify-center text-white`}
+                    >
+                        <p className="bg-blue-button rounded-full text-[12px]">
                             0
                         </p>
                     </div>
                     <div
-                        className={`${calculatedJourniePoints < 37.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2 z-0`}
+                        className={`${calculatedJourniePoints < 37.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2 z-0`}
+                    />
+                </li>
+                <li className="relative flex items-center w-full">
+                    <div
+                        className={`bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     />
                     <div
-                        className={`relative bottom-4 w-6 h-6 bg-yellow-button z-10 rounded-full flex items-center justify-center text-blue-text`}
+                        className={`${calculatedJourniePoints < 75 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                    />
+                </li>
+                <li className="relative flex items-center w-full">
+                    <div
+                        className={`bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    />
+                    <div
+                        className={`${calculatedJourniePoints < 112.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                    />
+                </li>
+                <li className="relative flex items-center w-full">
+                    <div
+                        className={` bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    />
+                    <div
+                        className={`${calculatedJourniePoints < 150 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                    />
+                </li>
+                <li className="relative w-full">
+                    <div
+                        className={`${calculatedJourniePoints < 150 ? 'bg-gray-300' : 'bg-green-background'} absolute top-1/2 -left-3 -translate-y-1/2 w-7 h-7 z-10 rounded-full flex items-center justify-center text-white`}
                     >
-                        <MdOutlineLocalGasStation />
-                    </div>
-                </li>
-                <li className="relative w-full">
-                    <div
-                        className={`${calculatedJourniePoints < 75 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                    />
-                    <div
-                        className={`bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    />
-                </li>
-                <li className="relative w-full">
-                    <div
-                        className={`${calculatedJourniePoints < 112.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                    />
-                    <div
-                        className={`bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    />
-                </li>
-                <li className="relative w-full">
-                    <div
-                        className={`${calculatedJourniePoints < 150 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                    />
-                    <div
-                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    />
-                </li>
-                <li className="relative w-full mb-6">
-                    <div className="text-left text-blue-text mb-2 font-bold">
-                        <p className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
+                        <p className="bg-blue-button rounded-full text-[12px]">
                             150
                         </p>
                     </div>
                     <div
-                        className={`${calculatedJourniePoints < 187.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
+                        className={`${calculatedJourniePoints < 187.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                    />
+                </li>
+                <li className="relative flex items-center w-full">
+                    <div
+                        className={` bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     />
                     <div
-                        className={`${calculatedJourniePoints < 150 ? 'bg-gray-300' : 'bg-yellow-button'} relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text`}
+                        className={`${calculatedJourniePoints < 225 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                    />
+                </li>
+                <li className="relative flex items-center w-full">
+                    <div
+                        className={` bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    />
+                    <div
+                        className={`${calculatedJourniePoints < 262.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                    />
+                </li>
+                <li className="relative flex items-center w-full">
+                    <div
+                        className={`bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
+                    />
+                    <div
+                        className={`${calculatedJourniePoints < 300 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                    />
+                    <div
+                        className={`${calculatedJourniePoints < 300 ? 'bg-gray-300' : 'bg-green-background'} absolute top-1/2 -right-1 -translate-y-1/2 w-7 h-7 z-10 rounded-full flex items-center justify-center text-white`}
                     >
-                        {calculatedJourniePoints < 150 ? (
-                            <MdLock />
-                        ) : (
-                            <MdOutlineLocalGasStation />
-                        )}
-                    </div>
-                </li>
-                <li className="relative w-full">
-                    <div
-                        className={`${calculatedJourniePoints < 225 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                    />
-                    <div
-                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    />
-                </li>
-                <li className="relative w-full">
-                    <div
-                        className={`${calculatedJourniePoints < 262.5 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                    />
-                    <div
-                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    />
-                </li>
-                <li className="relative w-full">
-                    <div
-                        className={`${calculatedJourniePoints < 300 ? 'bg-gray-300' : 'bg-yellow-button'} flex w-full h-2`}
-                    />
-                    <div
-                        className={` bg-white relative bottom-4 w-1 h-[9px] my-[7px] z-10 rounded-full flex items-center justify-center text-blue-text`}
-                    />
-                </li>
-                <li className="relative mb-6">
-                    <div className="text-left text-blue-text mb-2 font-bold">
-                        <p className="bg-blue-button rounded-full focus:border-blue-300 text-[12px]">
+                        <p className="bg-blue-button rounded-full text-[12px]">
                             300
                         </p>
-                    </div>
-                    <div
-                        className={`flex  ${calculatedJourniePoints < 10000 ? 'bg-gray-300' : 'bg-yellow-button'} h-2`}
-                    />
-                    <div
-                        className={`relative bottom-4 w-6 h-6 z-10 rounded-full flex items-center justify-center text-blue-text ${calculatedJourniePoints < 300 ? 'bg-gray-300' : 'bg-yellow-button'}`}
-                    >
-                        {calculatedJourniePoints < 300 ? (
-                            <MdLock />
-                        ) : (
-                            <MdOutlineLocalGasStation />
-                        )}
                     </div>
                 </li>
             </ol>
@@ -166,7 +145,8 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
                             setIsRewardButtonVisible={setIsRewardButtonVisible}
                         />
                     ) : null}
-                    <button
+                    <Button
+                        buttonType="primary"
                         onClick={() => {
                             listMemberRewards(customer?.id)
                             setRewardModalOpened(true)
@@ -174,7 +154,7 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
                         className="text-white bg-[#173C9F] h-[32px] rounded text-[16px] px-2"
                     >
                         Choose reward
-                    </button>
+                    </Button>
                 </div>
             ) : null}
         </div>

@@ -120,7 +120,7 @@ export default function LoginPage() {
                     {error ? <p className="text-center mt-2">{error}</p> : null}
                     <Button
                         type="submit"
-                        buttonType="primary"
+                        buttonType="green"
                         className="px-4 py-2 w-full bg-green-500 mb-1"
                     >
                         Login

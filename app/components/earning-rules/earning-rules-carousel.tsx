@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import { useGetEarningRules } from '@/app/hooks/useGetEarningRules'
+import Button from '../ui/atoms/button'
 
 interface EarningRulesCarouselProps {}
 const EarningRulesCarousel: React.FC<EarningRulesCarouselProps> = () => {
@@ -22,7 +23,7 @@ const EarningRulesCarousel: React.FC<EarningRulesCarouselProps> = () => {
                 <h1 className="text-blue-text text-18 font-bold">
                     Earning rules
                 </h1>
-                <button
+                <Button
                     onClick={handleEarningRulesRedirectClick}
                     className="flex items-center h-[32px] text-[16px] font-normal text-blue-text px-4 rounded bg-blue-background border border-blue-activeCoupon"
                 >
@@ -30,14 +31,14 @@ const EarningRulesCarousel: React.FC<EarningRulesCarouselProps> = () => {
                     <span className="pl-2">
                         <FaArrowRight />
                     </span>
-                </button>
+                </Button>
             </div>
             {loading ? (
                 <EarningRulesLoading />
             ) : (
                 <ScrollContainer
                     component={'div'}
-                    className="scroll-container flex ml-2 w-full"
+                    className="scroll-container flex mx-2 w-full"
                     buttons={[1, 2, 3, 4]}
                 >
                     {earningRules?.slice(0, 4)?.map((earningRule) => (

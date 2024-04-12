@@ -5,6 +5,7 @@ import { FaArrowRight } from 'react-icons/fa'
 import { useDealsCarousel } from '@/app/hooks/useDealsCarousel'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import { MobileAppContext } from '../app-context/app-context'
+import Button from '../ui/atoms/button'
 
 const DealsCarousel = () => {
     const router = useRouter()
@@ -22,7 +23,7 @@ const DealsCarousel = () => {
         <>
             <div className="flex justify-between mx-5">
                 <h1 className="text-blue-text text-18 font-bold">Deals</h1>
-                <button
+                <Button
                     onClick={handleDealsRedirectClick}
                     className="flex items-center h-[32px] text-[16px] font-normal text-blue-text px-4 rounded bg-blue-background border border-blue-activeCoupon"
                 >
@@ -30,7 +31,7 @@ const DealsCarousel = () => {
                     <span className="pl-2">
                         <FaArrowRight />
                     </span>
-                </button>
+                </Button>
             </div>
             {activeDeals?.length === 0 && !loading && (
                 <div className="py-3 flex justify-center items-center">
