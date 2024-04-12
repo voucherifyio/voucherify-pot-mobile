@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import ActiveRewards from '@/app/components/loyalty-card/active-rewards'
-import JournieHeader from '@/app/components/journie-header/journie-header'
+import VoucherifyHeader from '@/app/components/voucherify-header/voucherify-header'
 import LoyaltyCard from '@/app/components/loyalty-card/loyalty-card'
 import Loading from '@/app/components/loading/loading'
 import { useContext } from 'react'
@@ -26,7 +26,7 @@ export default function CardPage() {
     if (status === 'authenticated') {
         return (
             <div className="flex-1 bg-blue-background">
-                <JournieHeader headerText={'Loyalty card'} />
+                <VoucherifyHeader headerText={'Loyalty card'} />
                 {customer ? (
                     <div className="p-4 w-full">
                         <header>

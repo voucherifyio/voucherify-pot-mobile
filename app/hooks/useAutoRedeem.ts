@@ -22,30 +22,28 @@ export const useAutoRedeem = () => {
     const autoRedeemCalculation = async (
         customer: CustomerObject | undefined
     ) => {
-        const currentJourniePoints =
-            customer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
+        const currentLoyaltyPoints =
+            customer?.loyalty.campaigns?.[CAMPAIGNS.LOYALTY_PROGRAM]?.points
+        const currentRewardPoints =
+            customer?.loyalty.campaigns?.[CAMPAIGNS.MILESTONE_REWARDS_PROGRAM]
                 ?.points
-        const currentPromoPoints =
-            customer?.loyalty.campaigns?.[
-                CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM
-            ]?.points
 
         if (
             customer?.id &&
-            currentJourniePoints !== undefined &&
-            currentJourniePoints >= 300 &&
-            currentPromoPoints === 0
+            currentLoyaltyPoints !== undefined &&
+            currentLoyaltyPoints >= 300 &&
+            currentRewardPoints === 0
         ) {
             const res = await listCustomerActivities(customer.id)
             const { activities } = await res.json()
             const lastActivityEvent = activities[0]
             const {
-                lastRewardedJourniePoints,
-                lastRewardedPromoPoints,
-                penultimateRewardedPromoPoints,
+                lastRewardedLoyaltyPoints,
+                lastRewardedRewardPoints,
+                penultimateRewardedRewardPoints,
             } = customerPointsCalculation(activities)
 
-            if (!activities[0].data.balance && currentJourniePoints < 300) {
+            if (!activities[0].data.balance && currentLoyaltyPoints < 300) {
                 return false
             }
             if (
@@ -55,30 +53,30 @@ export const useAutoRedeem = () => {
                     EVENT_TYPES.CUSTOMER_REWARD_REDEMPTIONS_CREATED,
                     EVENT_TYPES.CUSTOMER_REWARD_REDEMPTION_COMPLETED,
                 ].includes(lastActivityEvent.type) &&
-                currentJourniePoints >= 300
+                currentLoyaltyPoints >= 300
             ) {
-                return await autoRedeemReward(customer, currentJourniePoints)
+                return await autoRedeemReward(customer, currentLoyaltyPoints)
             }
             if (
-                lastRewardedJourniePoints?.data.balance.balance >= 300 &&
-                lastRewardedPromoPoints?.data.balance.balance === 0
+                lastRewardedLoyaltyPoints?.data.balance.balance >= 300 &&
+                lastRewardedRewardPoints?.data.balance.balance === 0
             ) {
-                const lastDateJourniePoints = dayjs(
-                    lastRewardedJourniePoints?.created_at
+                const lastDateLoyaltyPoints = dayjs(
+                    lastRewardedLoyaltyPoints?.created_at
                 ).format('YYYY-DD-MM HH:mm:ss')
 
                 const lastDatePenultimatePoints = dayjs(
-                    penultimateRewardedPromoPoints?.created_at
+                    penultimateRewardedRewardPoints?.created_at
                 ).format('YYYY-DD-MM HH:mm:ss')
 
-                const isPromoPointsAfterJourniePoints = dayjs(
+                const isRewardPointsAfterLoyaltyPoints = dayjs(
                     lastDatePenultimatePoints
-                ).isAfter(lastDateJourniePoints)
+                ).isAfter(lastDateLoyaltyPoints)
 
-                if (isPromoPointsAfterJourniePoints) {
+                if (isRewardPointsAfterLoyaltyPoints) {
                     return await autoRedeemReward(
                         customer,
-                        currentJourniePoints
+                        currentLoyaltyPoints
                     )
                 }
             }
@@ -90,9 +88,9 @@ export const useAutoRedeem = () => {
         rewardId: string,
         campaignName: string,
         aeroplan: boolean,
-        currentJourniePoints: number
+        currentLoyaltyPoints: number
     ) => {
-        let redeemQuantity = Math.floor(currentJourniePoints / 300)
+        let redeemQuantity = Math.floor(currentLoyaltyPoints / 300)
 
         while (redeemQuantity > 0) {
             const res = await redeemReward(customerId, rewardId, campaignName)
@@ -101,7 +99,7 @@ export const useAutoRedeem = () => {
             }
 
             if (res.ok && redeemQuantity === 1) {
-                setUnredemeedPoints(currentJourniePoints % 300)
+                setUnredemeedPoints(currentLoyaltyPoints % 300)
                 setAutoRedeemSuccessMessage(
                     `Successfully redeemed reward - ${aeroplan ? REWARDS.AEROPLAN_TRANSFER_REWARD : REWARDS.SEVEN_CENTS_PER_LITER_REWARD}`
                 )
@@ -118,7 +116,7 @@ export const useAutoRedeem = () => {
 
     const autoRedeemReward = async (
         customer: CustomerObject | undefined,
-        currentJourniePoints: number
+        currentLoyaltyPoints: number
     ) => {
         const aeroplan = customer?.metadata.aeroplan_member
 
@@ -126,18 +124,18 @@ export const useAutoRedeem = () => {
             return await redeemDependOnAeroplan(
                 customer?.id,
                 REWARDS.AEROPLAN_TRANSFER_REWARD_ID,
-                CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM,
+                CAMPAIGNS.LOYALTY_PROGRAM,
                 aeroplan,
-                currentJourniePoints
+                currentLoyaltyPoints
             )
         }
         if (!aeroplan) {
             return await redeemDependOnAeroplan(
                 customer?.id,
                 REWARDS.SEVEN_CENTS_PER_LITER_REWARD_ID,
-                CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM,
+                CAMPAIGNS.LOYALTY_PROGRAM,
                 aeroplan,
-                currentJourniePoints
+                currentLoyaltyPoints
             )
         }
     }

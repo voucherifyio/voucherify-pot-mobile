@@ -1,5 +1,5 @@
 'use client'
-import JournieHeader from '@/app/components/journie-header/journie-header'
+import VoucherifyHeader from '@/app/components/voucherify-header/voucherify-header'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Loading from '@/app/components/loading/loading'
@@ -21,7 +21,7 @@ export default function DealsPage() {
 
     return (
         <div className="bg-blue-background flex flex-col flex-1">
-            <JournieHeader headerText={'Deals'} />
+            <VoucherifyHeader headerText={'Deals'} />
             <Deals />
         </div>
     )

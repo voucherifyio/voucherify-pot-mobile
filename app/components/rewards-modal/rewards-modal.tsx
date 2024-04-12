@@ -174,7 +174,7 @@ const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
                         redeemCustomerReward(
                             customerId,
                             rewardId,
-                            CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM
+                            CAMPAIGNS.MILESTONE_REWARDS_PROGRAM
                         )
                     }
                     className="text-white rounded-lg px-2 h-8"

@@ -1,3 +1,4 @@
+import { CAMPAIGNS } from '@/enum/campaigns'
 import { VoucherifyServerSide } from '@voucherify/sdk'
 
 type Params = {
@@ -6,26 +7,25 @@ type Params = {
 }
 
 export const getLoyaltyCard = async (params: Params) => {
-    const JOURNIE_LOYALTY_CAMPAIGN_NAME = 'Journie PoT Loyalty Program'
     const { voucherify, customerId } = params
 
     try {
         if (customerId) {
             const vouchers = await voucherify.vouchers.list({
                 customer: customerId,
-                campaign: JOURNIE_LOYALTY_CAMPAIGN_NAME,
+                campaign: CAMPAIGNS.LOYALTY_PROGRAM,
             })
-            const journieLoyaltyCard = vouchers.vouchers.find(
-                (voucher) => voucher.campaign === JOURNIE_LOYALTY_CAMPAIGN_NAME
+            const loyaltyCard = vouchers.vouchers.find(
+                (voucher) => voucher.campaign === CAMPAIGNS.LOYALTY_PROGRAM
             )
 
-            if (journieLoyaltyCard) {
-                const barcode = journieLoyaltyCard?.assets?.barcode
-                const code = journieLoyaltyCard?.code
+            if (loyaltyCard) {
+                const barcode = loyaltyCard?.assets?.barcode
+                const code = loyaltyCard?.code
                 return { barcode, code }
             } else {
                 console.error(
-                    `Could not find loyalty card for campaign: ${JOURNIE_LOYALTY_CAMPAIGN_NAME}`
+                    `Could not find loyalty card for campaign: ${CAMPAIGNS.LOYALTY_PROGRAM}`
                 )
             }
         }

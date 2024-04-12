@@ -17,7 +17,7 @@ export const useGetEarningRules = ({
             const fetchData = async () => {
                 try {
                     const res = await getEarningRules(
-                        CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM_ID
+                        CAMPAIGNS.LOYALTY_PROGRAM_ID
                     )
                     const data = await res.json()
                     const fetchedEarningRules = data.earningRules.data

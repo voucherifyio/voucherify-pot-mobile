@@ -6,6 +6,10 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'dev.dl.voucherify.io',
             },
+            {
+                protocol: 'https',
+                hostname: 'dl.voucherify.io',
+            },
         ],
     },
 }

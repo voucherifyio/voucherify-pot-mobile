@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { CustomerObject } from '@voucherify/sdk'
 import { getCustomer } from '../apiEndpoints/apiEndpoints'
 import {
-    ifJourniePointsAmountHasChanged,
-    ifPromoPointsAmountHasChanged,
+    ifLoyaltyPointsAmountHasChanged,
+    ifRewardPointsAmountHasChanged,
     isNoAeroplanMember,
 } from '../utils/customer'
 
@@ -30,8 +30,8 @@ export const useCustomer = ({
                 !currentCustomer ||
                 currentCustomer.id !== customer.id ||
                 isNoAeroplanMember(currentCustomer, customer) ||
-                ifJourniePointsAmountHasChanged(currentCustomer, customer) ||
-                ifPromoPointsAmountHasChanged(currentCustomer, customer)
+                ifLoyaltyPointsAmountHasChanged(currentCustomer, customer) ||
+                ifRewardPointsAmountHasChanged(currentCustomer, customer)
             ) {
                 setIsCustomerUpdated(true)
                 setIsLinkedToAeroplan(customer.metadata?.aeroplan_member)

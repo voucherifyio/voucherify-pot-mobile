@@ -10,28 +10,28 @@ const Milestones = () => {
         autoRedeemSuccessMessage,
         unredeemedPoints,
         isCustomerUpdated,
-        journiePoints,
-        promoPoints,
+        loyaltyPoints,
+        rewardPoints,
         customer,
     } = useContext(MobileAppContext)
-    const [calculatedJourniePoints, setCalculatedJourniePoints] =
-        useState<number>(journiePoints || 0)
+    const [calculatedLoyaltyPoints, setCalculatedLoyaltyPoints] =
+        useState<number>(loyaltyPoints || 0)
     const [isRewardButtonVisible, setIsRewardButtonVisible] = useState(false)
 
-    const existingPromoPoints = promoPoints && promoPoints >= 1
+    const existingRewardPoints = rewardPoints && rewardPoints >= 1
 
     useEffect(() => {
-        if (journiePoints && journiePoints <= 150 && isCustomerUpdated) {
-            setCalculatedJourniePoints(journiePoints)
+        if (loyaltyPoints && loyaltyPoints < 150 && isCustomerUpdated) {
+            setCalculatedLoyaltyPoints(loyaltyPoints)
         }
         if (unredeemedPoints && !isCustomerUpdated) {
-            setCalculatedJourniePoints(unredeemedPoints)
+            setCalculatedLoyaltyPoints(unredeemedPoints)
         }
-        if (existingPromoPoints && journiePoints) {
-            setCalculatedJourniePoints(journiePoints)
+        if (existingRewardPoints && loyaltyPoints) {
+            setCalculatedLoyaltyPoints(loyaltyPoints)
             setIsRewardButtonVisible(true)
         }
-    }, [journiePoints, unredeemedPoints, promoPoints])
+    }, [loyaltyPoints, unredeemedPoints, rewardPoints])
 
     return (
         <div className="px-4 p-4">
@@ -39,13 +39,13 @@ const Milestones = () => {
                 <h4 className="text-blue-text text-16">
                     Your Points
                     <span className="pl-2 font-extrabold">
-                        {!customer ? null : calculatedJourniePoints}
+                        {!customer ? null : calculatedLoyaltyPoints}
                     </span>
                 </h4>
             </header>
 
             <MilestoneChart
-                calculatedJourniePoints={calculatedJourniePoints}
+                calculatedLoyaltyPoints={calculatedLoyaltyPoints}
                 isRewardButtonVisible={isRewardButtonVisible}
                 setIsRewardButtonVisible={setIsRewardButtonVisible}
             />

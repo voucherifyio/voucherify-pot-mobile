@@ -1,7 +1,8 @@
 'use client'
 import { useAutoRedeem } from '@/app/hooks/useAutoRedeem'
 import { useCustomer } from '@/app/hooks/useCustomer'
-import { useInitalizeBraze } from '@/app/hooks/useInitializeBraze'
+//COMMENTED UNTIL BRAZE WILL BE ENABLED
+// import { useInitalizeBraze } from '@/app/hooks/useInitializeBraze'
 import { useLocalStorage } from '@/app/hooks/useLocalStorage'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { CustomerObject } from '@voucherify/sdk'
@@ -23,17 +24,18 @@ type MobileAppContextType = {
     autoRedeemSuccessMessage: string | undefined
     unredeemedPoints: number | null
     isCustomerUpdated: boolean
-    journiePoints: number | undefined
-    promoPoints: number | undefined
+    loyaltyPoints: number | undefined
+    rewardPoints: number | undefined
     setCurrentCustomer: Dispatch<SetStateAction<CustomerObject | undefined>>
-    braze:
-        | typeof import('../../../node_modules/@braze/web-sdk/index')
-        | undefined
-    changeBrazeUser: ({
-        customerId,
-    }: {
-        customerId: string | null | undefined
-    }) => Promise<string | null | undefined>
+    //COMMENTED UNTIL BRAZE WILL BE ENABLED
+    // braze:
+    //     | typeof import('../../../node_modules/@braze/web-sdk/index')
+    //     | undefined
+    // changeBrazeUser: ({
+    //     customerId,
+    // }: {
+    //     customerId: string | null | undefined
+    // }) => Promise<string | null | undefined>
 }
 
 export const MobileAppContext = createContext<MobileAppContextType>({
@@ -46,11 +48,12 @@ export const MobileAppContext = createContext<MobileAppContextType>({
     autoRedeemSuccessMessage: undefined,
     unredeemedPoints: null,
     isCustomerUpdated: false,
-    journiePoints: undefined,
-    promoPoints: undefined,
+    loyaltyPoints: undefined,
+    rewardPoints: undefined,
     setCurrentCustomer: () => undefined,
-    braze: undefined,
-    changeBrazeUser: async () => null,
+    //COMMENTED UNTIL BRAZE WILL BE ENABLED
+    // braze: undefined,
+    // changeBrazeUser: async () => null,
 })
 
 const MobileApp = ({ children }: { children: JSX.Element }) => {
@@ -77,13 +80,13 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         unredeemedPoints,
         setUnredemeedPoints,
     } = useAutoRedeem()
-    const { braze, changeBrazeUser } = useInitalizeBraze()
+    //COMMENTED UNTIL BRAZE WILL BE ENABLED
+    // const { braze, changeBrazeUser } = useInitalizeBraze()
 
-    const journiePoints =
-        customer?.loyalty.campaigns?.[CAMPAIGNS.JOURNIE_POT_LOYALTY_PROGRAM]
-            ?.points
-    const promoPoints =
-        customer?.loyalty.campaigns?.[CAMPAIGNS.PROMO_POINTS_REWARDS_PROGRAM]
+    const loyaltyPoints =
+        customer?.loyalty.campaigns?.[CAMPAIGNS.LOYALTY_PROGRAM]?.points
+    const rewardPoints =
+        customer?.loyalty.campaigns?.[CAMPAIGNS.MILESTONE_REWARDS_PROGRAM]
             ?.points
 
     useEffect(() => {
@@ -114,11 +117,12 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 autoRedeemSuccessMessage,
                 unredeemedPoints,
                 isCustomerUpdated,
-                journiePoints,
-                promoPoints,
+                loyaltyPoints,
+                rewardPoints,
                 setCurrentCustomer,
-                braze,
-                changeBrazeUser,
+                //COMMENTED UNTIL BRAZE WILL BE ENABLED
+                // braze,
+                // changeBrazeUser,
             }}
         >
             {children}

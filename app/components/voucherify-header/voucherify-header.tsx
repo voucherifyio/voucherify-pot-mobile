@@ -3,10 +3,10 @@ import { useRouter } from 'next/navigation'
 import { IoMdArrowBack } from 'react-icons/io'
 import Button from '@/app/components/ui/atoms/button'
 
-interface JournieHeaderProps {
+interface VoucherifyHeaderProps {
     headerText: string
 }
-const JournieHeader: React.FC<JournieHeaderProps> = ({ headerText }) => {
+const VoucherifyHeader: React.FC<VoucherifyHeaderProps> = ({ headerText }) => {
     const router = useRouter()
     const handleGoToPreviousPageClick = () => {
         router.push('/home')
@@ -27,4 +27,4 @@ const JournieHeader: React.FC<JournieHeaderProps> = ({ headerText }) => {
     )
 }
 
-export default JournieHeader
+export default VoucherifyHeader
