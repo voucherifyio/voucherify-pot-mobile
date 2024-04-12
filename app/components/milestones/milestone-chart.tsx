@@ -45,7 +45,7 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
             <ol className="flex items-center">
                 <li className="relative w-full">
                     <div
-                        className={`${calculatedJourniePoints < 150 ? 'bg-gray-300' : 'bg-green-background'} absolute top-1/2 -left-1 -translate-y-1/2 w-7 h-7 z-10 rounded-full flex items-center justify-center text-white`}
+                        className={`${calculatedJourniePoints < 1 ? 'bg-gray-300' : 'bg-green-background'} absolute top-1/2 -left-1 -translate-y-1/2 w-7 h-7 z-10 rounded-full flex items-center justify-center text-white`}
                     >
                         <p className="bg-blue-button rounded-full text-[12px]">
                             0
