@@ -19,7 +19,7 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
     isRewardButtonVisible,
     setIsRewardButtonVisible,
 }) => {
-    const { customer, promoPoints } = useContext(MobileAppContext)
+    const { customer } = useContext(MobileAppContext)
     const [rewards, setRewards] = useState([])
     const [rewardModalOpened, setRewardModalOpened] = useState(false)
     const [loading, setLoading] = useState(true)

@@ -21,7 +21,7 @@ const Milestones = () => {
     const existingPromoPoints = promoPoints && promoPoints >= 1
 
     useEffect(() => {
-        if (journiePoints && journiePoints <= 150 && isCustomerUpdated) {
+        if (journiePoints && journiePoints < 150 && isCustomerUpdated) {
             setCalculatedJourniePoints(journiePoints)
         }
         if (unredeemedPoints && !isCustomerUpdated) {
