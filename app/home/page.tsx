@@ -67,7 +67,7 @@ export default function HomePage() {
                 <Milestones />
                 <DealsCarousel />
                 <EarningRulesCarousel />
-                <Aeroplan />
+                {/* <Aeroplan /> */}
             </div>
         </div>
     )
