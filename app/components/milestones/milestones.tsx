@@ -21,17 +21,16 @@ const Milestones = () => {
     const existingRewardPoints = rewardPoints && rewardPoints >= 1
 
     useEffect(() => {
-        if (loyaltyPoints && loyaltyPoints < 150 && isCustomerUpdated) {
+        if ((loyaltyPoints || loyaltyPoints === 0) && isCustomerUpdated) {
             setCalculatedLoyaltyPoints(loyaltyPoints)
         }
         if (unredeemedPoints && !isCustomerUpdated) {
             setCalculatedLoyaltyPoints(unredeemedPoints)
         }
-        if (existingRewardPoints && loyaltyPoints) {
-            setCalculatedLoyaltyPoints(loyaltyPoints)
+        if (existingRewardPoints) {
             setIsRewardButtonVisible(true)
         }
-    }, [loyaltyPoints, unredeemedPoints, rewardPoints])
+    }, [loyaltyPoints, rewardPoints])
 
     return (
         <div className="px-4 p-4">

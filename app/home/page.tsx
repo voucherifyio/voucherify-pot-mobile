@@ -8,7 +8,7 @@ import Milestones from '@/app/components/milestones/milestones'
 //COMMENTED UNTIL BRAZE WILL BE ENABLED
 // import BrazePermissionModal from '@/app/components/braze-permission-modal/braze-permission-modal'
 import DealsCarousel from '@/app/components/deals/deals-carousel'
-import Aeroplan from '@/app/components/aeroplan/aeroplan'
+import VoucherifyPlan from '@/app/components/voucherify-plan/voucherify-plan'
 import EarningRulesCarousel from '@/app/components/earning-rules/earning-rules-carousel'
 import Loading from '@/app/components/loading/loading'
 import { useContext } from 'react'
@@ -70,7 +70,7 @@ export default function HomePage() {
                 <Milestones />
                 <DealsCarousel />
                 <EarningRulesCarousel />
-                {/* <Aeroplan /> */}
+                <VoucherifyPlan />
             </div>
         </div>
     )
