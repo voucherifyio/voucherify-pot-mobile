@@ -2,6 +2,7 @@ import { getCustomer } from '@/voucherify/get-customer'
 import { getVoucherify } from '@/voucherify/voucherify-config'
 import { NextRequest, NextResponse } from 'next/server'
 import { Analytics } from '@segment/analytics-node'
+import { METADATA } from '@/enum/metadata'
 
 type Customer = {
     firstName?: string
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
     
     if (
         voucherifyCustomer?.source_id === body.phone &&
-        voucherifyCustomer?.metadata?.registered_customer === true
+        voucherifyCustomer?.metadata[METADATA.REGISTERED_CUSTOMER] === true
     ) {
         return NextResponse.json(
             { error: 'Customer already registered, please login.' },
@@ -46,7 +47,7 @@ export async function POST(req: NextRequest) {
     if (
         !voucherifyCustomer?.id ||
         (voucherifyCustomer.id &&
-            !voucherifyCustomer.metadata?.registered_customer)
+            !voucherifyCustomer.metadata[METADATA.REGISTERED_CUSTOMER])
     ) {
         const analitycs = getAnalytics()
         analitycs.identify({

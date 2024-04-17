@@ -5,11 +5,20 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
     const { customerId, rewardId, campaignName } = await req.json()
 
+    if (!customerId || !rewardId || !campaignName) {
+        return NextResponse.json(
+            {
+                error: 'Missing one of customerId, rewardId, campaignName property',
+            },
+            { status: 400 }
+        )
+    }
+
     const redeemedReward = await redeemReward({
         customerId,
         rewardId,
         voucherify: getVoucherify(),
-        campaignName
+        campaignName,
     })
 
     if (redeemedReward?.result === 'FAILURE') {

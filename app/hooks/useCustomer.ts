@@ -4,8 +4,9 @@ import { getCustomer } from '../apiEndpoints/apiEndpoints'
 import {
     ifLoyaltyPointsAmountHasChanged,
     ifRewardPointsAmountHasChanged,
-    isNoAeroplanMember,
+    isNoVoucherifyMember,
 } from '../utils/customer'
+import { METADATA } from '@/enum/metadata'
 
 export const useCustomer = ({
     customerPhone,
@@ -16,7 +17,8 @@ export const useCustomer = ({
         CustomerObject | undefined
     >(undefined)
     const [isCustomerUpdated, setIsCustomerUpdated] = useState(false)
-    const [isLinkedToAeroplan, setIsLinkedToAeroplan] = useState<boolean>(false)
+    const [isLinkedToVoucherify, setIsLinkedToVoucherify] =
+        useState<boolean>(false)
 
     const getCurrentCustomer = async () => {
         if (customerPhone) {
@@ -29,12 +31,12 @@ export const useCustomer = ({
             if (
                 !currentCustomer ||
                 currentCustomer.id !== customer.id ||
-                isNoAeroplanMember(currentCustomer, customer) ||
+                isNoVoucherifyMember(currentCustomer, customer) ||
                 ifLoyaltyPointsAmountHasChanged(currentCustomer, customer) ||
                 ifRewardPointsAmountHasChanged(currentCustomer, customer)
             ) {
                 setIsCustomerUpdated(true)
-                setIsLinkedToAeroplan(customer.metadata?.aeroplan_member)
+                setIsLinkedToVoucherify(customer.metadata[METADATA.VOUCHERIFY_MEMBER])
                 setCurrentCustomer(customer)
             }
         }
@@ -43,7 +45,7 @@ export const useCustomer = ({
     return {
         customer: currentCustomer,
         getCurrentCustomer,
-        isLinkedToAeroplan,
+        isLinkedToVoucherify,
         isCustomerUpdated,
         setIsCustomerUpdated,
         setCurrentCustomer,

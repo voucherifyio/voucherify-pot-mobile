@@ -28,13 +28,16 @@ const getCustomer = async (customerPhone: string) => {
     })
 }
 
-const updateCustomer = async (customerId: string, isAeroplanMember: boolean) => {
+const updateCustomer = async (
+    customerId: string,
+    isVoucherifyMember: boolean
+) => {
     return await fetch(`/api/voucherify/update-customer`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             source_id: customerId,
-            metadata: { aeroplan_member: isAeroplanMember },
+            metadata: { voucherify_member: isVoucherifyMember },
         }),
     })
 }
@@ -61,8 +64,8 @@ const getLoyaltyCard = async (customerId: string) => {
 
 const redeemReward = async (
     customerId: string | undefined,
-    rewardId: string,
-    campaignName: string
+    rewardId: string | undefined,
+    campaignName: string | undefined
 ) => {
     return await fetch(`/api/voucherify/redeem-reward`, {
         method: 'POST',
@@ -125,6 +128,18 @@ const listCustomerActivities = async (customerId: string) => {
     )
 }
 
+const listCampaigns = async () => {
+    return await fetch(`/api/voucherify/list-campaigns`, {
+        method: 'GET',
+    })
+}
+
+const listRewards = async () => {
+    return await fetch(`/api/voucherify/list-rewards`, {
+        method: 'GET',
+    })
+}
+
 export {
     getQualifications,
     getBarcode,
@@ -138,4 +153,6 @@ export {
     getCampaign,
     listCustomerSegments,
     listCustomerActivities,
+    listCampaigns,
+    listRewards,
 }

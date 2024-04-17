@@ -48,7 +48,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
     const { dealsAndRewards, setDealsAndRewards } = useContext(MobileAppContext)
 
     const fetchQualifications = async (
-        voucherCode: string,
+        reward: string,
         interval: NodeJS.Timeout
     ) => {
         const res = await getQualifications(
@@ -58,7 +58,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
         const data = await res.json()
         const qualifications = data.qualifications
         for (const qualification of qualifications) {
-            if (qualification.id === voucherCode) {
+            if (qualification.id === reward) {
                 clearInterval(interval)
                 setConfirmation(false)
                 setDealsAndRewards({
@@ -84,14 +84,11 @@ const RewardsModal: FC<RewardsModalProps> = ({
         if (res.status !== 200) {
             console.error('Cannot redeem reward')
         }
+        const reward = redeemedReward.reward?.voucher?.code
 
-        if (redeemedReward.reward.voucher.code) {
+        if (reward) {
             const interval: NodeJS.Timeout = setInterval(
-                async () =>
-                    await fetchQualifications(
-                        redeemedReward.reward.voucher.code,
-                        interval
-                    ),
+                async () => await fetchQualifications(reward, interval),
                 2000
             )
         }

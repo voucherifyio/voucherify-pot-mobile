@@ -19,7 +19,7 @@ type MobileAppContextType = {
     setDealsAndRewards: Dispatch<SetStateAction<DealsAndRewards>>
     customer: CustomerObject | undefined
     getCurrentCustomer: () => Promise<true | void>
-    isLinkedToAeroplan: boolean
+    isLinkedToVoucherify: boolean
     autoRedeemError: string | undefined
     autoRedeemSuccessMessage: string | undefined
     unredeemedPoints: number | null
@@ -43,7 +43,7 @@ export const MobileAppContext = createContext<MobileAppContextType>({
     setDealsAndRewards: () => {},
     customer: undefined,
     getCurrentCustomer: async () => true,
-    isLinkedToAeroplan: false,
+    isLinkedToVoucherify: false,
     autoRedeemError: undefined,
     autoRedeemSuccessMessage: undefined,
     unredeemedPoints: null,
@@ -62,7 +62,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
     const {
         customer,
         getCurrentCustomer,
-        isLinkedToAeroplan,
+        isLinkedToVoucherify,
         isCustomerUpdated,
         setIsCustomerUpdated,
         setCurrentCustomer,
@@ -79,6 +79,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         autoRedeemSuccessMessage,
         unredeemedPoints,
         setUnredemeedPoints,
+        filterAutoRedeemCampaign,
     } = useAutoRedeem()
     //COMMENTED UNTIL BRAZE WILL BE ENABLED
     // const { braze, changeBrazeUser } = useInitalizeBraze()
@@ -91,12 +92,13 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
 
     useEffect(() => {
         getCurrentCustomer()
+        const autoRedeemCampaign = filterAutoRedeemCampaign()
         const interval: NodeJS.Timeout = setInterval(async () => {
             if (!document.hidden) {
                 await getCurrentCustomer()
                 if (isCustomerUpdated) {
                     setUnredemeedPoints(null)
-                    await autoRedeemCalculation(customer)
+                    await autoRedeemCalculation(customer, await autoRedeemCampaign)
                     setIsCustomerUpdated(false)
                 }
             }
@@ -112,7 +114,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 setDealsAndRewards,
                 customer,
                 getCurrentCustomer,
-                isLinkedToAeroplan,
+                isLinkedToVoucherify,
                 autoRedeemError,
                 autoRedeemSuccessMessage,
                 unredeemedPoints,

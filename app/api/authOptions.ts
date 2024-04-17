@@ -2,6 +2,7 @@ import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { getCustomer } from '@/voucherify/get-customer'
 import { getVoucherify } from '@/voucherify/voucherify-config'
+import { METADATA } from '@/enum/metadata'
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -24,7 +25,7 @@ export const authOptions: NextAuthOptions = {
 
                 if (
                     !voucherifyCustomer?.source_id ||
-                    !voucherifyCustomer?.metadata?.registered_customer
+                    !voucherifyCustomer?.metadata[METADATA.REGISTERED_CUSTOMER]
                 ) {
                     return null
                 }
