@@ -11,7 +11,6 @@ import {
     listRewards,
     redeemReward,
 } from '../apiEndpoints/apiEndpoints'
-import { REWARDS } from '@/enum/rewards'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import {
     checkIfRewardPointsAfterLoyaltyPoints,
