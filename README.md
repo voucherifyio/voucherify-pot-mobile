@@ -12,6 +12,7 @@ The Voucherify app is intended to demonstrate basic functionality in conjunction
 
 > [!IMPORTANT]
 > ### **Voucherify configuration description**
+> Please note that this configuration applies to a specific scenario, specific campaigns and the specific Voucherify account that is connected to the application. Otherwise, the application's behavior may be unpredictable.
 ### Campaigns
 The configuration consists of two main loyalty campaigns, the purpose of which is to accrue points depending on the products purchased in the second application - POS Voucherify.
 
