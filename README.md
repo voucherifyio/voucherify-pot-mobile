@@ -3,19 +3,20 @@
 
 ## Introducion
 Voucherify App offers several main views that allow users to use different functionalities:
-- Home: The main view where users can track their loyalty points balance, select rewards based on the number of promotional points, view vouchers they have, and join the Voucherify plan to earn additional rewards.
-- Deals: A section where users can view and manage their vouchers that have been awarded automatically.
-- Rewards: In this view, users can view and manage the rewards they have earned on the home page through collected promotional points.
-- Card: A section that allows users to scan their vouchers and rewards using a barcode.
+- **Home:** The main view where users can track their loyalty points balance, select rewards based on the number of promotional points, view vouchers they have, and join the Voucherify plan to earn additional rewards.
+- **Deals:** A section where users can view and manage their vouchers that have been awarded automatically.
+- **Rewards:** In this view, users can view and manage the rewards they have earned on the home page through collected promotional points.
+- **Card:** A section that allows users to scan their vouchers and rewards using a barcode.
 
 The Voucherify app is intended to demonstrate basic functionality in conjunction with the [Voucherify POS](https://voucherify-pot-pos-9defbe226ae2.herokuapp.com/) (Point of sales) app, such as purchasing products, receiving discounts and rewards, and generating promotions.
 
-## Voucherify configuration description
+> [!IMPORTANT]
+> ### **Voucherify configuration description**
 ### Campaigns
 The configuration consists of two main loyalty campaigns, the purpose of which is to accrue points depending on the products purchased in the second application - POS Voucherify.
 
-1. Main Campaign: For every 150 points earned in this campaign, the user receives 1 promotional point.
-2. Promotional campaign: Promotional points can be redeemed for prizes in the Voucherify app. 1 point equals one prize. The "Choose reward" button informs the user about the availability of a reward that he can generate by receiving a voucher available in the Rewards tab. The reward can then be redeemed by scanning the barcode in the POS Voucherify app.
+1. **Main Campaign:** For every 150 points earned in this campaign, the user receives 1 promotional point.
+2. **Promotional campaign:** Promotional points can be redeemed for prizes in the Voucherify app. 1 point equals one prize. The "Choose reward" button informs the user about the availability of a reward that he can generate by receiving a voucher available in the Rewards tab. The reward can then be redeemed by scanning the barcode in the POS Voucherify app.
 
 ### Voucherify plan
 Voucherify Plan is an optional plan available to application users that allows you to automatically burn loyalty points for rewards using the "Auto redeem" functionality.
@@ -27,12 +28,12 @@ The mechanism is implemented by interacting with the API of the Voucherify platf
 
 #### Logic of action
 
-1. Checking the status of points: Every 3 seconds, the application queries the [Get customer](https://docs.voucherify.io/reference/get-customer) endpoint to check the number of user points in the main loyalty campaign.
-2. Checking the user's activity history: After confirming a sufficient number of points in the main campaign (300), we query the [List customer activity](https://docs.voucherify.io/reference/list-customer-activity) endpoint, searching the user's activity history to determine whether the points from the promotional campaign have already been used or are still being processed and will be charged.
+1. **Checking the status of points:** Every 3 seconds, the application queries the [Get customer](https://docs.voucherify.io/reference/get-customer) endpoint to check the number of user points in the main loyalty campaign.
+2. **Checking the user's activity history:** After confirming a sufficient number of points in the main campaign (300), we query the [List customer activity](https://docs.voucherify.io/reference/list-customer-activity) endpoint, searching the user's activity history to determine whether the points from the promotional campaign have already been used or are still being processed and will be charged.
 
 #### Technical requirements
-- Frequent API polling: The application must regularly poll Voucherify platform endpoints to check the status of points and user activity history.
-- Support for asynchronous tasks: "Auto redeem" is an asynchronous process in which Voucherify queues tasks in connection with the accrual of points. In this case, we must check the user's activity history to properly verify the points awarded.
+- **Frequent API polling:** The application must regularly poll Voucherify platform endpoints to check the status of points and user activity history.
+- **Support for asynchronous tasks:** "Auto redeem" is an asynchronous process in which Voucherify queues tasks in connection with the accrual of points. In this case, we must check the user's activity history to properly verify the points awarded.
 
 ## External tools
 ### Segment
