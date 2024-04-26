@@ -1,18 +1,9 @@
 import { useState } from 'react'
 import { CustomerObject } from '@voucherify/sdk'
 import { getCustomer } from '../apiEndpoints/apiEndpoints'
-import {
-    ifLoyaltyPointsAmountHasChanged,
-    ifRewardPointsAmountHasChanged,
-    isNoVoucherifyMember,
-} from '../utils/customer'
 import { METADATA } from '@/enum/metadata'
 
-export const useCustomer = ({
-    customerPhone,
-}: {
-    customerPhone: string | null | undefined
-}) => {
+export const useCustomer = () => {
     const [currentCustomer, setCurrentCustomer] = useState<
         CustomerObject | undefined
     >(undefined)
@@ -20,25 +11,22 @@ export const useCustomer = ({
     const [isLinkedToVoucherify, setIsLinkedToVoucherify] =
         useState<boolean>(false)
 
-    const getCurrentCustomer = async () => {
-        if (customerPhone) {
-            const res = await getCustomer(customerPhone)
+    const getCurrentCustomer = async (
+        customerSourceId: string | null | undefined
+    ) => {
+        if (customerSourceId) {
+            const res = await getCustomer(customerSourceId)
             const { customer }: { customer: CustomerObject } = await res.json()
             if (res.status !== 200) {
                 return undefined
             }
 
-            if (
-                !currentCustomer ||
-                currentCustomer.id !== customer.id ||
-                isNoVoucherifyMember(currentCustomer, customer) ||
-                ifLoyaltyPointsAmountHasChanged(currentCustomer, customer) ||
-                ifRewardPointsAmountHasChanged(currentCustomer, customer)
-            ) {
-                setIsCustomerUpdated(true)
-                setIsLinkedToVoucherify(customer.metadata[METADATA.VOUCHERIFY_MEMBER])
-                setCurrentCustomer(customer)
+            if (customer.metadata[METADATA.VOUCHERIFY_MEMBER]) {
+                setIsLinkedToVoucherify(
+                    customer.metadata[METADATA.VOUCHERIFY_MEMBER]
+                )
             }
+            setCurrentCustomer(customer)
         }
     }
 

@@ -2,7 +2,7 @@ import {
     CampaignResponse,
     CustomerObject,
     RewardsCreateResponse,
-    RewardsTypeResponse,
+    RewardsGetResponse,
 } from '@voucherify/sdk'
 import { useState } from 'react'
 import {
@@ -31,14 +31,6 @@ type RewardParameters = {
     }
 }
 
-type AutoRedeemCampaign =
-    | {
-          name: string | undefined
-          id: string | undefined
-          rewardId: string | undefined
-      }
-    | undefined
-
 export const useAutoRedeem = () => {
     const [autoRedeemError, setAutoRedeemError] = useState<string | undefined>()
     const [autoRedeemSuccessMessage, setAutoRedeemSuccessMessage] = useState<
@@ -49,21 +41,21 @@ export const useAutoRedeem = () => {
     )
 
     const autoRedeemCalculation = async (
-        customer: CustomerObject | undefined,
-        autoRedeemCampaign: AutoRedeemCampaign
+        customer: CustomerObject | undefined
     ) => {
         const currentLoyaltyPoints =
             customer?.loyalty.campaigns?.[CAMPAIGNS.LOYALTY_PROGRAM]?.points
         const currentRewardPoints =
             customer?.loyalty.campaigns?.[CAMPAIGNS.MILESTONE_REWARDS_PROGRAM]
                 ?.points
+        const autoRedeemCampaignReward = await filterAutoRedeemCampaignReward()
 
         if (
             customer?.id &&
-            currentLoyaltyPoints !== undefined &&
+            currentLoyaltyPoints &&
             currentLoyaltyPoints >= 300 &&
             currentRewardPoints === 0 &&
-            autoRedeemCampaign?.rewardId &&
+            autoRedeemCampaignReward?.id &&
             customer.metadata[METADATA.VOUCHERIFY_MEMBER]
         ) {
             const res = await listCustomerActivities(customer.id)
@@ -90,7 +82,7 @@ export const useAutoRedeem = () => {
                 return await autoRedeemReward(
                     customer,
                     currentLoyaltyPoints,
-                    autoRedeemCampaign
+                    autoRedeemCampaignReward
                 )
             }
             if (
@@ -107,25 +99,26 @@ export const useAutoRedeem = () => {
                     return await autoRedeemReward(
                         customer,
                         currentLoyaltyPoints,
-                        autoRedeemCampaign
+                        autoRedeemCampaignReward
                     )
                 }
             }
         }
+        return undefined
     }
 
-    const redeemDependOnVoucherifyPlan = async (
+    const redeemBasedOnVoucherifyPlan = async (
         customerId: string | undefined,
         currentLoyaltyPoints: number,
-        autoRedeemCampaign: AutoRedeemCampaign
+        autoRedeemReward: RewardsGetResponse
     ) => {
         let redeemQuantity = Math.floor(currentLoyaltyPoints / 300)
 
         while (redeemQuantity > 0) {
             const res = await redeemReward(
                 customerId,
-                autoRedeemCampaign?.rewardId,
-                autoRedeemCampaign?.name
+                autoRedeemReward?.id,
+                CAMPAIGNS.LOYALTY_PROGRAM
             )
             if (res.status !== 200) {
                 return setAutoRedeemError('Redemption failed')
@@ -134,7 +127,7 @@ export const useAutoRedeem = () => {
             if (res.ok && redeemQuantity === 1) {
                 setUnredemeedPoints(currentLoyaltyPoints % 300)
                 setAutoRedeemSuccessMessage(
-                    `Successfully redeemed reward - ${autoRedeemCampaign?.name}`
+                    `Successfully redeemed reward - ${autoRedeemReward?.name}`
                 )
                 return setTimeout(
                     () => setAutoRedeemSuccessMessage(undefined),
@@ -150,19 +143,19 @@ export const useAutoRedeem = () => {
     const autoRedeemReward = async (
         customer: CustomerObject | undefined,
         currentLoyaltyPoints: number,
-        autoRedeemCampaign: AutoRedeemCampaign
+        autoRedeemReward: RewardsGetResponse
     ) => {
         const voucherifyPlan = customer?.metadata[METADATA.VOUCHERIFY_MEMBER]
         if (voucherifyPlan) {
-            return await redeemDependOnVoucherifyPlan(
+            return await redeemBasedOnVoucherifyPlan(
                 customer?.id,
                 currentLoyaltyPoints,
-                autoRedeemCampaign
+                autoRedeemReward
             )
         }
     }
 
-    const filterAutoRedeemCampaign = async () => {
+    const filterAutoRedeemCampaignReward = async () => {
         const res = await listCampaigns()
         if (res.status > 299) {
             const { error } = await res.json()
@@ -174,7 +167,7 @@ export const useAutoRedeem = () => {
                 await res.json()
 
             const autoRedeemCampaign = campaigns.find(
-                (campaign) => campaign.metadata?.Reward === METADATA.AUTOREDEEM
+                (campaign) => campaign.metadata?.Autoredeem
             )
             const rewardsRes = await listRewards()
 
@@ -185,17 +178,11 @@ export const useAutoRedeem = () => {
                 const reward = rewards.find((reward) => {
                     const parameters = reward.parameters as RewardParameters
                     if (parameters.campaign?.id === autoRedeemCampaign?.id) {
-                        return reward.id
+                        return reward
                     }
                 })
 
-                const autoRedeemCampaignProperties = {
-                    name: autoRedeemCampaign?.name,
-                    id: autoRedeemCampaign?.id,
-                    rewardId: reward?.id,
-                }
-
-                return autoRedeemCampaignProperties
+                return reward
             }
         }
     }
@@ -206,6 +193,5 @@ export const useAutoRedeem = () => {
         autoRedeemSuccessMessage,
         autoRedeemError,
         setUnredemeedPoints,
-        filterAutoRedeemCampaign,
     }
 }

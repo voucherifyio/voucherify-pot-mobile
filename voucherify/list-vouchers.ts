@@ -1,10 +1,9 @@
-import { CAMPAIGNS } from '@/enum/campaigns'
 import { VoucherifyServerSide, VouchersResponse } from '@voucherify/sdk'
 
 type Params = {
     voucherify: ReturnType<typeof VoucherifyServerSide>
     campaignName: string
-    customerId: string
+    customerIdOrSourceId: string
 }
 
 interface Vouchers extends VouchersResponse {
@@ -12,11 +11,11 @@ interface Vouchers extends VouchersResponse {
 }
 
 export const listVouchers = async (params: Params) => {
-    const { voucherify, campaignName, customerId } = params
+    const { voucherify, campaignName, customerIdOrSourceId } = params
 
     const data = await voucherify.vouchers.list({
         campaign: campaignName,
-        customer: customerId,
+        customer: customerIdOrSourceId,
     })
 
     return { vouchers: data.vouchers as Vouchers[] }

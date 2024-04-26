@@ -13,7 +13,7 @@ export const redeemReward = async (params: Params) => {
     const { vouchers } = await listVouchers({
         voucherify,
         campaignName,
-        customerId,
+        customerIdOrSourceId: customerId,
     })
     const data = vouchers.find((voucher) => voucher.holder_id === customerId)
 

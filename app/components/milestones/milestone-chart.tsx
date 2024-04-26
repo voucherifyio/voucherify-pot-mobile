@@ -137,7 +137,6 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
                             rewards={rewards}
                             rewardModalOpened={rewardModalOpened}
                             setRewardModalOpened={setRewardModalOpened}
-                            customerId={customer?.id}
                             loading={loading}
                             setRewardGeneratedMessage={
                                 setRewardGeneratedMessage

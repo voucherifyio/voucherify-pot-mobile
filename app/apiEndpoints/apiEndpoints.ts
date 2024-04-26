@@ -140,6 +140,18 @@ const listRewards = async () => {
     })
 }
 
+const listVouchers = async (
+    customerSourceId: string | null | undefined,
+    campaignName: string
+) => {
+    return await fetch(
+        `/api/voucherify/list-vouchers?customerSourceId=${customerSourceId}&campaignName=${campaignName}`,
+        {
+            method: 'GET',
+        }
+    )
+}
+
 export {
     getQualifications,
     getBarcode,
@@ -155,4 +167,5 @@ export {
     listCustomerActivities,
     listCampaigns,
     listRewards,
+    listVouchers,
 }

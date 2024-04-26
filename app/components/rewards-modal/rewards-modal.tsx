@@ -36,7 +36,6 @@ const RewardsModal: FC<RewardsModalProps> = ({
     rewards,
     rewardModalOpened,
     setRewardModalOpened,
-    customerId,
     loading,
     setRewardGeneratedMessage,
     setIsRewardButtonVisible,
@@ -45,9 +44,15 @@ const RewardsModal: FC<RewardsModalProps> = ({
     const [rewardId, setRewardId] = useState<string | null>(null)
     const [isVoucherGenerationProcess, setIsVoucherGenerationProcess] =
         useState(false)
-    const { dealsAndRewards, setDealsAndRewards } = useContext(MobileAppContext)
+    const {
+        dealsAndRewards,
+        setDealsAndRewards,
+        autoRedeemCalculation,
+        customer,
+    } = useContext(MobileAppContext)
 
     const fetchQualifications = async (
+        customerId: string,
         reward: string,
         interval: NodeJS.Timeout
     ) => {
@@ -88,13 +93,12 @@ const RewardsModal: FC<RewardsModalProps> = ({
 
         if (reward) {
             const interval: NodeJS.Timeout = setInterval(
-                async () => await fetchQualifications(reward, interval),
+                async () =>
+                    await fetchQualifications(customerId, reward, interval),
                 2000
             )
         }
     }
-
-    const pattern = /\(150\s*Point[s]*\s*Reward\)/
 
     if (!rewardModalOpened) return null
 
@@ -104,9 +108,9 @@ const RewardsModal: FC<RewardsModalProps> = ({
             {!loading && rewards?.length <= 0 && (
                 <NoRewardsState setRewardModalOpened={setRewardModalOpened} />
             )}
-            {rewardId && customerId && confirmation && (
+            {rewardId && customer?.id && confirmation && (
                 <ChoiceConfimartion
-                    customerId={customerId}
+                    customerId={customer.id}
                     rewardId={rewardId}
                     redeemCustomerReward={redeemCustomerReward}
                     confirmation={confirmation}
@@ -137,7 +141,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
                                     setConfirmation(true)
                                 }}
                             >
-                                {reward.name?.replace(pattern, '')}
+                                {reward.name}
                             </Button>
                         ))}
                     </div>

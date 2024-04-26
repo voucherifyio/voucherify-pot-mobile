@@ -18,16 +18,16 @@ const Milestones = () => {
         useState<number>(loyaltyPoints || 0)
     const [isRewardButtonVisible, setIsRewardButtonVisible] = useState(false)
 
-    const existingRewardPoints = rewardPoints && rewardPoints >= 1
+    const isRewardPoints = rewardPoints && rewardPoints >= 1
 
     useEffect(() => {
-        if ((loyaltyPoints || loyaltyPoints === 0) && isCustomerUpdated) {
+        if (typeof loyaltyPoints === 'number') {
             setCalculatedLoyaltyPoints(loyaltyPoints)
         }
-        if (unredeemedPoints && !isCustomerUpdated) {
-            setCalculatedLoyaltyPoints(unredeemedPoints)
-        }
-        if (existingRewardPoints) {
+        // if (unredeemedPoints && !isCustomerUpdated) {
+        //     setCalculatedLoyaltyPoints(unredeemedPoints)
+        // }
+        if (isRewardPoints) {
             setIsRewardButtonVisible(true)
         }
     }, [loyaltyPoints, rewardPoints])
