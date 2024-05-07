@@ -2,18 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import io from 'socket.io-client'
 const socket = io('http://localhost:3000')
 
-export async function POST() {
-    console.log('idzie to w ogołe?????')
+export async function POST(req: NextRequest) {
+    console.log('Przed Try/catchem')
     try {
-        const webhook = await fetch('/webhook', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-        })
-        const data = await webhook.json()
-        console.log(data)
-        // console.log(data, 'DATA WEBSOCKET')
+        const data = await req.json()
+
+        console.log(data,'REQUEST')
         console.log('siema')
-        // socket.emit('points updated', data)
+        socket.emit('webhook-received', data)
         return NextResponse.json({ status: 'success' }, { status: 200 })
     } catch (err) {
         console.error('[Websocket error]', err)

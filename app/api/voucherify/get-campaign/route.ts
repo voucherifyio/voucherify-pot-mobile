@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getCampaign } from '@/voucherify/get-campaign'
 
 export async function GET(req: NextRequest) {
-    console.log('MANTO')
     const campaignId = req.nextUrl.searchParams.get('campaignId')
     if (campaignId) {
         const campaign = await getCampaign({

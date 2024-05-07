@@ -21,8 +21,9 @@ app.prepare().then(() => {
     socketIO.on('connection', (socket) => {
         console.log('Client connected')
 
-        socket.on('points updated', (data) => {
-            console.log(data)
+        socket.on('webhook-received', (data) => {
+            console.log(data, 'SOCKET IO WEBHOOK RECEIVED')
+            socketIO.emit('send-data', data)
         })
 
         socket.on('disconnect', () => {

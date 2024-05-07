@@ -73,7 +73,6 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         getCurrentCustomer,
         isLinkedToVoucherify,
         isCustomerUpdated,
-        setIsCustomerUpdated,
         setCurrentCustomer,
     } = useCustomer()
     const customerId = customer?.id
@@ -94,6 +93,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
     const [loyaltyPoints, setLoyaltyPoints] = useState<number | undefined>(0)
     const [rewardPoints, setRewardPoints] = useState<number | undefined>(0)
     const { websocket } = useWebsocket()
+    console.log(websocket, "Webscoket")
     const getPointsLoyaltyCampaigns = async (
         customerSourceId: string | null | undefined
     ) => {
