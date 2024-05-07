@@ -16,7 +16,7 @@ import {
 } from 'react'
 import { useLoyaltyData } from '@/app/hooks/useLoyaltyData'
 import Error from '../error/error'
-import { useWebsocket } from '@/app/hooks/useWebsocket'
+import { useUpdateLoyaltyPoints } from '@/app/hooks/useUpdateLoyaltyPoints'
 
 export type DealsAndRewards = {
     rewards: number
@@ -90,10 +90,16 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
     // const { braze, changeBrazeUser } = useInitalizeBraze()
 
     const { validateLoyaltyCampaigns, error } = useLoyaltyData()
-    const [loyaltyPoints, setLoyaltyPoints] = useState<number | undefined>(0)
-    const [rewardPoints, setRewardPoints] = useState<number | undefined>(0)
-    const { websocket } = useWebsocket()
-    console.log(websocket, "Webscoket")
+    const {
+        websocket,
+        loyaltyPoints,
+        rewardPoints,
+        setLoyaltyPoints,
+        setRewardPoints,
+    } = useUpdateLoyaltyPoints()
+    // const [loyaltyPoints, setLoyaltyPoints] = useState<number | undefined>(0)
+    // const [rewardPoints, setRewardPoints] = useState<number | undefined>(0)
+    console.log(websocket, 'Webscoket')
     const getPointsLoyaltyCampaigns = async (
         customerSourceId: string | null | undefined
     ) => {
