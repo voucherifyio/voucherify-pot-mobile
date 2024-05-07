@@ -79,8 +79,8 @@ export const useAutoRedeem = () => {
                 ].includes(lastActivityEvent.type) &&
                 currentLoyaltyPoints >= 300
             ) {
-                return await autoRedeemReward(
-                    customer,
+                return await autoRdeemBasedOnVoucherifyPlan(
+                    customer.id,
                     currentLoyaltyPoints,
                     autoRedeemCampaignReward
                 )
@@ -96,8 +96,8 @@ export const useAutoRedeem = () => {
                     )
 
                 if (isRewardPointsAfterLoyaltyPoints) {
-                    return await autoRedeemReward(
-                        customer,
+                    return await autoRdeemBasedOnVoucherifyPlan(
+                        customer.id,
                         currentLoyaltyPoints,
                         autoRedeemCampaignReward
                     )
@@ -107,7 +107,7 @@ export const useAutoRedeem = () => {
         return undefined
     }
 
-    const redeemBasedOnVoucherifyPlan = async (
+    const autoRdeemBasedOnVoucherifyPlan = async (
         customerId: string | undefined,
         currentLoyaltyPoints: number,
         autoRedeemReward: RewardsGetResponse
@@ -137,21 +137,6 @@ export const useAutoRedeem = () => {
             if (res.ok) {
                 redeemQuantity--
             }
-        }
-    }
-
-    const autoRedeemReward = async (
-        customer: CustomerObject | undefined,
-        currentLoyaltyPoints: number,
-        autoRedeemReward: RewardsGetResponse
-    ) => {
-        const voucherifyPlan = customer?.metadata[METADATA.VOUCHERIFY_MEMBER]
-        if (voucherifyPlan) {
-            return await redeemBasedOnVoucherifyPlan(
-                customer?.id,
-                currentLoyaltyPoints,
-                autoRedeemReward
-            )
         }
     }
 
@@ -192,6 +177,5 @@ export const useAutoRedeem = () => {
         autoRedeemCalculation,
         autoRedeemSuccessMessage,
         autoRedeemError,
-        setUnredemeedPoints,
     }
 }

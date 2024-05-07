@@ -7,13 +7,7 @@ import { useLocalStorage } from '@/app/hooks/useLocalStorage'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { CustomerObject } from '@voucherify/sdk'
 import { useSession } from 'next-auth/react'
-import {
-    Dispatch,
-    SetStateAction,
-    createContext,
-    useEffect,
-    useState,
-} from 'react'
+import { Dispatch, SetStateAction, createContext, useEffect } from 'react'
 import { useLoyaltyData } from '@/app/hooks/useLoyaltyData'
 import Error from '../error/error'
 import { useUpdateLoyaltyPoints } from '@/app/hooks/useUpdateLoyaltyPoints'
@@ -31,7 +25,6 @@ type MobileAppContextType = {
     autoRedeemError: string | undefined
     autoRedeemSuccessMessage: string | undefined
     unredeemedPoints: number | null
-    isCustomerUpdated: boolean
     loyaltyPoints: number | undefined
     rewardPoints: number | undefined
     setCurrentCustomer: Dispatch<SetStateAction<CustomerObject | undefined>>
@@ -55,7 +48,6 @@ export const MobileAppContext = createContext<MobileAppContextType>({
     autoRedeemError: undefined,
     autoRedeemSuccessMessage: undefined,
     unredeemedPoints: null,
-    isCustomerUpdated: false,
     loyaltyPoints: undefined,
     rewardPoints: undefined,
     setCurrentCustomer: () => undefined,
@@ -72,7 +64,6 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         customer,
         getCurrentCustomer,
         isLinkedToVoucherify,
-        isCustomerUpdated,
         setCurrentCustomer,
     } = useCustomer()
     const customerId = customer?.id
@@ -84,23 +75,14 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         autoRedeemError,
         autoRedeemSuccessMessage,
         unredeemedPoints,
-        setUnredemeedPoints,
     } = useAutoRedeem()
     //COMMENTED UNTIL BRAZE WILL BE ENABLED
     // const { braze, changeBrazeUser } = useInitalizeBraze()
-
     const { validateLoyaltyCampaigns, error } = useLoyaltyData()
-    const {
-        websocket,
-        loyaltyPoints,
-        rewardPoints,
-        setLoyaltyPoints,
-        setRewardPoints,
-    } = useUpdateLoyaltyPoints()
-    // const [loyaltyPoints, setLoyaltyPoints] = useState<number | undefined>(0)
-    // const [rewardPoints, setRewardPoints] = useState<number | undefined>(0)
-    console.log(websocket, 'Webscoket')
-    const getPointsLoyaltyCampaigns = async (
+    const { loyaltyPoints, rewardPoints, setLoyaltyPoints, setRewardPoints } =
+        useUpdateLoyaltyPoints({ customerId })
+
+    const getInitialPointsLoyaltyCampaigns = async (
         customerSourceId: string | null | undefined
     ) => {
         const loyaltyCampaigns =
@@ -124,7 +106,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
 
     useEffect(() => {
         getCurrentCustomer(customerPhone)
-        getPointsLoyaltyCampaigns(customerPhone)
+        getInitialPointsLoyaltyCampaigns(customerPhone)
         if (!document.hidden && !customer?.id) {
             const interval: NodeJS.Timeout = setInterval(
                 async () => await getCurrentCustomer(customerPhone),
@@ -134,9 +116,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         }
     }, [customerPhone, customer?.id])
 
-    if (error) {
-        return <Error message={error} />
-    }
+    if (error) return <Error message={error} />
 
     return (
         <MobileAppContext.Provider
@@ -149,7 +129,6 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 autoRedeemSuccessMessage,
                 unredeemedPoints,
                 autoRedeemCalculation,
-                isCustomerUpdated,
                 loyaltyPoints,
                 rewardPoints,
                 setCurrentCustomer,

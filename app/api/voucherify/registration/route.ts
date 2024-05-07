@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
         customer: { ...body },
         voucherify: getVoucherify(),
     })
-    
+
     if (
         voucherifyCustomer?.source_id === body.phone &&
         voucherifyCustomer?.metadata[METADATA.REGISTERED_CUSTOMER] === true

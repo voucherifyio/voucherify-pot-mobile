@@ -6,18 +6,24 @@ import { useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
 const socket = io('http://localhost:3000')
 
-export const useUpdateLoyaltyPoints = () => {
-    const [websocket, setWebsocket] = useState()
+export const useUpdateLoyaltyPoints = ({
+    customerId,
+}: {
+    customerId: string | null | undefined
+}) => {
     const [loyaltyPoints, setLoyaltyPoints] = useState<number | undefined>(0)
     const [rewardPoints, setRewardPoints] = useState<number | undefined>(0)
 
     useEffect(() => {
         socket.on('send-data', (res: WebhookResponse) => {
-            if (res.data.balance.balance) {
+            if (
+                typeof res.data.balance.balance === 'number' &&
+                customerId === res.data.customer.id
+            ) {
                 updateLoyaltyPoints(res)
             }
         })
-    }, [socket])
+    }, [socket, customerId])
 
     const updateLoyaltyPoints = async (res: WebhookResponse) => {
         if (
@@ -25,7 +31,6 @@ export const useUpdateLoyaltyPoints = () => {
             (CAMPAIGNS.LOYALTY_PROGRAM_ID ||
                 CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID)
         ) {
-            console.log('tutaj 1')
             setLoyaltyPoints(res.data.balance.balance)
         }
 
@@ -33,13 +38,11 @@ export const useUpdateLoyaltyPoints = () => {
             res.data.voucher.campaign_id ===
             CAMPAIGNS.MILESTONE_REWARDS_PROGRAM_ID
         ) {
-            console.log('tutaj 2')
             setRewardPoints(res.data.balance.balance)
         }
     }
 
     return {
-        websocket,
         loyaltyPoints,
         rewardPoints,
         setLoyaltyPoints,

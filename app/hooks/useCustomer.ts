@@ -7,7 +7,6 @@ export const useCustomer = () => {
     const [currentCustomer, setCurrentCustomer] = useState<
         CustomerObject | undefined
     >(undefined)
-    const [isCustomerUpdated, setIsCustomerUpdated] = useState(false)
     const [isLinkedToVoucherify, setIsLinkedToVoucherify] =
         useState<boolean>(false)
 
@@ -34,8 +33,6 @@ export const useCustomer = () => {
         customer: currentCustomer,
         getCurrentCustomer,
         isLinkedToVoucherify,
-        isCustomerUpdated,
-        setIsCustomerUpdated,
         setCurrentCustomer,
     }
 }

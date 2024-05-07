@@ -1,4 +1,7 @@
-import { LoyaltiesListMemberRewardsResponseBody } from '@voucherify/sdk'
+import {
+    CustomerObject,
+    LoyaltiesListMemberRewardsResponseBody,
+} from '@voucherify/sdk'
 import { Dispatch, FC, SetStateAction, useContext, useState } from 'react'
 import Button from '@/app/components/ui/atoms/button'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
@@ -8,24 +11,27 @@ import {
 } from '@/app/apiEndpoints/apiEndpoints'
 import { MobileAppContext } from '../app-context/app-context'
 import { CAMPAIGNS } from '@/enum/campaigns'
+import { useRedeemReward } from '@/app/hooks/useRedeemReward'
+import Toast from '../ui/atoms/toast'
+
+const toastStyles =
+    'font-bold border border-gray-300 rounded-lg shadow-lg fixed top-[15%] left-[50%] -translate-x-2/4 flex items-center justify-center w-full max-w-xs p-4 bg-white z-50'
 
 type RewardsModalProps = {
     rewards: LoyaltiesListMemberRewardsResponseBody['data']
     rewardModalOpened: boolean
     setRewardModalOpened: Dispatch<SetStateAction<boolean>>
-    customerId: string | null | undefined
     loading: boolean
-    setRewardGeneratedMessage: Dispatch<SetStateAction<string | undefined>>
     setIsRewardButtonVisible: Dispatch<SetStateAction<boolean>>
 }
 
 type ChoiceConfirmationProps = {
-    redeemCustomerReward: (
-        customerId: string,
+    redeemReward: (
+        customer: CustomerObject | undefined,
         rewardId: string,
         campaignName: string
     ) => void
-    customerId: string
+    customer: CustomerObject | undefined
     rewardId: string
     confirmation: boolean
     setConfirmation: Dispatch<SetStateAction<boolean>>
@@ -37,7 +43,6 @@ const RewardsModal: FC<RewardsModalProps> = ({
     rewardModalOpened,
     setRewardModalOpened,
     loading,
-    setRewardGeneratedMessage,
     setIsRewardButtonVisible,
 }) => {
     const [confirmation, setConfirmation] = useState<boolean>(false)
@@ -50,21 +55,23 @@ const RewardsModal: FC<RewardsModalProps> = ({
         autoRedeemCalculation,
         customer,
     } = useContext(MobileAppContext)
+    const { redeemCustomerReward } = useRedeemReward()
+    const [error, setError] = useState<string | undefined>(undefined)
+    const [success, setSuccess] = useState<string | undefined>(undefined)
 
-    const fetchQualifications = async (
-        customerId: string,
-        reward: string,
-        interval: NodeJS.Timeout
+    const handleRedeemReward = async (
+        customer: CustomerObject | undefined,
+        rewardId: string,
+        campaignName: string
     ) => {
-        const res = await getQualifications(
-            customerId,
-            QUALIFICATION_SCENARIO.AUDIENCE_ONLY
-        )
-        const data = await res.json()
-        const qualifications = data.qualifications
-        for (const qualification of qualifications) {
-            if (qualification.id === reward) {
-                clearInterval(interval)
+        try {
+            setIsVoucherGenerationProcess(true)
+            const { status, message } = await redeemCustomerReward(
+                customer,
+                rewardId,
+                campaignName
+            )
+            if (customer?.id && status === 'success') {
                 setConfirmation(false)
                 setDealsAndRewards({
                     ...dealsAndRewards,
@@ -72,33 +79,34 @@ const RewardsModal: FC<RewardsModalProps> = ({
                 })
                 setRewardModalOpened(false)
                 setIsVoucherGenerationProcess(false)
-                setRewardGeneratedMessage('Reward voucher has been generated')
+                setSuccess(message)
                 setIsRewardButtonVisible(false)
+                autoRedeemCalculation(customer)
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message)
             }
         }
     }
 
-    const redeemCustomerReward = async (
-        customerId: string,
-        rewardId: string,
-        campaignName: string
-    ) => {
-        setIsVoucherGenerationProcess(true)
-        const res = await redeemReward(customerId, rewardId, campaignName)
-        const { redeemedReward } = await res.json()
-        if (res.status !== 200) {
-            console.error('Cannot redeem reward')
-        }
-        const reward = redeemedReward.reward?.voucher?.code
+    if (error)
+        return (
+            <Toast
+                toastType="error"
+                toastText={error}
+                customStyles={toastStyles}
+            />
+        )
 
-        if (reward) {
-            const interval: NodeJS.Timeout = setInterval(
-                async () =>
-                    await fetchQualifications(customerId, reward, interval),
-                2000
-            )
-        }
-    }
+    if (success)
+        return (
+            <Toast
+                toastType="success"
+                toastText={success}
+                customStyles={toastStyles}
+            />
+        )
 
     if (!rewardModalOpened) return null
 
@@ -110,9 +118,9 @@ const RewardsModal: FC<RewardsModalProps> = ({
             )}
             {rewardId && customer?.id && confirmation && (
                 <ChoiceConfimartion
-                    customerId={customer.id}
+                    customer={customer}
                     rewardId={rewardId}
-                    redeemCustomerReward={redeemCustomerReward}
+                    redeemReward={handleRedeemReward}
                     confirmation={confirmation}
                     setConfirmation={setConfirmation}
                     isVoucherGenerationProcess={isVoucherGenerationProcess}
@@ -152,8 +160,8 @@ const RewardsModal: FC<RewardsModalProps> = ({
 }
 
 const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
-    redeemCustomerReward,
-    customerId,
+    redeemReward,
+    customer,
     rewardId,
     confirmation,
     setConfirmation,
@@ -172,8 +180,8 @@ const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
                 <Button
                     buttonType="green"
                     onClick={() =>
-                        redeemCustomerReward(
-                            customerId,
+                        redeemReward(
+                            customer,
                             rewardId,
                             CAMPAIGNS.MILESTONE_REWARDS_PROGRAM
                         )

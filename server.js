@@ -22,7 +22,6 @@ app.prepare().then(() => {
         console.log('Client connected')
 
         socket.on('webhook-received', (data) => {
-            console.log(data, 'SOCKET IO WEBHOOK RECEIVED')
             socketIO.emit('send-data', data)
         })
 

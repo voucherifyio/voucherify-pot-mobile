@@ -78,7 +78,6 @@ export const useLoyaltyData = () => {
     }
 
     return {
-        getLoyaltyCampaignInfo,
         validateLoyaltyCampaigns,
         error,
     }

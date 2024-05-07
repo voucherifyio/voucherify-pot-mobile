@@ -9,22 +9,16 @@ const Milestones = () => {
         autoRedeemError,
         autoRedeemSuccessMessage,
         unredeemedPoints,
-        isCustomerUpdated,
         loyaltyPoints,
         rewardPoints,
         customer,
     } = useContext(MobileAppContext)
-    const [calculatedLoyaltyPoints, setCalculatedLoyaltyPoints] =
-        useState<number>(loyaltyPoints || 0)
     const [isRewardButtonVisible, setIsRewardButtonVisible] = useState(false)
 
-    const isRewardPoints = rewardPoints && rewardPoints >= 1
+    const isRewardPoints = typeof rewardPoints === 'number' && rewardPoints >= 1
 
     useEffect(() => {
-        if (typeof loyaltyPoints === 'number') {
-            setCalculatedLoyaltyPoints(loyaltyPoints)
-        }
-        // if (unredeemedPoints && !isCustomerUpdated) {
+        // if (typeof unredeemedPoints === 'number') {
         //     setCalculatedLoyaltyPoints(unredeemedPoints)
         // }
         if (isRewardPoints) {
@@ -38,13 +32,13 @@ const Milestones = () => {
                 <h4 className="text-blue-text text-16">
                     Your Points
                     <span className="pl-2 font-extrabold">
-                        {!customer ? null : calculatedLoyaltyPoints}
+                        {!customer ? null : loyaltyPoints || 0}
                     </span>
                 </h4>
             </header>
 
             <MilestoneChart
-                calculatedLoyaltyPoints={calculatedLoyaltyPoints}
+                loyaltyPoints={loyaltyPoints || 0}
                 isRewardButtonVisible={isRewardButtonVisible}
                 setIsRewardButtonVisible={setIsRewardButtonVisible}
             />
