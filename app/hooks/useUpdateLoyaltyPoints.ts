@@ -11,15 +11,12 @@ export const useUpdateLoyaltyPoints = ({
 }: {
     customerId: string | null | undefined
 }) => {
-    const [loyaltyPoints, setLoyaltyPoints] = useState<number | undefined>(0)
-    const [rewardPoints, setRewardPoints] = useState<number | undefined>(0)
+    const [loyaltyPoints, setLoyaltyPoints] = useState<number>(0)
+    const [rewardPoints, setRewardPoints] = useState<number>(0)
 
     useEffect(() => {
         socket.on('send-data', (res: WebhookResponse) => {
-            if (
-                typeof res.data.balance.balance === 'number' &&
-                customerId === res.data.customer.id
-            ) {
+            if (customerId === res.data.customer.id) {
                 updateLoyaltyPoints(res)
             }
         })
@@ -31,14 +28,14 @@ export const useUpdateLoyaltyPoints = ({
             (CAMPAIGNS.LOYALTY_PROGRAM_ID ||
                 CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID)
         ) {
-            setLoyaltyPoints(res.data.balance.balance)
+            setLoyaltyPoints(res.data.voucher.loyalty_card.balance)
         }
 
         if (
             res.data.voucher.campaign_id ===
             CAMPAIGNS.MILESTONE_REWARDS_PROGRAM_ID
         ) {
-            setRewardPoints(res.data.balance.balance)
+            setRewardPoints(res.data.voucher.loyalty_card.balance)
         }
     }
 

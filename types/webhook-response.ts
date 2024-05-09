@@ -12,7 +12,7 @@ export type WebhookResponse = {
             balance: number
             operation_type: string
             related_object: {}
-        }
+        } | null
         voucher: {
             id: string
             code: string
@@ -22,14 +22,14 @@ export type WebhookResponse = {
             campaign: string
             metadata: {}
             holder_id: string
-            categories: []
+            categories: {}
             created_at: string
-            redemption: []
+            redemption: {}
             start_date: null | string
             updated_at: string
             campaign_id: string
             category_id: null | string
-            loyalty_card: []
+            loyalty_card: { points: number; balance: number }
             expiration_date: null | string
             is_referral_code: boolean
         }
@@ -39,7 +39,7 @@ export type WebhookResponse = {
             type: string
             active: boolean
             object: string
-            voucher: []
+            voucher: {}
             category: null | string
             metadata: {}
             auto_join: boolean
@@ -58,7 +58,7 @@ export type WebhookResponse = {
             name: string | null
             email: null | string
             object: string
-            metadata: []
+            metadata: {}
             source_id: string
         }
         transaction: {
@@ -66,7 +66,7 @@ export type WebhookResponse = {
             type: string
             reason: null | string
             source: string
-            details: []
+            details: {}
             source_id: null | string
             created_at: string
             voucher_id: string

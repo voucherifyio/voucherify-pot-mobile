@@ -12,11 +12,6 @@ import {
     redeemReward,
 } from '../apiEndpoints/apiEndpoints'
 import { CAMPAIGNS } from '@/enum/campaigns'
-import {
-    checkIfRewardPointsAfterLoyaltyPoints,
-    customerPointsCalculation,
-} from '../utils/customer'
-import { EVENT_TYPES } from '@/enum/customer-event-types'
 import { METADATA } from '@/enum/metadata'
 
 type RewardParameters = {
@@ -36,78 +31,40 @@ export const useAutoRedeem = () => {
     const [autoRedeemSuccessMessage, setAutoRedeemSuccessMessage] = useState<
         string | undefined
     >()
-    const [unredeemedPoints, setUnredemeedPoints] = useState<number | null>(
-        null
-    )
+    const [loyaltyPointsCalculation, setLoyaltyPointsCalulcation] =
+        useState(false)
 
     const autoRedeemCalculation = async (
-        customer: CustomerObject | undefined
+        customer: CustomerObject | undefined,
+        currentLoyaltyPoints: number
     ) => {
-        const currentLoyaltyPoints =
-            customer?.loyalty.campaigns?.[CAMPAIGNS.LOYALTY_PROGRAM]?.points
-        const currentRewardPoints =
-            customer?.loyalty.campaigns?.[CAMPAIGNS.MILESTONE_REWARDS_PROGRAM]
-                ?.points
         const autoRedeemCampaignReward = await filterAutoRedeemCampaignReward()
-
         if (
             customer?.id &&
-            currentLoyaltyPoints &&
             currentLoyaltyPoints >= 300 &&
-            currentRewardPoints === 0 &&
             autoRedeemCampaignReward?.id &&
             customer.metadata[METADATA.VOUCHERIFY_MEMBER]
         ) {
             const res = await listCustomerActivities(customer.id)
             const { activities } = await res.json()
             const lastActivityEvent = activities[0]
-            const {
-                lastRewardedLoyaltyPoints,
-                lastRewardedRewardPoints,
-                penultimateRewardedRewardPoints,
-            } = customerPointsCalculation(activities)
+            const rewardPoints =
+                lastActivityEvent.data.voucher.campaign_id ===
+                    CAMPAIGNS.MILESTONE_REWARDS_PROGRAM_ID &&
+                lastActivityEvent.data.voucher.loyalty_card.balance === 0
 
-            if (!lastActivityEvent.data.balance && currentLoyaltyPoints < 300) {
-                return false
-            }
-            if (
-                [
-                    EVENT_TYPES.CUSTOMER_REWARDED,
-                    EVENT_TYPES.CUSTOMER_REDEMPTIONS_SUCCEEDED,
-                    EVENT_TYPES.CUSTOMER_REWARD_REDEMPTIONS_CREATED,
-                    EVENT_TYPES.CUSTOMER_REWARD_REDEMPTION_COMPLETED,
-                ].includes(lastActivityEvent.type) &&
-                currentLoyaltyPoints >= 300
-            ) {
-                return await autoRdeemBasedOnVoucherifyPlan(
+            if (rewardPoints && currentLoyaltyPoints >= 300) {
+                return await autoRedeemBasedOnVoucherifyPlan(
                     customer.id,
                     currentLoyaltyPoints,
                     autoRedeemCampaignReward
                 )
             }
-            if (
-                lastRewardedLoyaltyPoints?.data.balance.balance >= 300 &&
-                lastRewardedRewardPoints?.data.balance.balance === 0
-            ) {
-                const isRewardPointsAfterLoyaltyPoints =
-                    checkIfRewardPointsAfterLoyaltyPoints(
-                        lastRewardedLoyaltyPoints,
-                        penultimateRewardedRewardPoints
-                    )
-
-                if (isRewardPointsAfterLoyaltyPoints) {
-                    return await autoRdeemBasedOnVoucherifyPlan(
-                        customer.id,
-                        currentLoyaltyPoints,
-                        autoRedeemCampaignReward
-                    )
-                }
-            }
         }
         return undefined
     }
 
-    const autoRdeemBasedOnVoucherifyPlan = async (
+    const autoRedeemBasedOnVoucherifyPlan = async (
         customerId: string | undefined,
         currentLoyaltyPoints: number,
         autoRedeemReward: RewardsGetResponse
@@ -125,7 +82,7 @@ export const useAutoRedeem = () => {
             }
 
             if (res.ok && redeemQuantity === 1) {
-                setUnredemeedPoints(currentLoyaltyPoints % 300)
+                setLoyaltyPointsCalulcation(true)
                 setAutoRedeemSuccessMessage(
                     `Successfully redeemed reward - ${autoRedeemReward?.name}`
                 )
@@ -173,9 +130,10 @@ export const useAutoRedeem = () => {
     }
 
     return {
-        unredeemedPoints,
         autoRedeemCalculation,
         autoRedeemSuccessMessage,
         autoRedeemError,
+        loyaltyPointsCalculation,
+        setLoyaltyPointsCalulcation,
     }
 }

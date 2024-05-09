@@ -21,10 +21,15 @@ export async function POST(req: NextRequest) {
         campaignName,
     })
 
-    if (redeemedReward?.result === 'FAILURE') {
-        return new Response('Cannot use reward, please try again later.', {
-            status: 400,
-        })
+    if (redeemedReward?.result === 'FAILURE' || !redeemedReward) {
+        return NextResponse.json(
+            {
+                error: 'Cannot redeem reward for some reason, please check audit log.',
+            },
+            {
+                status: 400,
+            }
+        )
     }
 
     return NextResponse.json({ redeemedReward }, { status: 200 })

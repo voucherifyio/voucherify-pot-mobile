@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
     try {
         const data = await req.json()
         socket.emit('webhook-received', data)
-
         return NextResponse.json({ status: 'success' }, { status: 200 })
     } catch (err) {
         console.error('[Webhook error]', err)

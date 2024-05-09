@@ -21,11 +21,15 @@ export const redeemReward = async (params: Params) => {
         return null
     }
 
-    const redeemedReward = await voucherify.loyalties.redeemReward(
-        data.campaign_id,
-        data.code,
-        { reward: { id: rewardId } }
-    )
+    try {
+        const redeemedReward = await voucherify.loyalties.redeemReward(
+            data.campaign_id,
+            data.code,
+            { reward: { id: rewardId } }
+        )
 
-    return redeemedReward
+        return redeemedReward
+    } catch (error) {
+        return null
+    }
 }

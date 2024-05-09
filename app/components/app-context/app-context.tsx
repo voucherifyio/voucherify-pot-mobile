@@ -11,6 +11,7 @@ import { Dispatch, SetStateAction, createContext, useEffect } from 'react'
 import { useLoyaltyData } from '@/app/hooks/useLoyaltyData'
 import Error from '../error/error'
 import { useUpdateLoyaltyPoints } from '@/app/hooks/useUpdateLoyaltyPoints'
+import { useRedeemReward } from '@/app/hooks/useRedeemReward'
 
 export type DealsAndRewards = {
     rewards: number
@@ -24,11 +25,23 @@ type MobileAppContextType = {
     isLinkedToVoucherify: boolean
     autoRedeemError: string | undefined
     autoRedeemSuccessMessage: string | undefined
-    unredeemedPoints: number | null
-    loyaltyPoints: number | undefined
-    rewardPoints: number | undefined
+    loyaltyPoints: number
+    rewardPoints: number
     setCurrentCustomer: Dispatch<SetStateAction<CustomerObject | undefined>>
-    autoRedeemCalculation: (customer: CustomerObject) => unknown | undefined
+    autoRedeemCalculation: (
+        customer: CustomerObject,
+        currentLoyaltyPoints: number
+    ) => unknown | undefined
+    redeemCustomerReward: (
+        customer: CustomerObject | undefined,
+        rewardId: string,
+        campaignName: string
+    ) => Promise<{ status: 'success' | 'error' }>
+    rewardErrorMessage: string | undefined
+    rewardSuccessMessage: string | undefined
+    loyaltyCampaignName: string | undefined
+    loyaltyPointsCalculation: boolean
+    setLoyaltyPointsCalulcation: Dispatch<SetStateAction<boolean>>
     //COMMENTED UNTIL BRAZE WILL BE ENABLED
     // braze:
     //     | typeof import('../../../node_modules/@braze/web-sdk/index')
@@ -47,11 +60,16 @@ export const MobileAppContext = createContext<MobileAppContextType>({
     isLinkedToVoucherify: false,
     autoRedeemError: undefined,
     autoRedeemSuccessMessage: undefined,
-    unredeemedPoints: null,
-    loyaltyPoints: undefined,
-    rewardPoints: undefined,
+    loyaltyPoints: 0,
+    rewardPoints: 0,
     setCurrentCustomer: () => undefined,
     autoRedeemCalculation: () => undefined,
+    redeemCustomerReward: () => Promise.resolve({ status: 'success' }),
+    rewardErrorMessage: undefined,
+    rewardSuccessMessage: undefined,
+    loyaltyCampaignName: undefined,
+    loyaltyPointsCalculation: false,
+    setLoyaltyPointsCalulcation: () => false,
     //COMMENTED UNTIL BRAZE WILL BE ENABLED
     // braze: undefined,
     // changeBrazeUser: async () => null,
@@ -74,13 +92,17 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         autoRedeemCalculation,
         autoRedeemError,
         autoRedeemSuccessMessage,
-        unredeemedPoints,
+        loyaltyPointsCalculation,
+        setLoyaltyPointsCalulcation,
     } = useAutoRedeem()
     //COMMENTED UNTIL BRAZE WILL BE ENABLED
     // const { braze, changeBrazeUser } = useInitalizeBraze()
-    const { validateLoyaltyCampaigns, error } = useLoyaltyData()
+    const { validateLoyaltyCampaigns, loyaltyDataError, loyaltyCampaignName } =
+        useLoyaltyData()
     const { loyaltyPoints, rewardPoints, setLoyaltyPoints, setRewardPoints } =
         useUpdateLoyaltyPoints({ customerId })
+    const { redeemCustomerReward, rewardErrorMessage, rewardSuccessMessage } =
+        useRedeemReward()
 
     const getInitialPointsLoyaltyCampaigns = async (
         customerSourceId: string | null | undefined
@@ -93,14 +115,14 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                     CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID,
                     CAMPAIGNS.LOYALTY_PROGRAM_ID,
                 ].includes(campaign.id as CAMPAIGNS)
-            )?.loyaltyPoints
+            )?.loyaltyPoints || 0
         )
 
         setRewardPoints(
             loyaltyCampaigns.find(
                 (campaign) =>
                     campaign?.id === CAMPAIGNS.MILESTONE_REWARDS_PROGRAM_ID
-            )?.loyaltyPoints
+            )?.loyaltyPoints || 0
         )
     }
 
@@ -116,7 +138,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         }
     }, [customerPhone, customer?.id])
 
-    if (error) return <Error message={error} />
+    if (loyaltyDataError) return <Error message={loyaltyDataError} />
 
     return (
         <MobileAppContext.Provider
@@ -127,11 +149,16 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 isLinkedToVoucherify,
                 autoRedeemError,
                 autoRedeemSuccessMessage,
-                unredeemedPoints,
                 autoRedeemCalculation,
                 loyaltyPoints,
                 rewardPoints,
                 setCurrentCustomer,
+                redeemCustomerReward,
+                rewardErrorMessage,
+                rewardSuccessMessage,
+                loyaltyCampaignName,
+                loyaltyPointsCalculation,
+                setLoyaltyPointsCalulcation,
                 //COMMENTED UNTIL BRAZE WILL BE ENABLED
                 // braze,
                 // changeBrazeUser,

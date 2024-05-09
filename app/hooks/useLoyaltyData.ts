@@ -6,7 +6,7 @@ import { useState } from 'react'
 export type BasicLoyaltyCampaignsInfo = {
     name: string | undefined
     id: string | undefined
-    loyaltyPoints: number | undefined
+    loyaltyPoints: number
     isActive: boolean
 }
 
@@ -22,7 +22,12 @@ const loyaltyCampaigns = [
 ]
 
 export const useLoyaltyData = () => {
-    const [error, setError] = useState<string | undefined>(undefined)
+    const [loyaltyDataError, setLoyaltyDataError] = useState<
+        string | undefined
+    >(undefined)
+    const [loyaltyCampaignName, setLoyaltyCampaignName] = useState<
+        string | undefined
+    >()
 
     const getLoyaltyCampaignInfo = async (
         customerSourceId: string | null | undefined,
@@ -39,7 +44,7 @@ export const useLoyaltyData = () => {
         return {
             name: vouchers[0]?.campaign,
             id: vouchers[0]?.campaign_id,
-            loyaltyPoints: vouchers[0]?.loyalty_card?.balance,
+            loyaltyPoints: vouchers[0].loyalty_card?.balance,
             isActive: vouchers[0]?.active,
         } as BasicLoyaltyCampaignsInfo
     }
@@ -67,10 +72,19 @@ export const useLoyaltyData = () => {
         )
 
         if (isMoreLoyaltyCampaignsThanOne) {
-            setError(
+            setLoyaltyDataError(
                 `You have activated two loyalty programs (Loyalty Program, Loyalty Program - earn and burn). Disable one of them for the app to work properly.`
             )
         }
+
+        setLoyaltyCampaignName(
+            activeCampaigns.find(
+                (campaign) =>
+                    campaign?.name ===
+                    (CAMPAIGNS.LOYALTY_PROGRAM ||
+                        CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN)
+            )?.name
+        )
 
         return activeCampaigns.filter(
             (campaign) => !!campaign?.id
@@ -79,6 +93,7 @@ export const useLoyaltyData = () => {
 
     return {
         validateLoyaltyCampaigns,
-        error,
+        loyaltyDataError,
+        loyaltyCampaignName,
     }
 }

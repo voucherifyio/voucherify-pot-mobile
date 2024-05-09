@@ -7,16 +7,19 @@ import {
     MdHome,
     MdOutlineLocalOffer,
     MdStars,
+    MdLocalFireDepartment,
 } from 'react-icons/md'
 import Link from 'next/link'
 import { MobileAppContext } from './app-context/app-context'
+import { CAMPAIGNS } from '@/enum/campaigns'
 
 const Navbar = () => {
     const { status } = useSession()
-    const { dealsAndRewards, customer } = useContext(MobileAppContext)
-
+    const { dealsAndRewards, customer, loyaltyCampaignName } =
+        useContext(MobileAppContext)
     const pathname = usePathname()
-    const MENU_LIST = [
+
+    const LOYALTY_PROGRAM_MENU = [
         {
             text: 'Home',
             href: '/home',
@@ -39,6 +42,19 @@ const Navbar = () => {
         },
     ]
 
+    const filteredRewardsTab = LOYALTY_PROGRAM_MENU.filter(
+        (menu) => menu.text !== 'Rewards'
+    )
+
+    const EARN_AND_BURN_MENU = [
+        ...filteredRewardsTab,
+        {
+            text: 'Earn and burn',
+            href: '/earn-and-burn',
+            icon: <MdLocalFireDepartment color="gray" />,
+        },
+    ]
+
     if (status === 'loading') {
         return null
     }
@@ -47,20 +63,23 @@ const Navbar = () => {
         return (
             <div className="w-full h-16 bg-white border-t border-gray-200 sticky bottom-0">
                 <div className="flex justify-evenly h-full max-w-screen-sm grid-cols-5 mx-auto font-medium">
-                    {MENU_LIST.map((item) => (
+                    {(loyaltyCampaignName !== CAMPAIGNS.LOYALTY_PROGRAM
+                        ? EARN_AND_BURN_MENU
+                        : LOYALTY_PROGRAM_MENU
+                    ).map((item) => (
                         <Link
                             key={item.text}
-                            className={`inline-flex flex-col items-center justify-center px-5 relative`}
+                            className={`inline-flex flex-col items-center justify-center relative px-2`}
                             href={item.href}
                         >
                             {dealsAndRewards.deals && item.text === 'Deals' ? (
-                                <span className="absolute top-2 right-3 bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white text-[10px]">
+                                <span className="absolute top-2 -right-0 bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white text-[10px]">
                                     {!customer ? null : dealsAndRewards.deals}
                                 </span>
                             ) : null}
                             {dealsAndRewards.rewards &&
                             item.text === 'Rewards' ? (
-                                <span className="absolute top-2 right-6 bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white text-[10px]">
+                                <span className="absolute top-2 right-1 bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white text-[10px]">
                                     {!customer ? null : dealsAndRewards.rewards}
                                 </span>
                             ) : null}

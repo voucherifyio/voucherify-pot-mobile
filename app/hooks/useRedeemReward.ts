@@ -1,25 +1,31 @@
 import { CustomerObject } from '@voucherify/sdk'
 import { getQualifications, redeemReward } from '../apiEndpoints/apiEndpoints'
-import { useState } from 'react'
 import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
+import { useState } from 'react'
 
 export const useRedeemReward = () => {
+    const [rewardErrorMessage, setRewardErrorMessage] = useState<
+        string | undefined
+    >(undefined)
+    const [rewardSuccessMessage, setRewardSuccessMessage] = useState<
+        string | undefined
+    >(undefined)
+
     const redeemCustomerReward = async (
         customer: CustomerObject | undefined,
         rewardId: string,
         campaignName: string
-    ): Promise<{ status: 'success' | 'error'; message?: string }> => {
+    ): Promise<{ status: 'success' | 'error' }> => {
         if (!customer?.id) {
-            throw new Error('Customer id does not exist.')
+            setRewardErrorMessage('Customer id does not exist.')
+            return { status: 'error' }
         }
 
         const res = await redeemReward(customer?.id, rewardId, campaignName)
-        const { redeemedReward } = await res.json()
-        if (res.status !== 200) {
-            console.error('Cannot redeem reward')
-            throw new Error(
-                'Cannot redeem reward for some reason, please check audit log.'
-            )
+        const { redeemedReward, error } = await res.json()
+        if (error) {
+            setRewardErrorMessage(error)
+            return { status: 'error' }
         }
         const reward = redeemedReward.reward?.voucher?.code
 
@@ -31,7 +37,6 @@ export const useRedeemReward = () => {
                         clearInterval(interval)
                         resolve({
                             status: data.status,
-                            message: 'Voucher has been generated',
                         })
                     }
                 }, 2000)
@@ -50,6 +55,8 @@ export const useRedeemReward = () => {
         const qualifications = data.qualifications
         for (const qualification of qualifications) {
             if (qualification.id === reward) {
+                setRewardSuccessMessage('Voucher has been generated')
+                setTimeout(() => setRewardSuccessMessage(undefined), 3000)
                 return { status: 'success' }
             }
         }
@@ -57,5 +64,7 @@ export const useRedeemReward = () => {
 
     return {
         redeemCustomerReward,
+        rewardErrorMessage,
+        rewardSuccessMessage,
     }
 }

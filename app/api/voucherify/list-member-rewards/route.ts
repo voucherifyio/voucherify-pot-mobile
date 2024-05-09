@@ -14,9 +14,12 @@ export async function GET(req: NextRequest) {
         })
 
         if (!rewards) {
-            return new Response('No rewards assigned to customer', {
-                status: 400,
-            })
+            return NextResponse.json(
+                { error: 'No rewards assigned to customer' },
+                {
+                    status: 400,
+                }
+            )
         }
 
         return NextResponse.json({ rewards }, { status: 200 })

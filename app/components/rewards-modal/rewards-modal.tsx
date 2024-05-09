@@ -4,25 +4,15 @@ import {
 } from '@voucherify/sdk'
 import { Dispatch, FC, SetStateAction, useContext, useState } from 'react'
 import Button from '@/app/components/ui/atoms/button'
-import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
-import {
-    getQualifications,
-    redeemReward,
-} from '@/app/apiEndpoints/apiEndpoints'
 import { MobileAppContext } from '../app-context/app-context'
 import { CAMPAIGNS } from '@/enum/campaigns'
-import { useRedeemReward } from '@/app/hooks/useRedeemReward'
-import Toast from '../ui/atoms/toast'
-
-const toastStyles =
-    'font-bold border border-gray-300 rounded-lg shadow-lg fixed top-[15%] left-[50%] -translate-x-2/4 flex items-center justify-center w-full max-w-xs p-4 bg-white z-50'
 
 type RewardsModalProps = {
     rewards: LoyaltiesListMemberRewardsResponseBody['data']
     rewardModalOpened: boolean
     setRewardModalOpened: Dispatch<SetStateAction<boolean>>
     loading: boolean
-    setIsRewardButtonVisible: Dispatch<SetStateAction<boolean>>
+    setCalculatedRewardPoints: Dispatch<SetStateAction<number>>
 }
 
 type ChoiceConfirmationProps = {
@@ -43,7 +33,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
     rewardModalOpened,
     setRewardModalOpened,
     loading,
-    setIsRewardButtonVisible,
+    setCalculatedRewardPoints,
 }) => {
     const [confirmation, setConfirmation] = useState<boolean>(false)
     const [rewardId, setRewardId] = useState<string | null>(null)
@@ -54,59 +44,33 @@ const RewardsModal: FC<RewardsModalProps> = ({
         setDealsAndRewards,
         autoRedeemCalculation,
         customer,
+        redeemCustomerReward,
+        loyaltyPoints,
     } = useContext(MobileAppContext)
-    const { redeemCustomerReward } = useRedeemReward()
-    const [error, setError] = useState<string | undefined>(undefined)
-    const [success, setSuccess] = useState<string | undefined>(undefined)
 
     const handleRedeemReward = async (
         customer: CustomerObject | undefined,
         rewardId: string,
         campaignName: string
     ) => {
-        try {
-            setIsVoucherGenerationProcess(true)
-            const { status, message } = await redeemCustomerReward(
-                customer,
-                rewardId,
-                campaignName
-            )
-            if (customer?.id && status === 'success') {
-                setConfirmation(false)
-                setDealsAndRewards({
-                    ...dealsAndRewards,
-                    rewards: dealsAndRewards.rewards + 1,
-                })
-                setRewardModalOpened(false)
-                setIsVoucherGenerationProcess(false)
-                setSuccess(message)
-                setIsRewardButtonVisible(false)
-                autoRedeemCalculation(customer)
-            }
-        } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message)
-            }
+        setIsVoucherGenerationProcess(true)
+        const { status } = await redeemCustomerReward(
+            customer,
+            rewardId,
+            campaignName
+        )
+        if (customer?.id && status === 'success') {
+            setConfirmation(false)
+            setDealsAndRewards({
+                ...dealsAndRewards,
+                rewards: dealsAndRewards.rewards + 1,
+            })
+            setRewardModalOpened(false)
+            setIsVoucherGenerationProcess(false)
+            setCalculatedRewardPoints(0)
+            autoRedeemCalculation(customer, loyaltyPoints)
         }
     }
-
-    if (error)
-        return (
-            <Toast
-                toastType="error"
-                toastText={error}
-                customStyles={toastStyles}
-            />
-        )
-
-    if (success)
-        return (
-            <Toast
-                toastType="success"
-                toastText={success}
-                customStyles={toastStyles}
-            />
-        )
 
     if (!rewardModalOpened) return null
 

@@ -1,25 +1,23 @@
 'use client'
 import { Dispatch, FC, SetStateAction, useContext, useState } from 'react'
-import { MdLock, MdOutlineLocalGasStation } from 'react-icons/md'
 import RewardsModal from '@/app/components/rewards-modal/rewards-modal'
 import { getMemberRewards } from '@/app/apiEndpoints/apiEndpoints'
 import { CAMPAIGNS } from '@/enum/campaigns'
-import Toast from '@/app/components/ui/atoms/toast'
 import { MobileAppContext } from '../app-context/app-context'
 import Button from '../ui/atoms/button'
 
 type MilestoneChartProps = {
-    loyaltyPoints: number
-    isRewardButtonVisible: boolean
-    setIsRewardButtonVisible: Dispatch<SetStateAction<boolean>>
+    calculatedLoyaltyPoints: number
+    calculatedRewardPoints: number
+    setCalculatedRewardPoints: Dispatch<SetStateAction<number>>
 }
 
 const MilestoneChart: FC<MilestoneChartProps> = ({
-    isRewardButtonVisible,
-    setIsRewardButtonVisible,
+    calculatedLoyaltyPoints,
+    calculatedRewardPoints,
+    setCalculatedRewardPoints,
 }) => {
-    const { customer, loyaltyPoints, rewardPoints } =
-        useContext(MobileAppContext)
+    const { customer } = useContext(MobileAppContext)
     const [rewards, setRewards] = useState([])
     const [rewardModalOpened, setRewardModalOpened] = useState(false)
     const [loading, setLoading] = useState(true)
@@ -42,14 +40,16 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
             <ol className="flex items-center">
                 <li className="relative w-full">
                     <div
-                        className={`${(loyaltyPoints || 0) < 1 ? 'bg-gray-300' : 'bg-green-background'} absolute top-1/2 -left-1 -translate-y-1/2 w-7 h-7 z-10 rounded-full flex items-center justify-center text-white`}
+                        className={`${calculatedLoyaltyPoints < 1 ? 'bg-gray-300' : 'bg-green-background'} absolute top-1/2 -left-1 -translate-y-1/2 w-7 h-7 z-10 rounded-full flex items-center justify-center text-white`}
                     >
                         <p className="bg-blue-button rounded-full text-[12px]">
-                            0
+                            {calculatedLoyaltyPoints < 150
+                                ? calculatedLoyaltyPoints
+                                : 0}
                         </p>
                     </div>
                     <div
-                        className={`${(loyaltyPoints || 0) < 37.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2 z-0`}
+                        className={`${calculatedLoyaltyPoints < 37.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2 z-0`}
                     />
                 </li>
                 <li className="relative flex items-center w-full">
@@ -57,7 +57,7 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
                         className={`bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     />
                     <div
-                        className={`${(loyaltyPoints || 0) < 75 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                        className={`${calculatedLoyaltyPoints < 75 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
                     />
                 </li>
                 <li className="relative flex items-center w-full">
@@ -65,7 +65,7 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
                         className={`bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     />
                     <div
-                        className={`${(loyaltyPoints || 0) < 112.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                        className={`${calculatedLoyaltyPoints < 112.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
                     />
                 </li>
                 <li className="relative flex items-center w-full">
@@ -73,19 +73,22 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
                         className={` bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     />
                     <div
-                        className={`${(loyaltyPoints || 0) < 150 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                        className={`${calculatedLoyaltyPoints < 150 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
                     />
                 </li>
                 <li className="relative w-full">
                     <div
-                        className={`${(loyaltyPoints || 0) < 150 ? 'bg-gray-300' : 'bg-green-background'} absolute top-1/2 -left-3 -translate-y-1/2 w-7 h-7 z-10 rounded-full flex items-center justify-center text-white`}
+                        className={`${calculatedLoyaltyPoints < 150 ? 'bg-gray-300' : 'bg-green-background'} absolute top-1/2 -left-3 -translate-y-1/2 w-7 h-7 z-10 rounded-full flex items-center justify-center text-white`}
                     >
                         <p className="bg-blue-button rounded-full text-[12px]">
-                            150
+                            {calculatedLoyaltyPoints >= 150 &&
+                            calculatedLoyaltyPoints < 300
+                                ? calculatedLoyaltyPoints
+                                : 150}
                         </p>
                     </div>
                     <div
-                        className={`${(loyaltyPoints || 0) < 187.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                        className={`${calculatedLoyaltyPoints < 187.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
                     />
                 </li>
                 <li className="relative flex items-center w-full">
@@ -93,7 +96,7 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
                         className={` bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     />
                     <div
-                        className={`${(loyaltyPoints || 0) < 225 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                        className={`${(calculatedLoyaltyPoints || 0) < 225 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
                     />
                 </li>
                 <li className="relative flex items-center w-full">
@@ -101,7 +104,7 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
                         className={` bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     />
                     <div
-                        className={`${(loyaltyPoints || 0) < 262.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                        className={`${calculatedLoyaltyPoints < 262.5 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
                     />
                 </li>
                 <li className="relative flex items-center w-full">
@@ -109,18 +112,20 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
                         className={`bg-white w-1 h-2 z-10 rounded-full flex items-center justify-center text-blue-text`}
                     />
                     <div
-                        className={`${(loyaltyPoints || 0) < 300 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
+                        className={`${calculatedLoyaltyPoints < 300 ? 'bg-gray-300' : 'bg-green-background'} flex w-full h-2`}
                     />
                     <div
-                        className={`${(loyaltyPoints || 0) < 300 ? 'bg-gray-300' : 'bg-green-background'} absolute top-1/2 -right-1 -translate-y-1/2 w-7 h-7 z-10 rounded-full flex items-center justify-center text-white`}
+                        className={`${calculatedLoyaltyPoints < 300 ? 'bg-gray-300' : 'bg-green-background'} absolute top-1/2 -right-1 -translate-y-1/2 w-7 h-7 z-10 rounded-full flex items-center justify-center text-white`}
                     >
                         <p className="bg-blue-button rounded-full text-[12px]">
-                            300
+                            {calculatedLoyaltyPoints >= 300
+                                ? calculatedLoyaltyPoints
+                                : 300}
                         </p>
                     </div>
                 </li>
             </ol>
-            {isRewardButtonVisible ? (
+            {calculatedRewardPoints >= 1 ? (
                 <div className="flex justify-center relative">
                     {rewardModalOpened ? (
                         <RewardsModal
@@ -128,7 +133,9 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
                             rewardModalOpened={rewardModalOpened}
                             setRewardModalOpened={setRewardModalOpened}
                             loading={loading}
-                            setIsRewardButtonVisible={setIsRewardButtonVisible}
+                            setCalculatedRewardPoints={
+                                setCalculatedRewardPoints
+                            }
                         />
                     ) : null}
                     <Button
