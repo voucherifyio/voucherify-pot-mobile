@@ -13,6 +13,8 @@ import EarningRulesCarousel from '@/app/components/earning-rules/earning-rules-c
 import Loading from '@/app/components/loading/loading'
 import { useContext } from 'react'
 import { MobileAppContext } from '../components/app-context/app-context'
+import { CAMPAIGNS } from '@/enum/campaigns'
+import EarnAndBurnRewardsCarousel from '../components/earn-and-burn/earn-and-burn-carousel'
 
 export default function HomePage() {
     const router = useRouter()
@@ -22,7 +24,7 @@ export default function HomePage() {
             router.push('/')
         },
     })
-    const { setDealsAndRewards, setCurrentCustomer } =
+    const { setDealsAndRewards, setCurrentCustomer, loyaltyCampaignName } =
         useContext(MobileAppContext)
 
     const handleLocalStorage = () => {
@@ -70,7 +72,13 @@ export default function HomePage() {
                 <Milestones />
                 <DealsCarousel />
                 <EarningRulesCarousel />
-                <VoucherifyPlan />
+                {loyaltyCampaignName ===
+                    CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN && (
+                    <EarnAndBurnRewardsCarousel />
+                )}
+                {loyaltyCampaignName === CAMPAIGNS.LOYALTY_PROGRAM && (
+                    <VoucherifyPlan />
+                )}
             </div>
         </div>
     )

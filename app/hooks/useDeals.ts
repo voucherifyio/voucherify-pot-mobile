@@ -3,7 +3,7 @@ import { QUALIFICATION_SCENARIO } from '@/enum/qualifications-scenario.enum'
 import { Deal } from '@/app/components/deals/deals'
 import { getQualifications } from '../apiEndpoints/apiEndpoints'
 
-export const useActiveDeals = ({
+export const useDeals = ({
     customerSourceId,
 }: {
     customerSourceId: string | null | undefined

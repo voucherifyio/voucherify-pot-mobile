@@ -2,7 +2,7 @@
 import { useContext, useState } from 'react'
 import Button from '@/app/components/ui/atoms/button'
 import Toast from '@/app/components/ui/atoms/toast'
-import { useActiveDeals } from '@/app/hooks/useActiveDeals'
+import { useDeals } from '@/app/hooks/useDeals'
 import Loading from '@/app/components/loading/loading'
 import { useConditionalDeals } from '@/app/hooks/useFetchConditionalDeals'
 import { MobileAppContext } from '../app-context/app-context'
@@ -38,11 +38,9 @@ enum CurrentDeal {
 const Deals = () => {
     const { customer } = useContext(MobileAppContext)
     const customerSourceId = customer?.source_id
-    const { activeDeals, setActiveDeals, error, dealsLoading } = useActiveDeals(
-        {
-            customerSourceId,
-        }
-    )
+    const { activeDeals, setActiveDeals, error, dealsLoading } = useDeals({
+        customerSourceId,
+    })
     const [currentDealType, setCurrentDealType] = useState<CurrentDeal>(
         CurrentDeal.WithinReach
     )

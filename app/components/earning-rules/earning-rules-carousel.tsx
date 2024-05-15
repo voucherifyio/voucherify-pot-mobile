@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import { useGetEarningRules } from '@/app/hooks/useGetEarningRules'
 import Button from '../ui/atoms/button'
+import { PulseLoader } from 'react-spinners'
 
 interface EarningRulesCarouselProps {}
 const EarningRulesCarousel: React.FC<EarningRulesCarouselProps> = () => {
@@ -59,7 +60,7 @@ const EarningRulesCarousel: React.FC<EarningRulesCarouselProps> = () => {
 
 const EarningRulesLoading = () => (
     <div className="w-full flex justify-center items-center bg-inherit m-2">
-        <p>Loading...</p>
+        <PulseLoader size={5} color="#173c9f" />
     </div>
 )
 export default EarningRulesCarousel

@@ -9,6 +9,10 @@ import {
 } from '@voucherify/sdk'
 import Button from '../ui/atoms/button'
 import { PulseLoader } from 'react-spinners'
+import Toast from '../ui/atoms/toast'
+
+const toastStyles =
+    'font-bold border border-gray-300 rounded-lg shadow-lg fixed top-[15%] left-[50%] -translate-x-2/4 flex items-center justify-center w-full max-w-xs p-4 bg-white z-50'
 
 const EarnAndBurnRewards = () => {
     const [rewards, setRewards] = useState<
@@ -21,6 +25,8 @@ const EarnAndBurnRewards = () => {
         redeemCustomerReward,
         setDealsAndRewards,
         dealsAndRewards,
+        rewardSuccessMessage,
+        loyaltyPoints,
     } = useContext(MobileAppContext)
     const [isVoucherGenerationProcess, setIsVoucherGenerationProcess] =
         useState(false)
@@ -64,7 +70,7 @@ const EarnAndBurnRewards = () => {
         if (customer?.id) {
             listMemberRewards(customer?.id)
         }
-    }, [customer?.id, isVoucherGenerationProcess])
+    }, [customer?.id, isVoucherGenerationProcess, loyaltyPoints])
 
     if (loading) return <Loading />
 
@@ -88,35 +94,44 @@ const EarnAndBurnRewards = () => {
 
     return (
         <div>
-            {rewards?.map(({ reward }) => (
+            {rewardSuccessMessage && (
+                <Toast
+                    toastType="success"
+                    toastText={rewardSuccessMessage}
+                    customStyles={toastStyles}
+                />
+            )}
+            {rewards?.map(({ reward, assignment }) => (
                 <div
                     key={reward.id}
-                    className="flex-1 flex-col justify-end shadow-md rounded-xl m-2 flex bg-white text-blue-text p-2 gap-2"
+                    className="flex-1 flex-col justify-end shadow-md rounded-xl m-2 flex bg-white text-blue-text py-2 px-4 gap-2"
                 >
-                    <h3 className="text-[16px] font-bold">{reward.id}</h3>
-                    <div className="flex items-end w-full">
+                    <h3 className="text-[16px] font-bold">
+                        Price - {assignment.parameters.loyalty.points} points
+                    </h3>
+                    <div className="flex justify-between items-end w-full">
                         <h3 className="text-[18px] font-extrabold">
                             {reward.name || reward.id}
                         </h3>
+                        <Button
+                            buttonType="green"
+                            className="px-2 max-h-[32px] max-w-[149px] text-[16px]"
+                            disabled={isVoucherGenerationProcess}
+                            onClick={() => {
+                                handleRedeemReward(
+                                    customer,
+                                    reward.id,
+                                    CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN
+                                )
+                            }}
+                        >
+                            {isVoucherGenerationProcess ? (
+                                <PulseLoader size={5} color="#173c9f" />
+                            ) : (
+                                'Choose reward'
+                            )}
+                        </Button>
                     </div>
-                    <Button
-                        buttonType="green"
-                        className="px-2 max-h-[32px] max-w-[149px] text-[16px]"
-                        disabled={isVoucherGenerationProcess}
-                        onClick={() => {
-                            handleRedeemReward(
-                                customer,
-                                reward.id,
-                                CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN
-                            )
-                        }}
-                    >
-                        {isVoucherGenerationProcess ? (
-                            <PulseLoader size={5} color="#173c9f" />
-                        ) : (
-                            'Choose reward'
-                        )}
-                    </Button>
                 </div>
             ))}
         </div>
