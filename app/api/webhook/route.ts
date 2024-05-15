@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import io from 'socket.io-client'
-const socket = io('http://localhost:3000')
+const socket = io('https://voucherify-pot-mobile-35601287c1ae.herokuapp.com/')
 
 export async function POST(req: NextRequest) {
     try {
