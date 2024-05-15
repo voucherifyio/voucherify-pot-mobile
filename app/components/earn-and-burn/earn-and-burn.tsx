@@ -6,6 +6,7 @@ import Loading from '../loading/loading'
 import {
     CustomerObject,
     LoyaltiesListMemberRewardsResponseBody,
+    RewardsAssignmentCampaignOrMaterialReward,
 } from '@voucherify/sdk'
 import Button from '../ui/atoms/button'
 import { PulseLoader } from 'react-spinners'
@@ -107,7 +108,13 @@ const EarnAndBurnRewards = () => {
                     className="flex-1 flex-col justify-end shadow-md rounded-xl m-2 flex bg-white text-blue-text py-2 px-4 gap-2"
                 >
                     <h3 className="text-[16px] font-bold">
-                        Price - {assignment.parameters.loyalty.points} points
+                        Price -{' '}
+                        {
+                            (
+                                assignment as RewardsAssignmentCampaignOrMaterialReward
+                            ).parameters.loyalty.points
+                        }{' '}
+                        points
                     </h3>
                     <div className="flex justify-between items-end w-full">
                         <h3 className="text-[18px] font-extrabold">
