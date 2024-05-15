@@ -42,14 +42,10 @@ const Navbar = () => {
         },
     ]
 
-    const filteredRewardsTab = LOYALTY_PROGRAM_MENU.filter(
-        (menu) => menu.text !== 'Rewards'
-    )
-
     const EARN_AND_BURN_MENU = [
-        ...filteredRewardsTab,
+        ...LOYALTY_PROGRAM_MENU,
         {
-            text: 'Earn and burn',
+            text: 'EB',
             href: '/earn-and-burn',
             icon: <MdLocalFireDepartment color="gray" />,
         },

@@ -61,13 +61,13 @@ export const useLoyaltyData = () => {
                     )
             )
         )
-
         const isMoreLoyaltyCampaignsThanOne = [
             CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID,
             CAMPAIGNS.LOYALTY_PROGRAM_ID,
         ].every((campaign) =>
             activeCampaigns.find(
-                (activeCampaign) => activeCampaign?.id === campaign
+                (activeCampaign) =>
+                    activeCampaign?.id === campaign && activeCampaign.isActive
             )
         )
 
@@ -80,14 +80,16 @@ export const useLoyaltyData = () => {
         setLoyaltyCampaignName(
             activeCampaigns.find(
                 (campaign) =>
-                    campaign?.name ===
-                    (CAMPAIGNS.LOYALTY_PROGRAM ||
-                        CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN)
+                    (campaign?.isActive &&
+                        campaign?.name ===
+                            CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN) ||
+                    (campaign?.isActive &&
+                        campaign.name === CAMPAIGNS.LOYALTY_PROGRAM)
             )?.name
         )
 
         return activeCampaigns.filter(
-            (campaign) => !!campaign?.id
+            (campaign) => !!campaign?.isActive
         ) as BasicLoyaltyCampaignsInfo[]
     }
 
