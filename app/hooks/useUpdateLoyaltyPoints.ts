@@ -24,9 +24,9 @@ export const useUpdateLoyaltyPoints = ({
 
     const updateLoyaltyPoints = async (res: WebhookResponse) => {
         if (
+            res.data.voucher.campaign_id === CAMPAIGNS.LOYALTY_PROGRAM_ID ||
             res.data.voucher.campaign_id ===
-            (CAMPAIGNS.LOYALTY_PROGRAM_ID ||
-                CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID)
+                CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID
         ) {
             setLoyaltyPoints(res.data.voucher.loyalty_card.balance)
         }
