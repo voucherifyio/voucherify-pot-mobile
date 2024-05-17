@@ -45,7 +45,7 @@ const Navbar = () => {
     const EARN_AND_BURN_MENU = [
         ...LOYALTY_PROGRAM_MENU,
         {
-            text: 'EB',
+            text: 'Burn',
             href: '/earn-and-burn',
             icon: <MdLocalFireDepartment color="gray" />,
         },

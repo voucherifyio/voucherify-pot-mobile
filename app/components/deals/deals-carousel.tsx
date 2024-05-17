@@ -2,16 +2,18 @@
 import { useContext } from 'react'
 import { useRouter } from 'next/navigation'
 import { FaArrowRight } from 'react-icons/fa'
-import { useDealsCarousel } from '@/app/hooks/useDealsCarousel'
 import ScrollContainer from 'react-indiana-drag-scroll'
 import { MobileAppContext } from '../app-context/app-context'
 import Button from '../ui/atoms/button'
+import { useDeals } from '@/app/hooks/useDeals'
+import { PulseLoader } from 'react-spinners'
+import Loading from '../loading/loading'
 
 const DealsCarousel = () => {
     const router = useRouter()
     const { customer } = useContext(MobileAppContext)
     const customerSourceId = customer?.source_id
-    const { activeDeals, loading } = useDealsCarousel({
+    const { activeDeals, dealsLoading } = useDeals({
         customerSourceId,
     })
 
@@ -33,15 +35,15 @@ const DealsCarousel = () => {
                     </span>
                 </Button>
             </div>
-            {activeDeals?.length === 0 && !loading && (
+            {activeDeals?.length === 0 && !dealsLoading && (
                 <div className="py-3 flex justify-center items-center">
                     <p className="text-[14px] font-bold text-blue-text">
                         No active deals
                     </p>
                 </div>
             )}
-            {loading ? (
-                <DealsLoading />
+            {dealsLoading ? (
+                <Loading />
             ) : (
                 <ScrollContainer
                     component={'div'}
@@ -66,7 +68,7 @@ const DealsCarousel = () => {
 
 const DealsLoading = () => (
     <div className="w-full flex justify-center items-center bg-inherit m-2">
-        <p>Loading...</p>
+        <PulseLoader size={5} color="#173c9f" />
     </div>
 )
 export default DealsCarousel
