@@ -1,8 +1,7 @@
 'use client'
 import { useAutoRedeem } from '@/app/hooks/useAutoRedeem'
 import { useCustomer } from '@/app/hooks/useCustomer'
-//COMMENTED UNTIL BRAZE WILL BE ENABLED
-// import { useInitalizeBraze } from '@/app/hooks/useInitializeBraze'
+import { useInitalizeBraze } from '@/app/hooks/useInitializeBraze'
 import { useLocalStorage } from '@/app/hooks/useLocalStorage'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { CustomerObject } from '@voucherify/sdk'
@@ -42,15 +41,14 @@ type MobileAppContextType = {
     loyaltyCampaignName: string | undefined
     loyaltyPointsCalculation: boolean
     setLoyaltyPointsCalulcation: Dispatch<SetStateAction<boolean>>
-    //COMMENTED UNTIL BRAZE WILL BE ENABLED
-    // braze:
-    //     | typeof import('../../../node_modules/@braze/web-sdk/index')
-    //     | undefined
-    // changeBrazeUser: ({
-    //     customerId,
-    // }: {
-    //     customerId: string | null | undefined
-    // }) => Promise<string | null | undefined>
+    braze:
+        | typeof import('../../../node_modules/@braze/web-sdk/index')
+        | undefined
+    changeBrazeUser: ({
+        customerId,
+    }: {
+        customerId: string | null | undefined
+    }) => Promise<string | null | undefined>
 }
 
 export const MobileAppContext = createContext<MobileAppContextType>({
@@ -70,9 +68,8 @@ export const MobileAppContext = createContext<MobileAppContextType>({
     loyaltyCampaignName: undefined,
     loyaltyPointsCalculation: false,
     setLoyaltyPointsCalulcation: () => false,
-    //COMMENTED UNTIL BRAZE WILL BE ENABLED
-    // braze: undefined,
-    // changeBrazeUser: async () => null,
+    braze: undefined,
+    changeBrazeUser: async () => null,
 })
 
 const MobileApp = ({ children }: { children: JSX.Element }) => {
@@ -95,8 +92,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         loyaltyPointsCalculation,
         setLoyaltyPointsCalulcation,
     } = useAutoRedeem()
-    //COMMENTED UNTIL BRAZE WILL BE ENABLED
-    // const { braze, changeBrazeUser } = useInitalizeBraze()
+    const { braze, changeBrazeUser } = useInitalizeBraze()
     const { validateLoyaltyCampaigns, loyaltyDataError, loyaltyCampaignName } =
         useLoyaltyData()
     const { loyaltyPoints, rewardPoints, setLoyaltyPoints, setRewardPoints } =
@@ -159,9 +155,8 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 loyaltyCampaignName,
                 loyaltyPointsCalculation,
                 setLoyaltyPointsCalulcation,
-                //COMMENTED UNTIL BRAZE WILL BE ENABLED
-                // braze,
-                // changeBrazeUser,
+                braze,
+                changeBrazeUser,
             }}
         >
             {children}

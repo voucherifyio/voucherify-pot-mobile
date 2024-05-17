@@ -5,8 +5,7 @@ import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import Loading from '../components/loading/loading'
-//COMMENTED UNTIL BRAZE WILL BE ENABLED
-// import { MobileAppContext } from '../components/app-context/app-context'
+import { MobileAppContext } from '../components/app-context/app-context'
 
 export interface Inputs {
     phone: string
@@ -19,8 +18,7 @@ export default function LoginPage() {
     const router = useRouter()
     const { status } = useSession()
     const [loading, setLoading] = useState(false)
-    //COMMENTED UNTIL BRAZE WILL BE ENABLED
-    // const { changeBrazeUser } = useContext(MobileAppContext)
+    const { changeBrazeUser } = useContext(MobileAppContext)
     const {
         register,
         handleSubmit,
@@ -51,12 +49,10 @@ export default function LoginPage() {
         }
 
         if (res?.ok) {
-            //COMMENTED UNTIL BRAZE WILL BE ENABLED
-            // const brazeUser = await changeBrazeUser({ customerId: data.phone })
-            // if (brazeUser === data.phone) {
-            //     router.push('/home')
-            // }
-            router.push('/home')
+            const brazeUser = await changeBrazeUser({ customerId: data.phone })
+            if (brazeUser === data.phone) {
+                router.push('/home')
+            }
         }
     }
 

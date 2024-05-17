@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation'
 import { MdOutlineAccountCircle } from 'react-icons/md'
 import Button from '@/app/components/ui/atoms/button'
 import Milestones from '@/app/components/milestones/milestones'
-//COMMENTED UNTIL BRAZE WILL BE ENABLED
-// import BrazePermissionModal from '@/app/components/braze-permission-modal/braze-permission-modal'
+import BrazePermissionModal from '@/app/components/braze-permission-modal/braze-permission-modal'
 import DealsCarousel from '@/app/components/deals/deals-carousel'
 import VoucherifyPlan from '@/app/components/voucherify-plan/voucherify-plan'
 import EarningRulesCarousel from '@/app/components/earning-rules/earning-rules-carousel'
@@ -24,8 +23,12 @@ export default function HomePage() {
             router.push('/')
         },
     })
-    const { setDealsAndRewards, setCurrentCustomer, loyaltyCampaignName } =
-        useContext(MobileAppContext)
+    const {
+        setDealsAndRewards,
+        setCurrentCustomer,
+        loyaltyCampaignName,
+        braze,
+    } = useContext(MobileAppContext)
 
     const handleLocalStorage = () => {
         localStorage.setItem('dealsAndRewards', JSON.stringify([]))
@@ -36,13 +39,11 @@ export default function HomePage() {
         return <Loading />
     }
 
-    //COMMENTED UNTIL BRAZE WILL BE ENABLED
-    // const showBrazePermissionModal = !braze?.isPushPermissionGranted()
+    const showBrazePermissionModal = !braze?.isPushPermissionGranted()
 
     return (
         <div className="flex flex-col flex-1 items-center justify-center bg-[#ecf0fb] overflow-hidden">
-            {/* NEED TO BE UNCOMMENT WHEN BRAZE WILL BE ENABLED */}
-            {/* {showBrazePermissionModal && <BrazePermissionModal braze={braze} />} */}
+            {showBrazePermissionModal && <BrazePermissionModal braze={braze} />}
             <div className="flex justify-between px-4 py-2 w-full bg-white">
                 <div>
                     <h1 className="text-blue-text text-2xl font-extrabold">

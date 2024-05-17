@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import Loading from '../components/loading/loading'
-//COMMENTED UNTIL BRAZE WILL BE ENABLED
-// import { MobileAppContext } from '../components/app-context/app-context'
+import { MobileAppContext } from '../components/app-context/app-context'
 
 type Inputs = {
     firstName?: string
@@ -26,8 +25,7 @@ export default function RegisterPage() {
     const { status } = useSession()
     const [loading, setLoading] = useState(false)
     const form = useForm<Inputs>()
-    //COMMENTED UNTIL BRAZE WILL BE ENABLED
-    // const { changeBrazeUser } = useContext(MobileAppContext)
+    const { changeBrazeUser } = useContext(MobileAppContext)
     const {
         register,
         handleSubmit,
@@ -77,12 +75,13 @@ export default function RegisterPage() {
                 if (res?.status !== 200 || res.error || !res.ok) {
                     return setError('Could not login, please try again.')
                 }
-                //COMMENTED UNTIL BRAZE WILL BE ENABLED
-                // const brazeUser = await changeBrazeUser({ customerId: values.phone })
-                // if (brazeUser === values.hone) {
-                    // router.push('/home')
-                // }
-                router.push('/home')
+
+                const brazeUser = await changeBrazeUser({
+                    customerId: values.phone,
+                })
+                if (brazeUser === values.phone) {
+                    router.push('/home')
+                }
             } catch (err) {
                 if (err instanceof Error) {
                     setError(err.message)
