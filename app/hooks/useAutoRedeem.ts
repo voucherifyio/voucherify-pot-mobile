@@ -31,10 +31,10 @@ export const useAutoRedeem = () => {
     const [autoRedeemSuccessMessage, setAutoRedeemSuccessMessage] = useState<
         string | undefined
     >()
-    const [loyaltyPointsCalculation, setLoyaltyPointsCalulcation] =
+    const [isLoyaltyPointsCalculated, setIsLoyaltyPointsCalculated] =
         useState(false)
 
-    const autoRedeemCalculation = async (
+    const autoRedeem = async (
         customer: CustomerObject | undefined,
         currentLoyaltyPoints: number
     ) => {
@@ -82,7 +82,7 @@ export const useAutoRedeem = () => {
             }
 
             if (res.ok && redeemQuantity === 1) {
-                setLoyaltyPointsCalulcation(true)
+                setIsLoyaltyPointsCalculated(true)
                 setAutoRedeemSuccessMessage(
                     `Successfully redeemed reward - ${autoRedeemReward?.name}`
                 )
@@ -130,10 +130,10 @@ export const useAutoRedeem = () => {
     }
 
     return {
-        autoRedeemCalculation,
+        autoRedeem,
         autoRedeemSuccessMessage,
         autoRedeemError,
-        loyaltyPointsCalculation,
-        setLoyaltyPointsCalulcation,
+        isLoyaltyPointsCalculated,
+        setIsLoyaltyPointsCalculated,
     }
 }

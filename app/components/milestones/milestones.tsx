@@ -17,8 +17,8 @@ const Milestones = () => {
         customer,
         rewardErrorMessage,
         rewardSuccessMessage,
-        loyaltyPointsCalculation,
-        setLoyaltyPointsCalulcation,
+        isLoyaltyPointsCalculated,
+        setIsLoyaltyPointsCalculated,
     } = useContext(MobileAppContext)
     const [calculatedLoyaltyPoints, setCalculatedLoyaltyPoints] =
         useState<number>(loyaltyPoints)
@@ -33,7 +33,7 @@ const Milestones = () => {
             loyaltyPoints !== calculatedLoyaltyPoints
         ) {
             setCalculatedLoyaltyPoints(loyaltyPoints)
-            setLoyaltyPointsCalulcation(false)
+            setIsLoyaltyPointsCalculated(false)
         }
 
         if (isRewardPoints) {
@@ -62,7 +62,7 @@ const Milestones = () => {
                 <span className="pl-2 font-extrabold">
                     {!customer ? (
                         <PulseLoader size={5} color="#173c9f" />
-                    ) : loyaltyPointsCalculation ? (
+                    ) : isLoyaltyPointsCalculated ? (
                         <PulseLoader size={5} color="#173c9f" />
                     ) : (
                         calculatedLoyaltyPoints

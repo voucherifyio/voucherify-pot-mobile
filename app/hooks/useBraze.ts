@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import * as instanceBraze from '@braze/web-sdk'
 
-export const useInitalizeBraze = () => {
+export const useBraze = () => {
     const [braze, setBraze] = useState<
-        typeof import('../../node_modules/@braze/web-sdk/index') | undefined
+        typeof import('@braze/web-sdk') | undefined
     >()
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export const useInitalizeBraze = () => {
         process.env.NEXT_PUBLIC_BRAZE_SDK_ENDPOINT,
     ])
 
-    const changeBrazeUser = async ({
+    const updateBrazeUser = async ({
         customerId,
     }: {
         customerId: string | null | undefined
@@ -36,5 +36,5 @@ export const useInitalizeBraze = () => {
         }
     }
 
-    return { braze, changeBrazeUser }
+    return { braze, updateBrazeUser }
 }

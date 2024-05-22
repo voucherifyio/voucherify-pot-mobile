@@ -10,7 +10,7 @@ export const useCustomer = () => {
     const [isLinkedToVoucherify, setIsLinkedToVoucherify] =
         useState<boolean>(false)
 
-    const getCurrentCustomer = async (
+    const loadCustomer = async (
         customerSourceId: string | null | undefined
     ) => {
         if (customerSourceId) {
@@ -31,7 +31,7 @@ export const useCustomer = () => {
 
     return {
         customer: currentCustomer,
-        getCurrentCustomer,
+        loadCustomer,
         isLinkedToVoucherify,
         setCurrentCustomer,
     }

@@ -1,15 +1,13 @@
 'use client'
 import { useAutoRedeem } from '@/app/hooks/useAutoRedeem'
 import { useCustomer } from '@/app/hooks/useCustomer'
-import { useInitalizeBraze } from '@/app/hooks/useInitializeBraze'
+import { useBraze } from '@/app/hooks/useBraze'
 import { useLocalStorage } from '@/app/hooks/useLocalStorage'
-import { CAMPAIGNS } from '@/enum/campaigns'
 import { CustomerObject } from '@voucherify/sdk'
 import { useSession } from 'next-auth/react'
 import { Dispatch, SetStateAction, createContext, useEffect } from 'react'
-import { useLoyaltyData } from '@/app/hooks/useLoyaltyData'
+import { useLoyalty } from '@/app/hooks/useLoyalty'
 import Error from '../error/error'
-import { useUpdateLoyaltyPoints } from '@/app/hooks/useUpdateLoyaltyPoints'
 import { useRedeemReward } from '@/app/hooks/useRedeemReward'
 
 export type DealsAndRewards = {
@@ -27,7 +25,7 @@ type MobileAppContextType = {
     loyaltyPoints: number
     rewardPoints: number
     setCurrentCustomer: Dispatch<SetStateAction<CustomerObject | undefined>>
-    autoRedeemCalculation: (
+    autoRedeem: (
         customer: CustomerObject,
         currentLoyaltyPoints: number
     ) => unknown | undefined
@@ -39,12 +37,12 @@ type MobileAppContextType = {
     rewardErrorMessage: string | undefined
     rewardSuccessMessage: string | undefined
     loyaltyCampaignName: string | undefined
-    loyaltyPointsCalculation: boolean
-    setLoyaltyPointsCalulcation: Dispatch<SetStateAction<boolean>>
+    isLoyaltyPointsCalculated: boolean
+    setIsLoyaltyPointsCalculated: Dispatch<SetStateAction<boolean>>
     braze:
         | typeof import('../../../node_modules/@braze/web-sdk/index')
         | undefined
-    changeBrazeUser: ({
+    updateBrazeUser: ({
         customerId,
     }: {
         customerId: string | null | undefined
@@ -61,80 +59,57 @@ export const MobileAppContext = createContext<MobileAppContextType>({
     loyaltyPoints: 0,
     rewardPoints: 0,
     setCurrentCustomer: () => undefined,
-    autoRedeemCalculation: () => undefined,
+    autoRedeem: () => undefined,
     redeemCustomerReward: () => Promise.resolve({ status: 'success' }),
     rewardErrorMessage: undefined,
     rewardSuccessMessage: undefined,
     loyaltyCampaignName: undefined,
-    loyaltyPointsCalculation: false,
-    setLoyaltyPointsCalulcation: () => false,
+    isLoyaltyPointsCalculated: false,
+    setIsLoyaltyPointsCalculated: () => false,
     braze: undefined,
-    changeBrazeUser: async () => null,
+    updateBrazeUser: async () => null,
 })
 
 const MobileApp = ({ children }: { children: JSX.Element }) => {
     const { data: session } = useSession()
     const customerPhone = session?.user?.id
-    const {
-        customer,
-        getCurrentCustomer,
-        isLinkedToVoucherify,
-        setCurrentCustomer,
-    } = useCustomer()
+    const { customer, loadCustomer, isLinkedToVoucherify, setCurrentCustomer } =
+        useCustomer()
     const customerId = customer?.id
     const { dealsAndRewards, setDealsAndRewards } = useLocalStorage({
         customerId,
     })
     const {
-        autoRedeemCalculation,
+        autoRedeem,
         autoRedeemError,
         autoRedeemSuccessMessage,
-        loyaltyPointsCalculation,
-        setLoyaltyPointsCalulcation,
+        isLoyaltyPointsCalculated,
+        setIsLoyaltyPointsCalculated,
     } = useAutoRedeem()
-    const { braze, changeBrazeUser } = useInitalizeBraze()
-    const { validateLoyaltyCampaigns, loyaltyDataError, loyaltyCampaignName } =
-        useLoyaltyData()
-    const { loyaltyPoints, rewardPoints, setLoyaltyPoints, setRewardPoints } =
-        useUpdateLoyaltyPoints({ customerId })
+    const { braze, updateBrazeUser } = useBraze()
+    const {
+        loyaltyPoints,
+        rewardPoints,
+        loadInitialPoints,
+        loyaltyError,
+        loyaltyCampaignName,
+    } = useLoyalty({ customerId })
     const { redeemCustomerReward, rewardErrorMessage, rewardSuccessMessage } =
         useRedeemReward()
 
-    const getInitialPointsLoyaltyCampaigns = async (
-        customerSourceId: string | null | undefined
-    ) => {
-        const loyaltyCampaigns =
-            await validateLoyaltyCampaigns(customerSourceId)
-        setLoyaltyPoints(
-            loyaltyCampaigns.find((campaign) =>
-                [
-                    CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID,
-                    CAMPAIGNS.LOYALTY_PROGRAM_ID,
-                ].includes(campaign.id as CAMPAIGNS)
-            )?.loyaltyPoints || 0
-        )
-
-        setRewardPoints(
-            loyaltyCampaigns.find(
-                (campaign) =>
-                    campaign?.id === CAMPAIGNS.MILESTONE_REWARDS_PROGRAM_ID
-            )?.loyaltyPoints || 0
-        )
-    }
-
     useEffect(() => {
-        getCurrentCustomer(customerPhone)
-        getInitialPointsLoyaltyCampaigns(customerPhone)
+        loadCustomer(customerPhone)
+        loadInitialPoints(customerPhone)
         if (!document.hidden && !customer?.id) {
             const interval: NodeJS.Timeout = setInterval(
-                async () => await getCurrentCustomer(customerPhone),
+                async () => await loadCustomer(customerPhone),
                 3000
             )
             return () => clearInterval(interval)
         }
     }, [customerPhone, customer?.id])
 
-    if (loyaltyDataError) return <Error message={loyaltyDataError} />
+    if (loyaltyError) return <Error message={loyaltyError} />
 
     return (
         <MobileAppContext.Provider
@@ -145,7 +120,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 isLinkedToVoucherify,
                 autoRedeemError,
                 autoRedeemSuccessMessage,
-                autoRedeemCalculation,
+                autoRedeem,
                 loyaltyPoints,
                 rewardPoints,
                 setCurrentCustomer,
@@ -153,10 +128,10 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
                 rewardErrorMessage,
                 rewardSuccessMessage,
                 loyaltyCampaignName,
-                loyaltyPointsCalculation,
-                setLoyaltyPointsCalulcation,
+                isLoyaltyPointsCalculated,
+                setIsLoyaltyPointsCalculated,
                 braze,
-                changeBrazeUser,
+                updateBrazeUser,
             }}
         >
             {children}

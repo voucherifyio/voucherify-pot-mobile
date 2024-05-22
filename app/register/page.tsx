@@ -25,7 +25,7 @@ export default function RegisterPage() {
     const { status } = useSession()
     const [loading, setLoading] = useState(false)
     const form = useForm<Inputs>()
-    const { changeBrazeUser } = useContext(MobileAppContext)
+    const { updateBrazeUser } = useContext(MobileAppContext)
     const {
         register,
         handleSubmit,
@@ -76,7 +76,7 @@ export default function RegisterPage() {
                     return setError('Could not login, please try again.')
                 }
 
-                const brazeUser = await changeBrazeUser({
+                const brazeUser = await updateBrazeUser({
                     customerId: values.phone,
                 })
                 if (brazeUser === values.phone) {

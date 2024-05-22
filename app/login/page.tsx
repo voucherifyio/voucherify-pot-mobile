@@ -18,7 +18,7 @@ export default function LoginPage() {
     const router = useRouter()
     const { status } = useSession()
     const [loading, setLoading] = useState(false)
-    const { changeBrazeUser } = useContext(MobileAppContext)
+    const { updateBrazeUser } = useContext(MobileAppContext)
     const {
         register,
         handleSubmit,
@@ -49,7 +49,7 @@ export default function LoginPage() {
         }
 
         if (res?.ok) {
-            const brazeUser = await changeBrazeUser({ customerId: data.phone })
+            const brazeUser = await updateBrazeUser({ customerId: data.phone })
             if (brazeUser === data.phone) {
                 router.push('/home')
             }

@@ -6,6 +6,18 @@ import { Dispatch, FC, SetStateAction, useContext, useState } from 'react'
 import Button from '@/app/components/ui/atoms/button'
 import { MobileAppContext } from '../app-context/app-context'
 import { CAMPAIGNS } from '@/enum/campaigns'
+import { PulseLoader } from 'react-spinners'
+import {
+    Box,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    useDisclosure,
+} from '@chakra-ui/react'
 
 type RewardsModalProps = {
     rewards: LoyaltiesListMemberRewardsResponseBody['data']
@@ -15,19 +27,6 @@ type RewardsModalProps = {
     setCalculatedRewardPoints: Dispatch<SetStateAction<number>>
 }
 
-type ChoiceConfirmationProps = {
-    redeemReward: (
-        customer: CustomerObject | undefined,
-        rewardId: string,
-        campaignName: string
-    ) => void
-    customer: CustomerObject | undefined
-    rewardId: string
-    confirmation: boolean
-    setConfirmation: Dispatch<SetStateAction<boolean>>
-    isVoucherGenerationProcess: boolean
-}
-
 const RewardsModal: FC<RewardsModalProps> = ({
     rewards,
     rewardModalOpened,
@@ -35,18 +34,18 @@ const RewardsModal: FC<RewardsModalProps> = ({
     loading,
     setCalculatedRewardPoints,
 }) => {
-    const [confirmation, setConfirmation] = useState<boolean>(false)
     const [rewardId, setRewardId] = useState<string | null>(null)
     const [isVoucherGenerationProcess, setIsVoucherGenerationProcess] =
         useState(false)
     const {
         dealsAndRewards,
         setDealsAndRewards,
-        autoRedeemCalculation,
+        autoRedeem,
         customer,
         redeemCustomerReward,
         loyaltyPoints,
     } = useContext(MobileAppContext)
+    const { onClose } = useDisclosure()
 
     const handleRedeemReward = async (
         customer: CustomerObject | undefined,
@@ -60,7 +59,6 @@ const RewardsModal: FC<RewardsModalProps> = ({
             campaignName
         )
         if (customer?.id && status === 'success') {
-            setConfirmation(false)
             setDealsAndRewards({
                 ...dealsAndRewards,
                 rewards: dealsAndRewards.rewards + 1,
@@ -68,123 +66,153 @@ const RewardsModal: FC<RewardsModalProps> = ({
             setRewardModalOpened(false)
             setIsVoucherGenerationProcess(false)
             setCalculatedRewardPoints(0)
-            autoRedeemCalculation(customer, loyaltyPoints)
+            autoRedeem(customer, loyaltyPoints)
         }
     }
 
     if (!rewardModalOpened) return null
 
     return (
-        <div className="flex w-full min-h-80 flex-col items-end bg-[#173C9F] absolute z-50 rounded-lg px-4 py-4 gap-4 bottom-0 left-2/4 -translate-x-2/4">
-            {loading && <ModalLoading message="Loading..." />}
-            {!loading && rewards?.length <= 0 && (
-                <NoRewardsState setRewardModalOpened={setRewardModalOpened} />
-            )}
-            {rewardId && customer?.id && confirmation && (
-                <ChoiceConfimartion
-                    customer={customer}
-                    rewardId={rewardId}
-                    redeemReward={handleRedeemReward}
-                    confirmation={confirmation}
-                    setConfirmation={setConfirmation}
-                    isVoucherGenerationProcess={isVoucherGenerationProcess}
-                />
-            )}
-            {!loading && !confirmation && rewards?.length >= 1 && (
-                <>
-                    <div className="flex w-full justify-between">
-                        <p className="text-white">Choose your reward</p>
-                        <Button
-                            buttonType="gray"
+        <Modal isCentered isOpen={rewardModalOpened} onClose={onClose}>
+            <ModalOverlay bg="blue.700" backdropFilter="blur(1px)" />
+            <ModalContent
+                style={{
+                    backgroundColor: '#FFF',
+                    margin: '110px 10px 0 10px',
+                    borderRadius: '8px',
+                    padding: '10px',
+                    position: 'relative',
+                    boxShadow: '0px 0px 15px 0px rgba(152, 152, 152, 1)',
+                }}
+            >
+                {isVoucherGenerationProcess && (
+                    <VoucherGenerationProcess message="Voucher generation process..." />
+                )}
+                {loading && (
+                    <PulseLoader
+                        size={5}
+                        color="#173c9f"
+                        style={{ margin: 'auto' }}
+                    />
+                )}
+                {!loading && rewards?.length <= 0 && (
+                    <Box className="flex-1 w-full h-full flex justify-center items-center">
+                        <ModalCloseButton
                             onClick={() => setRewardModalOpened(false)}
-                            className="h-auto text-white py-1 px-2"
+                            style={{
+                                position: 'absolute',
+                                top: '10px',
+                                right: '10px',
+                            }}
+                        />
+                        <p className="text-[14px] font-bold text-blue-text">
+                            You don't have any rewards.
+                        </p>
+                    </Box>
+                )}
+                {!loading &&
+                    !isVoucherGenerationProcess &&
+                    rewards?.length >= 1 && (
+                        <Box
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '20px',
+                            }}
                         >
-                            Close
-                        </Button>
-                    </div>
-                    <div className="flex gap-3 w-full justify-center">
-                        {rewards.map(({ reward }) => (
-                            <Button
-                                buttonType="green"
-                                key={reward.id}
-                                className="h-auto text-white text-center text-sm rounded-lg py-0.5 px-1"
-                                onClick={() => {
-                                    setRewardId(reward.id)
-                                    setConfirmation(true)
+                            <ModalHeader
+                                style={{
+                                    fontSize: '18px',
+                                    textAlign: 'center',
+                                    flex: 1,
+                                    fontWeight: 700,
+                                    color: '#173c9f',
                                 }}
                             >
-                                {reward.name}
-                            </Button>
-                        ))}
-                    </div>
-                </>
-            )}
-        </div>
+                                Rewards
+                            </ModalHeader>
+                            <ModalCloseButton
+                                onClick={() => setRewardModalOpened(false)}
+                                style={{
+                                    position: 'absolute',
+                                    top: '15px',
+                                    right: '15px',
+                                }}
+                            />
+                            <ModalBody
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    gap: '10px',
+                                    flexWrap: 'wrap',
+                                }}
+                            >
+                                {rewards.map(({ reward }) => (
+                                    <Button
+                                        key={reward.id}
+                                        style={{
+                                            backgroundColor:
+                                                rewardId === reward.id
+                                                    ? '#000'
+                                                    : '#22c55e',
+                                        }}
+                                        className="h-auto text-white text-center text-sm rounded-md py-2 px-2"
+                                        onClick={() => {
+                                            setRewardId(reward.id)
+                                        }}
+                                    >
+                                        {reward.name}
+                                    </Button>
+                                ))}
+                            </ModalBody>
+                            <ModalFooter
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    padding: '0 15px',
+                                    gap: '20px',
+                                }}
+                            >
+                                {rewardId && (
+                                    <Button
+                                        onClick={() =>
+                                            handleRedeemReward(
+                                                customer,
+                                                rewardId,
+                                                CAMPAIGNS.MILESTONE_REWARDS_PROGRAM
+                                            )
+                                        }
+                                        style={{
+                                            backgroundColor: '#173c9f',
+                                            height: '35px',
+                                            padding: '0 8px',
+                                            color: '#FFF',
+                                        }}
+                                    >
+                                        Choose
+                                    </Button>
+                                )}
+                                <Button
+                                    onClick={() => setRewardModalOpened(false)}
+                                    style={{
+                                        backgroundColor: '#edf2f7',
+                                        height: '35px',
+                                        padding: '0 8px',
+                                    }}
+                                >
+                                    Close
+                                </Button>
+                            </ModalFooter>
+                        </Box>
+                    )}
+            </ModalContent>
+        </Modal>
     )
 }
 
-const ChoiceConfimartion: FC<ChoiceConfirmationProps> = ({
-    redeemReward,
-    customer,
-    rewardId,
-    confirmation,
-    setConfirmation,
-    isVoucherGenerationProcess,
-}) => {
-    if (isVoucherGenerationProcess) {
-        return <ModalLoading message="Voucher generation process..." />
-    }
-
-    if (!confirmation) return null
-
-    return (
-        <div className="flex flex-col items-center justify-center h-full w-full gap-4">
-            <p className="text-white">Are you sure?</p>
-            <div className="flex w-full justify-evenly">
-                <Button
-                    buttonType="green"
-                    onClick={() =>
-                        redeemReward(
-                            customer,
-                            rewardId,
-                            CAMPAIGNS.MILESTONE_REWARDS_PROGRAM
-                        )
-                    }
-                    className="text-white rounded-lg px-2 h-8"
-                >
-                    Choose reward
-                </Button>
-                <Button
-                    buttonType="gray"
-                    onClick={() => setConfirmation(false)}
-                    className="text-white rounded-lg px-2 h-8"
-                >
-                    Cancel
-                </Button>
-            </div>
-        </div>
-    )
-}
-
-const ModalLoading = ({ message }: { message: string }) => (
-    <div className="flex justify-center items-center w-full h-full">
-        <p className="text-white">{message}</p>
-    </div>
-)
-
-const NoRewardsState = ({
-    setRewardModalOpened,
-}: {
-    setRewardModalOpened: Dispatch<SetStateAction<boolean>>
-}) => (
-    <div className="flex flex-col justify-center items-center w-full h-full gap-3">
-        <Button
-            onClick={() => setRewardModalOpened(false)}
-            className="h-auto text-white self-end"
-        >
-            Close
-        </Button>
-        <p className="text-white">You don't have any rewards.</p>
+const VoucherGenerationProcess = ({ message }: { message: string }) => (
+    <div className="flex justify-center items-center w-full h-full min-h-[35px]">
+        <p className="text-[14px] font-bold text-blue-text">{message}</p>
     </div>
 )
 
