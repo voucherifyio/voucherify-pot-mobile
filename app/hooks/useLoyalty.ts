@@ -95,7 +95,7 @@ export const useLoyalty = ({
         const res = await listVouchers(customerSourceId, campaignName)
         const { vouchers }: { vouchers: GeneratedVouchersResponse[] } =
             await res.json()
-        console.log(vouchers, 'COUVHCERS')
+
         if (!vouchers[0]?.id) {
             return null
         }
