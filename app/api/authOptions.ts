@@ -3,6 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { getCustomer } from '@/voucherify/get-customer'
 import { getVoucherify } from '@/voucherify/voucherify-config'
 import { METADATA } from '@/enum/metadata'
+import { randomBytes } from 'crypto'
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -53,12 +54,19 @@ export const authOptions: NextAuthOptions = {
             },
         }),
     ],
+    session: {
+        strategy: 'jwt',
+        generateSessionToken: () => {
+            return randomBytes(32).toString('hex')
+        },
+    },
     callbacks: {
         session: async ({ session, token }) => ({
             ...session,
             user: {
                 ...session.user,
                 id: token.sub,
+                token,
             },
         }),
     },

@@ -17,7 +17,7 @@ export default function GlobalError({
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'center',
-                        alignItems: 'centers',
+                        alignItems: 'center',
                         gap: '30px',
                         backgroundColor: '#000',
                     }}

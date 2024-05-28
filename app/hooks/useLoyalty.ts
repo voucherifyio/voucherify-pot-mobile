@@ -4,7 +4,8 @@ import { CAMPAIGNS } from '@/enum/campaigns'
 import { useEffect, useState } from 'react'
 import { WebhookResponse } from '@/types/webhook-response'
 import { io } from 'socket.io-client'
-const socket = io(`${process.env.NEXT_PUBLIC_WEBSOCKET_SERVER_URL}`)
+import { useSession } from 'next-auth/react'
+// const socket = io(`${process.env.NEXT_PUBLIC_WEBSOCKET_SERVER_URL}`)
 
 export type BasicLoyaltyCampaignsInfo = {
     name: string | undefined
@@ -37,14 +38,24 @@ export const useLoyalty = ({
     const [loyaltyCampaignName, setLoyaltyCampaignName] = useState<
         string | undefined
     >()
+    const { data: session } = useSession()
+    console.log(session, 'ssss')
 
     useEffect(() => {
+        const socket = io('http://localhost:3001', {
+            auth: { token: session?.user?.token, userId: session?.user?.id },
+            withCredentials: true,
+        })
+        // socket.on(`${session?.user?.id}`, (res) => {
+        //     console.log(res, "RESPONSE")
+        // })
+
         socket.on('send-data', (res: WebhookResponse) => {
             if (customerId === res.data.customer.id) {
                 updateLoyaltyPoints(res)
             }
         })
-    }, [socket, customerId])
+    }, [customerId, session])
 
     const loadInitialPoints = async (
         customerSourceId: string | null | undefined

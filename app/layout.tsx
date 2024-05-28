@@ -1,8 +1,8 @@
 import '@/app/components/ui/global.css'
+import { inter } from '@/app/components/ui/fonts'
 import { Metadata } from 'next'
 import SessionWrapper from '@/app/components/session-wrapper'
 import Navbar from '@/app/components/navbar'
-import { inter } from '@/app/components/ui/fonts'
 import MobileApp from './components/app-context/app-context'
 
 export const metadata: Metadata = {
