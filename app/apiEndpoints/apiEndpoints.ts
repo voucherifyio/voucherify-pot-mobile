@@ -129,13 +129,10 @@ const listCustomerActivities = async (customerId: string) => {
 }
 
 const listCampaigns = async () => {
-    const timestamp = new Date().getTime()
-    return await fetch(
-        `/api/voucherify/list-campaigns?timestamp=${timestamp}`,
-        {
-            method: 'GET',
-        }
-    )
+    return await fetch(`/api/voucherify/list-campaigns`, {
+        method: 'GET',
+        next: { revalidate: 0 },
+    })
 }
 
 const listRewards = async () => {
