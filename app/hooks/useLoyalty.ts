@@ -122,9 +122,14 @@ export const useLoyalty = ({
             ].includes(campaign.id as CAMPAIGNS)
         )
 
+        console.log(campaigns, 'ALL CAMPAIGNS')
+        console.log(validCampaigns, 'VALID CAMPAIGNS')
+
         const isActiveMultipleLoyaltyCampaigns = validCampaigns.every(
             (campaign) => campaign?.active
         )
+
+        console.log(isActiveMultipleLoyaltyCampaigns, 'IS ACTIVE MULTIPLE')
 
         if (isActiveMultipleLoyaltyCampaigns) {
             setLoyaltyError(
@@ -135,6 +140,8 @@ export const useLoyalty = ({
         const inactiveLoyaltyCampaigns = validCampaigns.every(
             (campaign) => !campaign?.active
         )
+
+        console.log(inactiveLoyaltyCampaigns, 'INACTIVE')
 
         if (inactiveLoyaltyCampaigns) {
             setLoyaltyError(
