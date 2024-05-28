@@ -123,7 +123,7 @@ export const useLoyalty = ({
         )
 
         const isActiveMultipleLoyaltyCampaigns = validCampaigns.every(
-            (campaign) => campaign.active
+            (campaign) => campaign?.active
         )
 
         if (isActiveMultipleLoyaltyCampaigns) {
