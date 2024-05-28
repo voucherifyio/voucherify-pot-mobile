@@ -131,7 +131,7 @@ const listCustomerActivities = async (customerId: string) => {
 const listCampaigns = async () => {
     return await fetch(`/api/voucherify/list-campaigns`, {
         method: 'GET',
-        cache: 'no-store',
+        cache: 'no-cache',
     })
 }
 
