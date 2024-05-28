@@ -12,7 +12,5 @@ export async function GET() {
         )
     }
 
-    const response = NextResponse.json({ campaigns }, { status: 200 })
-    response.headers.set('Cache-Control', 'no-store')
-    return response
+    return NextResponse.json({ campaigns }, { status: 200 })
 }
