@@ -48,7 +48,9 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ customerId }) => {
                 </Button>
             )}
             {error && (
-                <p className="text-red-500 font-extrabold">Error: {error}</p>
+                <p className="text-red-500 font-extrabold">
+                    Barcode is not available.
+                </p>
             )}
         </>
     )

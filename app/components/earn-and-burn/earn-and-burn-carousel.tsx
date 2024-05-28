@@ -7,7 +7,6 @@ import Button from '../ui/atoms/button'
 import { getMemberRewards } from '@/app/apiEndpoints/apiEndpoints'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { LoyaltiesListMemberRewardsResponseBody } from '@voucherify/sdk'
-import GlobalError from '../error/error'
 import { MobileAppContext } from '../app-context/app-context'
 import { PulseLoader } from 'react-spinners'
 

@@ -1,5 +1,5 @@
-import { VouchersResponse } from '@voucherify/sdk'
-import { listVouchers } from '../apiEndpoints/apiEndpoints'
+import { CampaignResponse, VouchersResponse } from '@voucherify/sdk'
+import { listCampaigns, listVouchers } from '../apiEndpoints/apiEndpoints'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { useEffect, useState } from 'react'
 import { WebhookResponse } from '@/types/webhook-response'
@@ -111,6 +111,37 @@ export const useLoyalty = ({
     const validateLoyaltyCampaigns = async (
         customerSourceId: string | null | undefined
     ): Promise<BasicLoyaltyCampaignsInfo[]> => {
+        const res = await listCampaigns()
+        const { campaigns }: { campaigns: CampaignResponse[] } =
+            await res.json()
+
+        const validCampaigns = campaigns.filter((campaign) =>
+            [
+                CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID,
+                CAMPAIGNS.LOYALTY_PROGRAM_ID,
+            ].includes(campaign.id as CAMPAIGNS)
+        )
+
+        const isActiveMultipleLoyaltyCampaigns = validCampaigns.every(
+            (campaign) => campaign.active
+        )
+
+        if (isActiveMultipleLoyaltyCampaigns) {
+            setLoyaltyError(
+                `You have activated two loyalty programs (Loyalty Program, Loyalty Program - earn and burn). Disable one of them for the app to work properly.`
+            )
+        }
+
+        const inactiveLoyaltyCampaigns = validCampaigns.every(
+            (campaign) => !campaign?.active
+        )
+
+        if (inactiveLoyaltyCampaigns) {
+            setLoyaltyError(
+                `For some reason, none of the loyalty campaigns are active for the user.`
+            )
+        }
+
         const activeCampaigns = await Promise.all(
             loyaltyCampaigns.map(
                 async (activeCampaign) =>
@@ -120,36 +151,9 @@ export const useLoyalty = ({
                     )
             )
         )
-        const validCampaigns = activeCampaigns.filter((campaign) => !!campaign)
-
-        const isMoreLoyaltyCampaignsThanOne = [
-            CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID,
-            CAMPAIGNS.LOYALTY_PROGRAM_ID,
-        ].every((campaign) =>
-            validCampaigns.find(
-                (activeCampaign) =>
-                    activeCampaign?.id === campaign && activeCampaign.isActive
-            )
-        )
-
-        if (isMoreLoyaltyCampaignsThanOne) {
-            setLoyaltyError(
-                `You have activated two loyalty programs (Loyalty Program, Loyalty Program - earn and burn). Disable one of them for the app to work properly.`
-            )
-        }
-
-        const inactiveCampaigns = validCampaigns.every(
-            (campaign) => !campaign?.isActive
-        )
-
-        if (inactiveCampaigns) {
-            setLoyaltyError(
-                `For some reason, none of the loyalty campaigns are active for the user or the user is not part of an active campaign.`
-            )
-        }
 
         setLoyaltyCampaignName(
-            validCampaigns
+            activeCampaigns
                 .filter((campaign) => !!campaign)
                 .find(
                     (campaign) =>
