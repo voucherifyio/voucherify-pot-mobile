@@ -24,16 +24,25 @@ const EarningRulesCarousel: React.FC<EarningRulesCarouselProps> = () => {
                 <h1 className="text-blue-text text-18 font-bold">
                     Earning rules
                 </h1>
-                <Button
-                    onClick={handleEarningRulesRedirectClick}
-                    className="flex items-center h-[32px] text-[16px] font-normal text-blue-text px-4 rounded bg-blue-background border border-blue-activeCoupon"
-                >
-                    See all
-                    <span className="pl-2">
-                        <FaArrowRight />
-                    </span>
-                </Button>
+                {earningRules.length === 0 || error ? null : (
+                    <Button
+                        onClick={handleEarningRulesRedirectClick}
+                        className="flex items-center h-[32px] text-[16px] font-normal text-blue-text px-4 rounded bg-blue-background border border-blue-activeCoupon"
+                    >
+                        See all
+                        <span className="pl-2">
+                            <FaArrowRight />
+                        </span>
+                    </Button>
+                )}
             </div>
+            {earningRules?.length === 0 && !loading && (
+                <div className="py-3 flex justify-center items-center">
+                    <p className="text-[14px] font-bold text-blue-text">
+                        No earning rules
+                    </p>
+                </div>
+            )}
             {loading ? (
                 <EarningRulesLoading />
             ) : (

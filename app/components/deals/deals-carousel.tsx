@@ -25,15 +25,17 @@ const DealsCarousel = () => {
         <>
             <div className="flex justify-between mx-5">
                 <h1 className="text-blue-text text-18 font-bold">Deals</h1>
-                <Button
-                    onClick={handleDealsRedirectClick}
-                    className="flex items-center h-[32px] text-[16px] font-normal text-blue-text px-4 rounded bg-blue-background border border-blue-activeCoupon"
-                >
-                    See all
-                    <span className="pl-2">
-                        <FaArrowRight />
-                    </span>
-                </Button>
+                {activeDeals.length === 0 ? null : (
+                    <Button
+                        onClick={handleDealsRedirectClick}
+                        className="flex items-center h-[32px] text-[16px] font-normal text-blue-text px-4 rounded bg-blue-background border border-blue-activeCoupon"
+                    >
+                        See all
+                        <span className="pl-2">
+                            <FaArrowRight />
+                        </span>
+                    </Button>
+                )}
             </div>
             {activeDeals?.length === 0 && !dealsLoading && (
                 <div className="py-3 flex justify-center items-center">

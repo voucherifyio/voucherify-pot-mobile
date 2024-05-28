@@ -1,13 +1,17 @@
 import { FC } from 'react'
 import Button from '../ui/atoms/button'
 
-type ErrorProps = {
+type GlobalErrorProps = {
     message: string
     buttonStyles?: string | undefined
     messageStyles?: string | undefined
 }
 
-const Error: FC<ErrorProps> = ({ message, buttonStyles, messageStyles }) => {
+const GlobalError: FC<GlobalErrorProps> = ({
+    message,
+    buttonStyles,
+    messageStyles,
+}) => {
     const buttonClassName = buttonStyles ? buttonStyles : 'px-4 h-10'
 
     const messageClassName = messageStyles
@@ -15,7 +19,7 @@ const Error: FC<ErrorProps> = ({ message, buttonStyles, messageStyles }) => {
         : 'text-center font-medium'
 
     return (
-        <div className="flex flex-col w-full h-screen items-center justify-center p-5 gap-8">
+        <div className="flex flex-col w-full items-center justify-center p-5 gap-8">
             <p className={messageClassName}>{message}</p>
             <Button
                 buttonType="primary"
@@ -28,4 +32,4 @@ const Error: FC<ErrorProps> = ({ message, buttonStyles, messageStyles }) => {
     )
 }
 
-export default Error
+export default GlobalError

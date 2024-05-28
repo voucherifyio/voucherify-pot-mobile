@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
 import { MobileAppContext } from '../app-context/app-context'
 import { PulseLoader } from 'react-spinners'
+import { CAMPAIGNS } from '@/enum/campaigns'
 
 const toastStyles =
     'font-bold border border-gray-300 rounded-lg shadow-lg fixed top-[15%] left-[50%] -translate-x-2/4 flex items-center justify-center w-full max-w-xs p-4 bg-white z-50'
@@ -18,6 +19,7 @@ const Milestones = () => {
         rewardErrorMessage,
         rewardSuccessMessage,
         isLoyaltyPointsCalculated,
+        loyaltyCampaignName,
         setIsLoyaltyPointsCalculated,
     } = useContext(MobileAppContext)
     const [calculatedLoyaltyPoints, setCalculatedLoyaltyPoints] =
@@ -70,11 +72,13 @@ const Milestones = () => {
                 </span>
             </h4>
 
-            <MilestoneChart
-                calculatedLoyaltyPoints={calculatedLoyaltyPoints}
-                calculatedRewardPoints={calculatedRewardPoints}
-                setCalculatedRewardPoints={setCalculatedRewardPoints}
-            />
+            {loyaltyCampaignName === CAMPAIGNS.LOYALTY_PROGRAM && (
+                <MilestoneChart
+                    calculatedLoyaltyPoints={calculatedLoyaltyPoints}
+                    calculatedRewardPoints={calculatedRewardPoints}
+                    setCalculatedRewardPoints={setCalculatedRewardPoints}
+                />
+            )}
             {autoRedeemSuccessMessage && (
                 <Toast
                     toastType="success"

@@ -7,7 +7,7 @@ import { CustomerObject } from '@voucherify/sdk'
 import { useSession } from 'next-auth/react'
 import { Dispatch, SetStateAction, createContext, useEffect } from 'react'
 import { useLoyalty } from '@/app/hooks/useLoyalty'
-import Error from '../error/error'
+import GlobalError from '../error/error'
 import { useRedeemReward } from '@/app/hooks/useRedeemReward'
 
 export type DealsAndRewards = {
@@ -109,7 +109,7 @@ const MobileApp = ({ children }: { children: JSX.Element }) => {
         }
     }, [customerPhone, customer?.id])
 
-    if (loyaltyError) return <Error message={loyaltyError} />
+    if (loyaltyError) return <GlobalError message={loyaltyError} />
 
     return (
         <MobileAppContext.Provider

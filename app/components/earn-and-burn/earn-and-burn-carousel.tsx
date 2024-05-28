@@ -7,7 +7,7 @@ import Button from '../ui/atoms/button'
 import { getMemberRewards } from '@/app/apiEndpoints/apiEndpoints'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { LoyaltiesListMemberRewardsResponseBody } from '@voucherify/sdk'
-import Error from '../error/error'
+import GlobalError from '../error/error'
 import { MobileAppContext } from '../app-context/app-context'
 import { PulseLoader } from 'react-spinners'
 
@@ -21,30 +21,28 @@ const EarnAndBurnRewardsCarousel = () => {
     const { customer } = useContext(MobileAppContext)
 
     const listMemberRewards = async (customerId: string | null | undefined) => {
-        const res = await getMemberRewards(
-            customerId,
-            CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN
-        )
-        const { rewards, error } = await res.json()
+        if (customerId) {
+            const res = await getMemberRewards(
+                customerId,
+                CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN
+            )
+            const { rewards, error } = await res.json()
 
-        if (error) {
+            if (error) {
+                setLoading(false)
+                return setError(error)
+            }
+            setRewards(rewards)
             setLoading(false)
-            return setError(error)
         }
-        setRewards(rewards)
-        setLoading(false)
     }
 
     useEffect(() => {
         listMemberRewards(customer?.id)
-    }, [])
+    }, [customer?.id])
 
     const handleBurnRewardsRedirectClick = () => {
         router.push('/earn-and-burn')
-    }
-
-    if (error) {
-        return <Error message={error} />
     }
 
     return (
@@ -53,25 +51,22 @@ const EarnAndBurnRewardsCarousel = () => {
                 <h1 className="text-blue-text text-18 font-bold">
                     Burning rewards
                 </h1>
-                <Button
-                    onClick={handleBurnRewardsRedirectClick}
-                    className="flex items-center h-[32px] text-[16px] font-normal text-blue-text px-4 rounded bg-blue-background border border-blue-activeCoupon"
-                >
-                    See all
-                    <span className="pl-2">
-                        <FaArrowRight />
-                    </span>
-                </Button>
+                {!rewards.length || error ? null : (
+                    <Button
+                        onClick={handleBurnRewardsRedirectClick}
+                        className="flex items-center h-[32px] text-[16px] font-normal text-blue-text px-4 rounded bg-blue-background border border-blue-activeCoupon"
+                    >
+                        See all
+                        <span className="pl-2">
+                            <FaArrowRight />
+                        </span>
+                    </Button>
+                )}
             </div>
-            {rewards?.length === 0 && !loading && (
-                <div className="py-3 flex justify-center items-center">
-                    <p className="text-[14px] font-bold text-blue-text">
-                        No active burn rewards
-                    </p>
-                </div>
-            )}
+            {(rewards?.length === 0 && !loading) ||
+                (error && <NoRewardsState />)}
             {loading ? (
-                <DealsLoading />
+                <EarnAndBurnLoading />
             ) : (
                 <ScrollContainer
                     component={'div'}
@@ -94,7 +89,15 @@ const EarnAndBurnRewardsCarousel = () => {
     )
 }
 
-const DealsLoading = () => (
+const NoRewardsState = () => (
+    <div className="py-3 flex justify-center items-center">
+        <p className="text-[14px] font-bold text-blue-text">
+            No active burn rewards
+        </p>
+    </div>
+)
+
+const EarnAndBurnLoading = () => (
     <div className="w-full flex justify-center items-center bg-inherit m-2">
         <PulseLoader size={5} color="#173c9f" />
     </div>
