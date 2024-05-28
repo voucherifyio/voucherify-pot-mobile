@@ -144,7 +144,7 @@ export const useLoyalty = ({
 
         if (inactiveCampaigns) {
             setLoyaltyError(
-                `For some reason, none of the loyalty campaigns are active or the user is not part of an active campaign.`
+                `For some reason, none of the loyalty campaigns are active for the user or the user is not part of an active campaign.`
             )
         }
 
