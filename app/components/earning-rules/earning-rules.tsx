@@ -1,7 +1,8 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
 import { CAMPAIGNS } from '@/enum/campaigns'
+import { MobileAppContext } from '../app-context/app-context'
 
 interface EarningRulesProps {
     customerId: string
@@ -14,15 +15,20 @@ export interface EarningRule {
     }
 }
 
-const EarningRules: React.FC<EarningRulesProps> = ({ customerId }) => {
+const EarningRules: React.FC<EarningRulesProps> = () => {
     const [earningRules, setEarningRules] = useState<EarningRule[]>([])
     const [error, setError] = useState<string | undefined>(undefined)
+    const { loyaltyCampaignName } = useContext(MobileAppContext)
 
     useEffect(() => {
         const fetchEarningRules = async () => {
             try {
+                const campaignId =
+                    loyaltyCampaignName === CAMPAIGNS.LOYALTY_PROGRAM
+                        ? CAMPAIGNS.LOYALTY_PROGRAM_ID
+                        : CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID
                 const res = await fetch(
-                    `/api/voucherify/list-earning-rules?campaignId=${CAMPAIGNS.LOYALTY_PROGRAM_ID}`,
+                    `/api/voucherify/list-earning-rules?campaignId=${campaignId}`,
                     {
                         method: 'GET',
                         headers: { 'Content-Type': 'application/json' },
@@ -42,7 +48,7 @@ const EarningRules: React.FC<EarningRulesProps> = ({ customerId }) => {
         if (!earningRules || earningRules.length === 0) {
             fetchEarningRules().catch(console.error)
         }
-    }, [])
+    }, [loyaltyCampaignName])
 
     return (
         <>

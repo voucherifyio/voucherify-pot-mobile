@@ -52,9 +52,9 @@ const getEarningRules = async (campaignName: string) => {
     )
 }
 
-const getLoyaltyCard = async (customerId: string) => {
+const getLoyaltyCard = async (customerId: string, campaignName: string) => {
     return await fetch(
-        `/api/voucherify/loyalty-card?customerId=${customerId}`,
+        `/api/voucherify/loyalty-card?customerId=${customerId}&campaignName=${campaignName}`,
         {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },

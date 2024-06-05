@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { getLoyaltyCard } from '../apiEndpoints/apiEndpoints'
+import { MobileAppContext } from '../components/app-context/app-context'
 
 interface LoyaltyCardResponse {
     loyaltyCard: {
@@ -19,12 +20,16 @@ export const useLoyaltyCard = ({
     const [error, setError] = useState<undefined | string>(undefined)
     const [cardUrl, setCardUrl] = useState<string>('')
     const [cardNumber, setCardNumber] = useState<string>('')
+    const { loyaltyCampaignName } = useContext(MobileAppContext)
 
     useEffect(() => {
-        if (customerId) {
+        if (customerId && loyaltyCampaignName) {
             const fetchData = async () => {
                 try {
-                    const res = await getLoyaltyCard(customerId)
+                    const res = await getLoyaltyCard(
+                        customerId,
+                        loyaltyCampaignName
+                    )
                     const data: LoyaltyCardResponse = await res.json()
                     setCardUrl(data.loyaltyCard.barcode.url)
                     setCardNumber(data.loyaltyCard.code)
@@ -37,7 +42,7 @@ export const useLoyaltyCard = ({
             }
             fetchData()
         }
-    }, [customerId])
+    }, [customerId, loyaltyCampaignName])
 
     return { cardUrl, cardNumber, error, setError }
 }
