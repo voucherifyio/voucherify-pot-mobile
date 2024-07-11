@@ -116,11 +116,25 @@ export const useLoyalty = ({
         customerSourceId: string | null | undefined
     ): Promise<BasicLoyaltyCampaignsInfo[]> => {
         const res = await getCampaign(CAMPAIGNS.LOYALTY_PROGRAM_ID)
+
+        if (res.status === 404) {
+            setLoyaltyError(
+                `Could not get Loyalty Program - check if campaign is not deleted in Voucherify dashboard.`
+            )
+        }
+
         const res2 = await getCampaign(
             CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID
         )
+
+        if (res2.status === 404) {
+            setLoyaltyError(
+                `Could not get Loyalty Program - earn and burn - check if campaign is not deleted in Voucherify dashboard.`
+            )
+        }
         const { campaign: loyaltyProgram } = await res.json()
         const { campaign: earnAndBurnProgram } = await res2.json()
+
         const campaigns = [loyaltyProgram, earnAndBurnProgram]
 
         const isActiveMultipleLoyaltyCampaigns = campaigns.every(
