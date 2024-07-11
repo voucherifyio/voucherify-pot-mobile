@@ -1,5 +1,9 @@
 import { CampaignResponse, VouchersResponse } from '@voucherify/sdk'
-import { listCampaigns, listVouchers } from '../apiEndpoints/apiEndpoints'
+import {
+    getCampaign,
+    listCampaigns,
+    listVouchers,
+} from '../apiEndpoints/apiEndpoints'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { useEffect, useState } from 'react'
 import { WebhookResponse } from '@/types/webhook-response'
@@ -111,18 +115,15 @@ export const useLoyalty = ({
     const validateLoyaltyCampaigns = async (
         customerSourceId: string | null | undefined
     ): Promise<BasicLoyaltyCampaignsInfo[]> => {
-        const res = await listCampaigns()
-        const { campaigns }: { campaigns: CampaignResponse[] } =
-            await res.json()
-
-        const validCampaigns = campaigns.filter((campaign) =>
-            [
-                CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID,
-                CAMPAIGNS.LOYALTY_PROGRAM_ID,
-            ].includes(campaign.id as CAMPAIGNS)
+        const res = await getCampaign(CAMPAIGNS.LOYALTY_PROGRAM_ID)
+        const res2 = await getCampaign(
+            CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID
         )
+        const { campaign: loyaltyProgram } = await res.json()
+        const { campaign: earnAndBurnProgram } = await res2.json()
+        const campaigns = [loyaltyProgram, earnAndBurnProgram]
 
-        const isActiveMultipleLoyaltyCampaigns = validCampaigns.every(
+        const isActiveMultipleLoyaltyCampaigns = campaigns.every(
             (campaign) => campaign.active
         )
 
@@ -132,7 +133,7 @@ export const useLoyalty = ({
             )
         }
 
-        const inactiveLoyaltyCampaigns = validCampaigns.every(
+        const inactiveLoyaltyCampaigns = campaigns.every(
             (campaign) => !campaign.active
         )
 
