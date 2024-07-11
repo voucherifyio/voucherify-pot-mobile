@@ -1,5 +1,9 @@
 import { CampaignResponse, VouchersResponse } from '@voucherify/sdk'
-import { listCampaigns, listVouchers } from '../apiEndpoints/apiEndpoints'
+import {
+    getCampaign,
+    listCampaigns,
+    listVouchers,
+} from '../apiEndpoints/apiEndpoints'
 import { CAMPAIGNS } from '@/enum/campaigns'
 import { useEffect, useState } from 'react'
 import { WebhookResponse } from '@/types/webhook-response'
@@ -54,7 +58,7 @@ export const useLoyalty = ({
                 await validateLoyaltyCampaigns(customerSourceId)
 
             setLoyaltyPoints(
-                loyaltyCampaigns.find((campaign) =>
+                loyaltyCampaigns?.find((campaign) =>
                     [
                         CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID,
                         CAMPAIGNS.LOYALTY_PROGRAM_ID,
@@ -63,7 +67,7 @@ export const useLoyalty = ({
             )
 
             setRewardPoints(
-                loyaltyCampaigns.find(
+                loyaltyCampaigns?.find(
                     (campaign) =>
                         campaign?.id === CAMPAIGNS.MILESTONE_REWARDS_PROGRAM_ID
                 )?.loyaltyPoints || 0
@@ -110,34 +114,44 @@ export const useLoyalty = ({
 
     const validateLoyaltyCampaigns = async (
         customerSourceId: string | null | undefined
-    ): Promise<BasicLoyaltyCampaignsInfo[]> => {
-        const res = await listCampaigns()
-        const { campaigns }: { campaigns: CampaignResponse[] } =
-            await res.json()
+    ): Promise<BasicLoyaltyCampaignsInfo[] | void> => {
+        const res = await getCampaign(CAMPAIGNS.LOYALTY_PROGRAM_ID)
 
-        const validCampaigns = campaigns.filter((campaign) =>
-            [
-                CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID,
-                CAMPAIGNS.LOYALTY_PROGRAM_ID,
-            ].includes(campaign.id as CAMPAIGNS)
+        if (res.status === 404) {
+            return setLoyaltyError(
+                `Could not get Loyalty Program - check if campaign is not deleted in Voucherify dashboard.`
+            )
+        }
+
+        const res2 = await getCampaign(
+            CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID
         )
 
-        const isActiveMultipleLoyaltyCampaigns = validCampaigns.every(
+        if (res2.status === 404) {
+            return setLoyaltyError(
+                `Could not get Loyalty Program - earn and burn - check if campaign is not deleted in Voucherify dashboard.`
+            )
+        }
+        const { campaign: loyaltyProgram } = await res.json()
+        const { campaign: earnAndBurnProgram } = await res2.json()
+
+        const campaigns = [loyaltyProgram, earnAndBurnProgram]
+
+        const isActiveMultipleLoyaltyCampaigns = campaigns.every(
             (campaign) => campaign.active
         )
 
         if (isActiveMultipleLoyaltyCampaigns) {
-            setLoyaltyError(
+            return setLoyaltyError(
                 `You have activated two loyalty programs (Loyalty Program, Loyalty Program - earn and burn). Disable one of them for the app to work properly.`
             )
         }
-
-        const inactiveLoyaltyCampaigns = validCampaigns.every(
+        const inactiveLoyaltyCampaigns = campaigns.every(
             (campaign) => !campaign.active
         )
 
         if (inactiveLoyaltyCampaigns) {
-            setLoyaltyError(
+            return setLoyaltyError(
                 `For some reason, none of the loyalty campaigns are active for the user.`
             )
         }

@@ -100,9 +100,9 @@ const getMemberRewards = async (
     )
 }
 
-const getCampaign = async (campaignName: string) => {
+const getCampaign = async (campaignId: string) => {
     return await fetch(
-        `/api/voucherify/get-campaign?campaignId=${campaignName}`,
+        `/api/voucherify/get-campaign?campaignId=${campaignId}`,
         {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
