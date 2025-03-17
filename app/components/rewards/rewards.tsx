@@ -52,7 +52,7 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
     }
 
     if (loading) {
-        return <Loading />
+        return <Loading className='text-white' />
     }
 
     return (
@@ -61,9 +61,9 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
                 activeRewards.map((reward) => (
                     <div
                         key={reward.id}
-                        className="flex flex-col justify-end shadow-md min-h-[92px] rounded-xl m-2 flex bg-white text-blue-text w-[95%] p-2 gap-4"
+                        className="flex flex-col min-h-[92px] rounded-[8px] m-2 flex bg-white p-2 gap-4"
                     >
-                        <h3 className="text-[16px] font-bold">
+                        <h3 className="text-[16px] font-bold text-black">
                             {reward.campaign_name}
                         </h3>
                         <div className="flex gap-4 items-end w-full">
@@ -84,7 +84,7 @@ const Rewards: FC<RewardsProps> = ({ customerId }) => {
                                         : 'Activate coupon'}
                                 </Button>
                             )}
-                            <h3 className="text-[18px] font-extrabold">
+                            <h3 className="text-[18px] font-extrabold text-black">
                                 {reward.name || reward.id}
                             </h3>
                         </div>

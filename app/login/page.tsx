@@ -72,14 +72,14 @@ export default function LoginPage() {
 
     return (
         <div className="h-screen items-center justify-center">
-            <div className="border-bottom-gray-200 flex h-[25%] w-full flex-col items-center justify-center border-b bg-white">
+            <div className="border-bottom-gray-200 my-8 flex w-full flex-col items-center justify-center bg-white">
                 <h1 className="text-blue-text text-xl font-extrabold">
                     Login to your account
                 </h1>
             </div>
-            <div className="bg-blue-background flex py-10 max-h-full w-full flex-col items-center justify-center">
+            <div className="flex py-10 h-full w-full flex-col items-center justify-center">
                 <form
-                    className="bg-blue-background mt-6 w-full rounded-md px-2"
+                    className="mt-6 w-full rounded-md px-2"
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <div className="mb-6">
@@ -119,14 +119,14 @@ export default function LoginPage() {
                     <Button
                         type="submit"
                         buttonType="green"
-                        className="px-4 py-2 w-full bg-green-500 mb-1"
+                        className="px-4 py-2 w-full bg-green-500 mb-1 rounded-[50px]"
                     >
                         Login
                     </Button>
                     <Button
                         type="button"
                         buttonType="primary"
-                        className="px-4 py-2 w-full mb-1"
+                        className="px-4 py-2 w-full mb-1 rounded-[50px]"
                         onClick={handleRegisterClick}
                     >
                         Register

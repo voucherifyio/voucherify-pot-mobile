@@ -5,6 +5,7 @@ import EarnAndBurnRewards from '../components/earn-and-burn/earn-and-burn'
 import VoucherifyHeader from '../components/voucherify-header/voucherify-header'
 import { useSession } from 'next-auth/react'
 import Loading from '../components/loading/loading'
+import { VW_COLOR } from '../../enum/vw-colors'
 
 export default function EarnAndBurnRewardsPage() {
     const router = useRouter()
@@ -16,11 +17,11 @@ export default function EarnAndBurnRewardsPage() {
     })
 
     if (status === 'loading') {
-        return <Loading />
+        return <Loading className='text-white' />
     }
 
     return (
-        <div className="bg-blue-background flex flex-col flex-1">
+        <div className="flex flex-col flex-1" style={{ backgroundColor: VW_COLOR.DARK_BLUE }}>
             <VoucherifyHeader headerText={'Earn and burn'} />
             <EarnAndBurnRewards />
         </div>

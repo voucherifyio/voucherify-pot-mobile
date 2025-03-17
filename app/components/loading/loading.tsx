@@ -1,7 +1,13 @@
-const Loading = () => {
+import { FC } from "react"
+
+type LoadingProps = {
+    className?: string
+}
+
+const Loading: FC<LoadingProps> = ({ className }) => {
     return (
         <div className="flex items-center justify-center w-full h-screen bg-inherit">
-            <p>Loading...</p>
+            <p className={className}>Loading...</p>
         </div>
     )
 }

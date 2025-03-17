@@ -2,16 +2,20 @@
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useContext } from 'react'
-import {
-    MdCreditCard,
-    MdHome,
-    MdOutlineLocalOffer,
-    MdStars,
-    MdLocalFireDepartment,
-} from 'react-icons/md'
+import BurnIcon from '@/public/images/volkswagen/burn.png'
+import BurnActiveIcon from '@/public/images/volkswagen/burn-active.png'
+import CardIcon from '@/public/images/volkswagen/card.png'
+import CardActiveIcon from '@/public/images/volkswagen/card-active.png'
+import DealsIcon from '@/public/images/volkswagen/deals.png'
+import DealsActiveIcon from '@/public/images/volkswagen/deals-active.png'
+import RewardsIcon from '@/public/images/volkswagen/rewards.png'
+import RewardsActiveIcon from '@/public/images/volkswagen/rewards-active.png'
+import HomeIcon from '@/public/images/volkswagen/home.png'
+import HomeActiveIcon from '@/public/images/volkswagen/home-active.png'
 import Link from 'next/link'
 import { MobileAppContext } from './app-context/app-context'
 import { CAMPAIGNS } from '@/enum/campaigns'
+import Image from 'next/image'
 
 const Navbar = () => {
     const { status } = useSession()
@@ -23,22 +27,26 @@ const Navbar = () => {
         {
             text: 'Home',
             href: '/home',
-            icon: <MdHome color="gray" />,
+            icon: <Image src={HomeIcon} alt='Home' width={30} />,
+            activeIcon: <Image src={HomeActiveIcon} alt='Home' width={30} />,
         },
         {
             text: 'Deals',
             href: '/deals',
-            icon: <MdOutlineLocalOffer color="gray" />,
+            icon: <Image src={DealsIcon} alt='Deals' width={30} />,
+            activeIcon: <Image src={DealsActiveIcon} alt='Deals' width={30} />
         },
         {
             text: 'Card',
             href: '/card',
-            icon: <MdCreditCard color="gray" />,
+            icon: <Image src={CardIcon} alt='Loyalty card' width={30} />,
+            activeIcon: <Image src={CardActiveIcon} alt='Loyalty card' width={30} />
         },
         {
             text: 'Rewards',
             href: '/rewards',
-            icon: <MdStars color="gray" />,
+            icon: <Image src={RewardsIcon} alt='Rewards' width={30} />,
+            activeIcon: <Image src={RewardsActiveIcon} alt='Rewards' width={30} />
         },
     ]
 
@@ -47,8 +55,9 @@ const Navbar = () => {
         {
             text: 'Burn',
             href: '/earn-and-burn',
-            icon: <MdLocalFireDepartment color="gray" />,
-        },
+            icon: <Image src={BurnIcon} alt='Burn' width={30} />,
+            activeIcon: <Image src={BurnActiveIcon} alt='Burn' width={30} />
+        }
     ]
 
     if (status === 'loading') {
@@ -57,7 +66,7 @@ const Navbar = () => {
 
     if (status === 'authenticated') {
         return (
-            <div className="w-full h-16 bg-white border-t border-gray-200 sticky bottom-0">
+            <div className="w-full h-16 bg-white sticky bottom-0">
                 <div className="flex justify-evenly h-full max-w-screen-sm grid-cols-5 mx-auto font-medium">
                     {(loyaltyCampaignName !== CAMPAIGNS.LOYALTY_PROGRAM
                         ? EARN_AND_BURN_MENU
@@ -68,23 +77,7 @@ const Navbar = () => {
                             className={`inline-flex flex-col items-center justify-center relative px-2`}
                             href={item.href}
                         >
-                            {dealsAndRewards.deals && item.text === 'Deals' ? (
-                                <span className="absolute top-2 -right-0 bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white text-[10px]">
-                                    {!customer ? null : dealsAndRewards.deals}
-                                </span>
-                            ) : null}
-                            {dealsAndRewards.rewards &&
-                            item.text === 'Rewards' ? (
-                                <span className="absolute top-2 right-1 bg-[#173c9f] rounded-xl h-4 w-4 flex justify-center items-center text-white text-[10px]">
-                                    {!customer ? null : dealsAndRewards.rewards}
-                                </span>
-                            ) : null}
-                            {item.icon}
-                            <p
-                                className={`text-sm  ${pathname === item.href ? 'text-blue-text' : 'text-gray-500'}`}
-                            >
-                                {item.text}
-                            </p>
+                            {item.href === pathname ? item.activeIcon : item.icon}
                         </Link>
                     ))}
                 </div>

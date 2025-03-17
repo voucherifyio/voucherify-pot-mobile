@@ -77,7 +77,7 @@ const Deals = () => {
     }
 
     if (conditionalDealsLoading || dealsLoading) {
-        return <Loading />
+        return <Loading className='text-white' />
     }
 
     return (
@@ -88,7 +88,7 @@ const Deals = () => {
                     <button
                         key={CurrentDeal.All}
                         onClick={() => setCurrentDealType(CurrentDeal.All)}
-                        className={`max-w-[150px] w-[150px] inline-block px-4 py-3 text-blue-text rounded-[30px] ${
+                        className={`max-w-[150px] w-[150px] inline-block px-4 py-3 text-black rounded-[30px] ${
                             currentDealType === CurrentDeal.All
                                 ? 'active bg-white'
                                 : 'bg-[#d1d6e8]'
@@ -103,7 +103,7 @@ const Deals = () => {
                         onClick={() =>
                             setCurrentDealType(CurrentDeal.WithinReach)
                         }
-                        className={`ml-2 max-w-[150px] w-[150px] inline-block text-blue-text px-4 py-3 rounded-[30px] ${
+                        className={`ml-2 max-w-[150px] w-[150px] inline-block text-black px-4 py-3 rounded-[30px] ${
                             currentDealType === CurrentDeal.WithinReach
                                 ? 'active bg-white'
                                 : 'bg-[#d1d6e8]'
@@ -119,7 +119,7 @@ const Deals = () => {
                         activeDeals.map((deal) => (
                             <div
                                 key={deal.id}
-                                className="flex flex-col justify-end shadow-md min-h-[80px] rounded-xl m-2 flex bg-white text-blue-text w-[95%] p-2 gap-4"
+                                className="flex flex-col justify-end min-h-[80px] rounded-[8px] m-2 flex bg-white p-2 gap-4"
                             >
                                 <h3 className="text-[16px] font-bold">
                                     {deal.campaign_name}
@@ -158,9 +158,9 @@ const Deals = () => {
                     {conditionalDeals.length === 0 &&
                         activeDeals.length === 0 && <EmptyDealsState />}
                     {conditionalDeals.length > 0 &&
-                        conditionalDeals.map((deal) => (
+                        conditionalDeals.map((deal, index) => (
                             <div
-                                key={deal.id}
+                                key={deal?.id || index}
                                 className="shadow-md min-h-[92px] rounded-xl m-2 flex bg-white text-blue-text w-[95%]"
                             >
                                 <div className="flex flex-col p-2">
@@ -168,7 +168,7 @@ const Deals = () => {
                                         {(deal?.promotion?.tiers &&
                                             deal?.promotion?.tiers[0].name) ||
                                             deal?.name ||
-                                            deal.id}
+                                            deal?.id}
                                     </h3>
                                     {isNotEligibleForTheConditionalDeal && (
                                         <h3 className="pt-1">

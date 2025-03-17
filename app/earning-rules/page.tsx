@@ -20,8 +20,8 @@ export default function EarningRulesPage() {
     }
 
     return (
-        <div className="flex flex-col flex-1 bg-blue-background">
-            <VoucherifyHeader headerText={'Earning Rules'} />
+        <div className="flex flex-col flex-1 bg-gray-100">
+            <VoucherifyHeader headerText={'Ways to Earn'} />
             {customerId && <EarningRules customerId={customerId} />}
         </div>
     )

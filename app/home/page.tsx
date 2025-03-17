@@ -6,14 +6,10 @@ import { MdOutlineAccountCircle } from 'react-icons/md'
 import Button from '@/app/components/ui/atoms/button'
 import Milestones from '@/app/components/milestones/milestones'
 import BrazePermissionModal from '@/app/components/braze-permission-modal/braze-permission-modal'
-import DealsCarousel from '@/app/components/deals/deals-carousel'
-import VoucherifyPlan from '@/app/components/voucherify-plan/voucherify-plan'
-import EarningRulesCarousel from '@/app/components/earning-rules/earning-rules-carousel'
 import Loading from '@/app/components/loading/loading'
 import { useContext } from 'react'
 import { MobileAppContext } from '../components/app-context/app-context'
-import { CAMPAIGNS } from '@/enum/campaigns'
-import EarnAndBurnRewardsCarousel from '../components/earn-and-burn/earn-and-burn-carousel'
+import Resources from '../components/resources/resources'
 
 export default function HomePage() {
     const router = useRouter()
@@ -42,19 +38,14 @@ export default function HomePage() {
     const showBrazePermissionModal = !braze?.isPushPermissionGranted()
 
     return (
-        <div className="flex flex-col flex-1 items-center justify-center bg-[#ecf0fb] overflow-hidden">
+        <div className="flex flex-col flex-1 overflow-hidden">
             {showBrazePermissionModal && <BrazePermissionModal braze={braze} />}
-            <div className="flex justify-between px-4 py-2 w-full bg-white">
-                <div>
-                    <h1 className="text-blue-text text-2xl font-extrabold">
-                        My Voucherify
-                    </h1>
-                    <h4 className="text-blue-text text-[15px] font-normal">
+            <div className="flex justify-between px-4 py-2 w-full bg-white items-center">
+                    <h4 className="text-[15px] font-normal">
                         Hello {session.user?.name || session.user?.id}
                     </h4>
-                </div>
                 <div className="flex items-center gap-2">
-                    <MdOutlineAccountCircle size={24} color="blue" />
+                    <MdOutlineAccountCircle size={24} color="black" />
                     <Button
                         buttonType="primary"
                         onClick={() => {
@@ -71,15 +62,7 @@ export default function HomePage() {
             </div>
             <div className="flex-1 flex flex-col w-full">
                 <Milestones />
-                <DealsCarousel />
-                <EarningRulesCarousel />
-                {loyaltyCampaignName ===
-                    CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN && (
-                    <EarnAndBurnRewardsCarousel />
-                )}
-                {loyaltyCampaignName === CAMPAIGNS.LOYALTY_PROGRAM && (
-                    <VoucherifyPlan />
-                )}
+                <Resources />
             </div>
         </div>
     )

@@ -8,7 +8,7 @@ const Button = (props: ButtonProps) => {
     const { className, buttonType, ...buttonProps } = props
 
     const buttonStyles: Record<string, string> = {
-        primary: 'bg-blue-text text-white ',
+        primary: 'bg-[#0040C5] text-white ',
         secondary: 'border bg-white border-blue-border text-blue-text',
         yellow: 'bg-yellow-button text-blue-text',
         green: 'bg-green-background text-white',

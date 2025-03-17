@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Loading from '@/app/components/loading/loading'
 import Deals from '@/app/components/deals/deals'
+import { VW_COLOR } from '../../enum/vw-colors'
 
 export default function DealsPage() {
     const router = useRouter()
@@ -20,7 +21,7 @@ export default function DealsPage() {
     }
 
     return (
-        <div className="bg-blue-background flex flex-col flex-1">
+        <div className="flex flex-col flex-1" style={{ backgroundColor: VW_COLOR.DARK_BLUE }}>
             <VoucherifyHeader headerText={'Deals'} />
             <Deals />
         </div>

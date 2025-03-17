@@ -24,11 +24,11 @@ const ActiveRewards = () => {
         <div className="mt-4">
             <header>
                 {activatedRewards.length > 0 ? (
-                    <h1 className="mb-4 text-[18px] font-bold text-blue-text">
+                    <h1 className="mb-4 text-[18px] font-bold text-white">
                         Active rewards/coupons
                     </h1>
                 ) : (
-                    <p className="mb-4 text-[14px] font-bold text-blue-text">
+                    <p className="mb-4 text-[14px] font-bold text-white">
                         No active coupons.
                     </p>
                 )}
@@ -38,9 +38,9 @@ const ActiveRewards = () => {
                     <div
                         key={reward.id}
                         onClick={() => handleExpandCoupon(reward.id)}
-                        className="flex flex-col shadow-md rounded-xl flex bg-white mt-4 text-blue-text w-full min-h-[92px] p-2"
+                        className="flex flex-col shadow-md rounded-[8px] flex bg-white mt-4 text-blue-text w-full min-h-[92px] p-2"
                     >
-                        <h3 className="text-[16px] font-bold">
+                        <h3 className="text-[16px] font-bold text-black">
                             {reward.campaign_name}
                         </h3>
                         <div className="flex items-center gap-4 mt-2">
@@ -50,12 +50,12 @@ const ActiveRewards = () => {
                                         handleExpandCoupon(reward.id)
                                     }
                                     buttonType="green"
-                                    className="h-[24px] text-[16px] rounded-md px-2"
+                                    className="h-auto text-[16px] rounded-md px-2 py-1"
                                 >
                                     Scan in-store
                                 </Button>
                             )}
-                            <h3 className="text-[18px] font-extrabold">
+                            <h3 className="text-[18px] font-extrabold text-black">
                                 {reward?.id}
                             </h3>
                         </div>
