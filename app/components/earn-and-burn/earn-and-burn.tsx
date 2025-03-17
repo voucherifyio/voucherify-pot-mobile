@@ -30,16 +30,11 @@ const EarnAndBurnRewards = () => {
     const [error, setError] = useState<string | undefined>(undefined)
     const {
         customer,
-        redeemCustomerReward,
-        setDealsAndRewards,
-        dealsAndRewards,
         rewardSuccessMessage,
         loyaltyPoints,
     } = useContext(MobileAppContext)
-    const [isVoucherGenerationProcess, setIsVoucherGenerationProcess] =
-        useState(false)
     const [activeIndex, setActiveIndex] = useState<number>(0)
-    const [redeemedReward, setRedeemedReward] = useState({
+    const [activeReward, setActiveReward] = useState({
         rewardId: undefined,
         barcodeUrl: undefined
     })
@@ -74,7 +69,7 @@ const EarnAndBurnRewards = () => {
         const { redeemedReward } = await res.json()
 
         if (redeemedReward.voucher.assets.barcode.url) {
-            setRedeemedReward({ barcodeUrl: redeemedReward.voucher.assets.barcode.url, rewardId: redeemedReward.reward.id })
+            setActiveReward({ barcodeUrl: redeemedReward.voucher.assets.barcode.url, rewardId: redeemedReward.reward.id })
             setIsCouponClosed(false);
         }
       }
@@ -130,15 +125,17 @@ const EarnAndBurnRewards = () => {
                                 <p className='font-bold text-black'>{reward.name || reward.id}</p>
                                 <p className='text-[14px] text-black'>{(assignment as RewardsAssignmentCampaignOrMaterialReward).parameters.loyalty.points?.toLocaleString()} points</p>
                             </div>
-                            {!redeemedReward.rewardId && isCouponClosed
+                            {!activeReward.rewardId && isCouponClosed
                                 ? <Button className='border px-4 py-1 rounded-full h-auto' onClick={() => handleRedeemReward(reward)}>Redeem</Button>
-                                : <Button className='border px-4 py-1 rounded-full h-auto' onClick={() => {
+                                : activeReward.rewardId === reward.id
+                                ? <Button className='border px-4 py-1 rounded-full h-auto' onClick={() => {
                                     setIsCouponClosed(true)
-                                    setRedeemedReward({ barcodeUrl: undefined, rewardId: undefined })
-                                    }}>Close</Button>}
+                                    setActiveReward({ barcodeUrl: undefined, rewardId: undefined })
+                                    }}>Close</Button>
+                                : null}
                         </div>
-                        {redeemedReward.rewardId === reward.id && redeemedReward.barcodeUrl ? <Image
-                                    src={redeemedReward.barcodeUrl}
+                        {activeReward.rewardId === reward.id && activeReward.barcodeUrl ? <Image
+                                    src={activeReward.barcodeUrl}
                                     alt="couponBarcode"
                                     width={250}
                                     height={65}
