@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import loginPage from '@/public/images/volkswagen/vw-hero-image.png'
+import welcomeImage from '@/public/images/volkswagen/vw-hero-image.png'
 import Button from '@/app/components/ui/atoms/button'
 import Loading from '@/app/components/loading/loading'
 import { useEffect } from 'react'
@@ -32,15 +32,15 @@ export default function LoginPage() {
     return (
         <div className="flex-1 flex flex-col items-center justify-center">
             <Image
-                src={loginPage}
-                alt="login-page"
+                src={welcomeImage}
+                alt="Welcome page"
                 priority
                 className="object-cover object-right flex-1"
             />
 
             <div className="flex-1 flex flex-col gap-4 max-h-60 w-full max-w-screen-sm text-center justify-center items-center">
                 <h1 className="text-black-text px-5 text-left text-xl font-bold leading-7 text-center">
-                    Register to Voucherify Mobile
+                    Enroll in VW Rewards
                 </h1>
                 <Button
                     buttonType="primary"
@@ -49,11 +49,9 @@ export default function LoginPage() {
                 >
                     Register
                 </Button>
-                <div className='flex justify-center gap-x-2'>
-                    <p className="text-16">
-                        Already have an account?
-                    </p>
-                    <Link href="/login" className='text-blue-text'>
+                <div className="flex justify-center gap-x-2">
+                    <p className="text-16">Already have an account?</p>
+                    <Link href="/login" className="text-blue-text">
                         Log in
                     </Link>
                 </div>

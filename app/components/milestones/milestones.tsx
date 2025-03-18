@@ -62,7 +62,7 @@ const Milestones = () => {
                 />
             )}
             <div className='flex flex-col gap-4'>
-                <h1 className='font-extrabold text-[30px]'>My Voucherify</h1>
+                <h1 className='font-extrabold text-[30px]'>VW Rewards</h1>
                 <Image src={HomeImage} alt='home-image' />
                 <div className='bg-gray-100 rounded-lg p-4'>
                     {!customer ? (
@@ -71,7 +71,7 @@ const Milestones = () => {
                         <PulseLoader size={5} color="#173c9f" />
                     ) : (
                         <div className='flex flex-col gap-2'>
-                            <p className='text-gray-700 font-medium'><span className='font-extrabold text-black text-xl'>{calculatedLoyaltyPoints}</span> points</p>
+                            <p className='text-gray-700 font-medium'><span className='font-extrabold text-black text-xl'>{calculatedLoyaltyPoints.toLocaleString()}</span> points</p>
                             <Progress value={calculatedLoyaltyPoints / 100} bg={VW_COLOR.GRAY} height='10px' borderRadius='50px' sx={{"& div[role='progressbar']": { backgroundColor: VW_COLOR.BLUE }}} />
                         </div>
                     )}

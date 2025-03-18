@@ -110,7 +110,7 @@ const EarnAndBurnRewards = () => {
                 />
             )}
             <p className='text-[24px] font-bold text-white mx-4 mb-4'>Your Rewards</p>
-            <p className='text-white mx-4'>Get exclusive incentives, and more with the points you’ve earned</p>
+            <p className='text-white mx-4'>Get exclusive incentives and more with the points you’ve earned</p>
             <ScrollContainer className='scroll-container flex gap-4 m-4' component={'div'}> 
                 {rewards?.map(({ reward, assignment }, index) => (
                     <div

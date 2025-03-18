@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Image from 'next/image'
 import { useLoyaltyCard } from '@/app/hooks/useLoyaltyCard'
 import LoyaltyCardImage from '@/public/images/volkswagen/loyalty-card-image.png'
@@ -8,25 +7,7 @@ interface LoyaltyCardProps {
 }
 
 const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ customerId }) => {
-    const { cardNumber, cardUrl, error, setError } = useLoyaltyCard({
-        customerId,
-    })
-    const [codeCopied, setCodeCopied] = useState<boolean>(false)
-
-    const handleCopy = async () => {
-        try {
-            setCodeCopied(false)
-            await navigator.clipboard.writeText(cardNumber)
-            setCodeCopied(true)
-            setTimeout(() => {
-                setCodeCopied(false)
-            }, 2000)
-        } catch (err) {
-            console.error('Unable to copy code')
-            setCodeCopied(false)
-            setError(error)
-        }
-    }
+    const { cardUrl, error } = useLoyaltyCard({ customerId })
 
     return (
         <>

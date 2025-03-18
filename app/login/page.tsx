@@ -6,6 +6,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import Loading from '../components/loading/loading'
 import { MobileAppContext } from '../components/app-context/app-context'
+import Image from 'next/image'
+import loginImage from '@/public/images/volkswagen/loyalty-resource2.png'
 
 export interface Inputs {
     phone: string
@@ -71,15 +73,21 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="h-screen items-center justify-center">
-            <div className="border-bottom-gray-200 my-8 flex w-full flex-col items-center justify-center bg-white">
-                <h1 className="text-blue-text text-xl font-extrabold">
+        <div className="items-center justify-center flex flex-col">
+            <Image
+                src={loginImage}
+                alt="Login page"
+                priority
+                style={{ width: '100%' }}
+            />
+            <div className="border-bottom-gray-200 my-8 flex w-full flex-col items-center justify-center">
+                <h1 className="text-xl font-extrabold">
                     Login to your account
                 </h1>
             </div>
-            <div className="flex py-10 h-full w-full flex-col items-center justify-center">
+            <div className="flex w-full">
                 <form
-                    className="mt-6 w-full rounded-md px-2"
+                    className="w-full rounded-md px-2"
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <div className="mb-6">

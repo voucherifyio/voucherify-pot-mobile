@@ -112,16 +112,16 @@ export default function RegisterPage() {
     if (status === 'unauthenticated') {
         return (
             <div className="flex-1 py-4">
-                <div className="border-bottom-gray-200 flex w-full flex-col items-center justify-center border-b bg-white pb-4">
-                    <h1 className="text-blue-text  text-xl font-extrabold">
+                <div className="flex w-full flex-col items-center justify-center bg-white pb-4">
+                    <h1 className="text-xl font-extrabold">
                         Create your account
                     </h1>
-                    <h4 className="text-blue-text">to start earning rewards</h4>
+                    <h4>to start earning rewards</h4>
                 </div>
-                <div className="bg-blue-background flex max-h-full w-full flex-col items-center justify-center">
+                <div className="flex max-h-full w-full flex-col items-center justify-center">
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="bg-blue-background mt-6 h-[100%] w-full rounded-md px-2 shadow-md"
+                        className="mt-6 h-[100%] w-full rounded-md px-2 shadow-md"
                     >
                         <div className="mb-6">
                             <label htmlFor="firstName" className={labelStyle}>

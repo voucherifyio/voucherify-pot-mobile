@@ -23,7 +23,7 @@ export default function RewardsPage() {
     if (status === 'authenticated') {
         return (
             <div className="flex-1 flex flex-col" style={{ backgroundColor: VW_COLOR.DARK_BLUE }}>
-                <VoucherifyHeader headerText={'Rewards'} />
+                <VoucherifyHeader headerText={'VW Rewards'} />
                 <Rewards customerId={customerId} />
             </div>
         )

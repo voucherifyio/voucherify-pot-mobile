@@ -20,17 +20,17 @@ const ActiveRewards = () => {
         return <Loading />
     }
 
+    if (!activatedRewards.length) {
+        return null
+    }
+
     return (
         <div className="mt-4">
             <header>
-                {activatedRewards.length > 0 ? (
+                {activatedRewards.length > 0 && (
                     <h1 className="mb-4 text-[18px] font-bold text-white">
                         Active rewards/coupons
                     </h1>
-                ) : (
-                    <p className="mb-4 text-[14px] font-bold text-white">
-                        No active coupons.
-                    </p>
                 )}
             </header>
             <div>

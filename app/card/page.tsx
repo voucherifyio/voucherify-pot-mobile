@@ -29,14 +29,14 @@ export default function CardPage() {
             <div className="flex-1" style={{ backgroundColor: VW_COLOR.DARK_BLUE }}>
                 <VoucherifyHeader headerText={'Loyalty card'} />
                 {customer ? (
-                    <div className="p-4 w-full">
+                    <div className="p-4 w-full h-full">
                         <header>
                             <h1 className="mb-4 text-[24px] font-bold text-white">
                                 Scan In-Store
                             </h1>
                             <h4 className="text-16 font-normal text-white mb-4">
                                 Show this card when you pay in-store to earn
-                                points and redeem rewards.
+                                points and redeem rewards
                             </h4>
                         </header>
                         {customerId && <LoyaltyCard customerId={customerId} />}
