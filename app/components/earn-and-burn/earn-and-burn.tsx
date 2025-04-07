@@ -10,14 +10,14 @@ import {
 } from '@voucherify/sdk'
 import Button from '../ui/atoms/button'
 import Toast from '../ui/atoms/toast'
-import FirstImage from '@/public/images/volkswagen/loyalty-card-image.png'
-import SecondaryImage from '@/public/images/volkswagen/loyalty-resource2.png'
-import ThirdImage from '@/public/images/volkswagen/vw-hero-image.png'
-import FourthImage from '@/public/images/volkswagen/loyalty-resource1.png'
+import FirstImage from '@/public/images/heb/heb_food1.webp'
+import SecondaryImage from '@/public/images/heb/heb_food2.webp'
+import ThirdImage from '@/public/images/heb/heb_meal1.webp'
+import FourthImage from '@/public/images/heb/heb_shop.webp'
 import Image from 'next/image'
 import ScrollContainer from 'react-indiana-drag-scroll'
 
-const VOLKSWAGEN_IMAGES = [FirstImage, SecondaryImage, ThirdImage, FourthImage];
+const HEB_IMAGES = [FirstImage, SecondaryImage, ThirdImage, FourthImage];
 
 const toastStyles =
     'font-bold border border-gray-300 rounded-lg shadow-lg fixed top-[15%] left-[50%] -translate-x-2/4 flex items-center justify-center w-full max-w-xs p-4 bg-white z-50'
@@ -118,10 +118,10 @@ const EarnAndBurnRewards = () => {
                         className="flex-1 flex-col justify-end shadow-md rounded-xl flex bg-white text-blue-text min-w-[85%] self-start"
                     >   
                         <div className='relative h-[320px]'>
-                            <Image src={VOLKSWAGEN_IMAGES[index]} alt='Reward image' fill style={{ objectFit: 'cover' }} className='rounded-t-[8px]' />
+                            <Image src={HEB_IMAGES[index] || HEB_IMAGES[1]} alt='Reward image' fill style={{ objectFit: 'cover' }} className='rounded-t-[8px]' />
                         </div>
                         <div className='p-4 flex justify-between items-end'>
-                            <div className=''>
+                            <div>
                                 <p className='font-bold text-black'>{reward.name || reward.id}</p>
                                 <p className='text-[14px] text-black'>{(assignment as RewardsAssignmentCampaignOrMaterialReward).parameters.loyalty.points?.toLocaleString()} points</p>
                             </div>
