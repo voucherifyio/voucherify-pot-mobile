@@ -35,11 +35,8 @@ export default function HomePage() {
         return <Loading />
     }
 
-    const showBrazePermissionModal = !braze?.isPushPermissionGranted()
-
     return (
         <div className="flex flex-col flex-1 overflow-hidden">
-            {showBrazePermissionModal && <BrazePermissionModal braze={braze} />}
             <div className="flex justify-between px-4 py-2 w-full bg-white items-center">
                     <h4 className="text-[15px] font-normal">
                         Hello {session.user?.name || session.user?.id}
