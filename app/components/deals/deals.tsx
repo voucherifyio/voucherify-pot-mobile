@@ -221,7 +221,7 @@ const Deals = () => {
 
 const EmptyDealsState = () => (
     <div className="flex-1 w-full h-full flex justify-center items-center">
-        <p className="mb-4 text-[14px] font-bold text-blue-text">
+        <p className="mb-4 text-[14px] font-bold text-white">
             You don't have any deals.
         </p>
     </div>

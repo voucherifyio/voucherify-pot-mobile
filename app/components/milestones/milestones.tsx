@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
 import { MobileAppContext } from '../app-context/app-context'
 import { PulseLoader } from 'react-spinners'
-import HomeImage from '@/public/images/volkswagen/home-image.png'
+import HomeImage from '@/public/images/heb/heb_shop2.webp'
 import Image from 'next/image'
 import { Progress } from '@chakra-ui/react'
 import { VW_COLOR } from '../../../enum/vw-colors'
@@ -62,7 +62,7 @@ const Milestones = () => {
                 />
             )}
             <div className='flex flex-col gap-4'>
-                <h1 className='font-extrabold text-[30px]'>VW Rewards</h1>
+                <h1 className='font-extrabold text-[30px]'>HEB Rewards</h1>
                 <Image src={HomeImage} alt='home-image' />
                 <div className='bg-gray-100 rounded-lg p-4'>
                     {!customer ? (

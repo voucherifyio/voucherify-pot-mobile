@@ -8,7 +8,7 @@ interface LoyaltyCardProps {
 
 const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ customerId }) => {
     const { cardUrl, error } = useLoyaltyCard({ customerId })
-
+console.log('halo', customerId)
     return (
         <>
             {cardUrl && !error && (

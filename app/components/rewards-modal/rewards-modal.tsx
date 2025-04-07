@@ -105,7 +105,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
                                 right: '10px',
                             }}
                         />
-                        <p className="text-[14px] font-bold text-blue-text">
+                        <p className="text-[14px] font-bold text-white">
                             You don't have any rewards.
                         </p>
                     </Box>

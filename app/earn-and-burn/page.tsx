@@ -22,7 +22,7 @@ export default function EarnAndBurnRewardsPage() {
 
     return (
         <div className="flex flex-col flex-1" style={{ backgroundColor: VW_COLOR.DARK_BLUE }}>
-            <VoucherifyHeader headerText={'VW Rewards'} />
+            <VoucherifyHeader headerText={'HEB Rewards'} />
             <EarnAndBurnRewards />
         </div>
     )

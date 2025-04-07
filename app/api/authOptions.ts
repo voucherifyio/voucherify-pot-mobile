@@ -23,10 +23,7 @@ export const authOptions: NextAuthOptions = {
                     voucherify: getVoucherify(),
                 })
 
-                if (
-                    !voucherifyCustomer?.source_id ||
-                    !voucherifyCustomer?.metadata[METADATA.REGISTERED_CUSTOMER]
-                ) {
+                if (!voucherifyCustomer?.source_id) {
                     return null
                 }
 

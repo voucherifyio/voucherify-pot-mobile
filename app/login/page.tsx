@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import Loading from '../components/loading/loading'
 import { MobileAppContext } from '../components/app-context/app-context'
 import Image from 'next/image'
-import loginImage from '@/public/images/volkswagen/loyalty-resource2.png'
+import loginImage from '@/public/images/heb/heb_meal1.webp'
 
 export interface Inputs {
     phone: string

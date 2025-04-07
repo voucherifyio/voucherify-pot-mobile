@@ -10,18 +10,18 @@ const LOYALTY_HARDCODED_RESOURCES = [
     {
         title: 'FAQs',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        image: '/images/volkswagen/loyalty-resource1.png'
+        image: '/images/heb/heb_food1.webp',
     },
     {
         title: 'Unlocking',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        image: '/images/volkswagen/loyalty-resource2.png'
+        image: '/images/heb/heb_food2.webp',
     },
     {
         title: 'Subscribe',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        image: '/images/volkswagen/home-image.png'
-    }
+        image: '/images/heb/heb_meal1.webp',
+    },
 ]
 
 interface EarningRulesProps {
@@ -31,12 +31,12 @@ interface EarningRulesProps {
 export interface EarningRule {
     id: string
     loyalty: {
-        points: number;
+        points: number
         type: string
-    },
+    }
     metadata?: {
-        description: string;
-    },
+        description: string
+    }
     source?: {
         banner?: string
     }
@@ -88,26 +88,44 @@ const EarningRules: React.FC<EarningRulesProps> = () => {
                     >
                         <div className="flex flex-col p-2 gap-2">
                             {index === 1 ? (
-                                <span className='text-sm bg-cyan-400 rounded-xl px-2 font-extrabold self-start'>Great Deal</span>
-                                ) : null}
+                                <span className="text-sm bg-cyan-400 rounded-xl px-2 font-extrabold self-start">
+                                    Great Deal
+                                </span>
+                            ) : null}
                             <h3 className="text-[20px] font-extrabold">
                                 {rule?.source?.banner || rule.id}
                             </h3>
-                            {rule.loyalty.points ? <p className='font-extrabold'>{rule.loyalty.points} points </p> : null}
-                            <p className='text-xs'>{rule.metadata?.description}</p>
+                            {rule.loyalty.points ? (
+                                <p className="font-extrabold">
+                                    {rule.loyalty.points} points{' '}
+                                </p>
+                            ) : null}
+                            <p className="text-xs">
+                                {rule.metadata?.description}
+                            </p>
                         </div>
                     </div>
                 ))}
-                <p className='px-2 my-4 font-bold text-xl' >For you</p>
-                <ScrollContainer className='scroll-container flex w-full px-2 mb-4 gap-4' component={'div'}>
-                    {LOYALTY_HARDCODED_RESOURCES.map(resource => (
-                        <div className='min-w-[70%]'>
-                            <div className='relative w-full h-[150px]'>
-                                <Image src={resource.image} alt='' fill objectFit='cover' className='rounded-t-[8px]' />
+                <p className="px-2 my-4 font-bold text-xl">For you</p>
+                <ScrollContainer
+                    className="scroll-container flex w-full px-2 mb-4 gap-4"
+                    component={'div'}
+                >
+                    {LOYALTY_HARDCODED_RESOURCES.map((resource, i) => (
+                        <div className="min-w-[70%]" key={i}>
+                            <div className="relative w-full h-[150px]">
+                                <Image
+                                    src={resource.image}
+                                    alt=""
+                                    fill
+                                    className="rounded-t-[8px] object-cover"
+                                />
                             </div>
-                            <div className='flex flex-col gap-2 bg-white p-4 rounded-b-[8px]'>
-                                <p className='font-bold'>{resource.title}</p>
-                                <p className='text-xs text-gray-400'>{resource.description}</p>
+                            <div className="flex flex-col gap-2 bg-white p-4 rounded-b-[8px]">
+                                <p className="font-bold">{resource.title}</p>
+                                <p className="text-xs text-gray-400">
+                                    {resource.description}
+                                </p>
                             </div>
                         </div>
                     ))}

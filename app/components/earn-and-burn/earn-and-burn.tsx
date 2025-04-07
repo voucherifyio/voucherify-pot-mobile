@@ -85,7 +85,7 @@ const EarnAndBurnRewards = () => {
     if (error)
         return (
             <div className="flex-1 w-full h-full flex justify-center items-center">
-                <p className="mb-4 text-[14px] font-bold text-blue-text">
+                <p className="mb-4 text-[14px] font-bold text-white">
                     {error}
                 </p>
             </div>
