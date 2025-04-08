@@ -21,13 +21,11 @@ export const useLoyaltyCard = ({
     const [cardUrl, setCardUrl] = useState<string>('')
     const [cardNumber, setCardNumber] = useState<string>('')
     const { loyaltyCampaignName } = useContext(MobileAppContext)
-console.log('ejejeje', customerId, loyaltyCampaignName)
+
     useEffect(() => {
-        console.log(customerId, loyaltyCampaignName, '??')
         if (customerId && loyaltyCampaignName) {
             const fetchData = async () => {
                 try {
-                    console.log(customerId, "id")
                     const res = await getLoyaltyCard(
                         customerId,
                         loyaltyCampaignName

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useLoyaltyCard } from '@/app/hooks/useLoyaltyCard'
-import LoyaltyCardImage from '@/public/images/volkswagen/loyalty-card-image.png'
+import LoyaltyCardImage from '@/public/images/heb/heb_shop.webp'
 
 interface LoyaltyCardProps {
     customerId: string
@@ -8,7 +8,7 @@ interface LoyaltyCardProps {
 
 const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ customerId }) => {
     const { cardUrl, error } = useLoyaltyCard({ customerId })
-console.log('halo', customerId)
+
     return (
         <>
             {cardUrl && !error && (
