@@ -27,26 +27,30 @@ const Navbar = () => {
         {
             text: 'Home',
             href: '/home',
-            icon: <Image src={HomeIcon} alt='Home' width={30} />,
-            activeIcon: <Image src={HomeActiveIcon} alt='Home' width={30} />,
+            icon: <Image src={HomeIcon} alt="Home" width={30} />,
+            activeIcon: <Image src={HomeActiveIcon} alt="Home" width={30} />,
         },
         {
             text: 'Deals',
             href: '/deals',
-            icon: <Image src={DealsIcon} alt='Deals' width={30} />,
-            activeIcon: <Image src={DealsActiveIcon} alt='Deals' width={30} />
+            icon: <Image src={DealsIcon} alt="Deals" width={30} />,
+            activeIcon: <Image src={DealsActiveIcon} alt="Deals" width={30} />,
         },
         {
             text: 'Card',
             href: '/card',
-            icon: <Image src={CardIcon} alt='Loyalty card' width={30} />,
-            activeIcon: <Image src={CardActiveIcon} alt='Loyalty card' width={30} />
+            icon: <Image src={CardIcon} alt="Loyalty card" width={30} />,
+            activeIcon: (
+                <Image src={CardActiveIcon} alt="Loyalty card" width={30} />
+            ),
         },
         {
             text: 'Rewards',
             href: '/rewards',
-            icon: <Image src={RewardsIcon} alt='Rewards' width={30} />,
-            activeIcon: <Image src={RewardsActiveIcon} alt='Rewards' width={30} />
+            icon: <Image src={RewardsIcon} alt="Rewards" width={30} />,
+            activeIcon: (
+                <Image src={RewardsActiveIcon} alt="Rewards" width={30} />
+            ),
         },
     ]
 
@@ -55,9 +59,9 @@ const Navbar = () => {
         {
             text: 'Burn',
             href: '/earn-and-burn',
-            icon: <Image src={BurnIcon} alt='Burn' width={30} />,
-            activeIcon: <Image src={BurnActiveIcon} alt='Burn' width={30} />
-        }
+            icon: <Image src={BurnIcon} alt="Burn" width={30} />,
+            activeIcon: <Image src={BurnActiveIcon} alt="Burn" width={30} />,
+        },
     ]
 
     if (status === 'loading') {
@@ -68,16 +72,15 @@ const Navbar = () => {
         return (
             <div className="w-full h-16 bg-white sticky bottom-0">
                 <div className="flex justify-evenly h-full max-w-screen-sm grid-cols-5 mx-auto font-medium">
-                    {(loyaltyCampaignName !== CAMPAIGNS.LOYALTY_PROGRAM
-                        ? EARN_AND_BURN_MENU
-                        : LOYALTY_PROGRAM_MENU
-                    ).map((item) => (
+                    {EARN_AND_BURN_MENU.map((item) => (
                         <Link
                             key={item.text}
                             className={`inline-flex flex-col items-center justify-center relative px-2`}
                             href={item.href}
                         >
-                            {item.href === pathname ? item.activeIcon : item.icon}
+                            {item.href === pathname
+                                ? item.activeIcon
+                                : item.icon}
                         </Link>
                     ))}
                 </div>
