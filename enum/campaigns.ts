@@ -1,5 +1,5 @@
 export enum CAMPAIGNS {
-    LOYALTY_PROGRAM = 'Loyalty Program',
+    LOYALTY_PROGRAM = 'H-E-B Continuity',
     LOYALTY_PROGRAM_ID = 'camp_HQnS260WUa8wwyvVB5KKYuz0',
     HEB_CONTINUITY = 'H-E-B Continuity',
     HEB_CONTINUITY_ID = 'camp_HQnS260WUa8wwyvVB5KKYuz0',

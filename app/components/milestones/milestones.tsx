@@ -72,7 +72,7 @@ const Milestones = () => {
                     ) : (
                         <div className='flex flex-col gap-2'>
                             <p className='text-gray-700 font-medium'><span className='font-extrabold text-black text-xl'>{calculatedLoyaltyPoints.toLocaleString()}</span> points</p>
-                            <Progress value={calculatedLoyaltyPoints / 100} bg={VW_COLOR.GRAY} height='10px' borderRadius='50px' sx={{"& div[role='progressbar']": { backgroundColor: VW_COLOR.BLUE }}} />
+                            <Progress value={calculatedLoyaltyPoints * 25} bg={VW_COLOR.GRAY} height='10px' borderRadius='50px' sx={{"& div[role='progressbar']": { backgroundColor: VW_COLOR.BLUE }}} />
                         </div>
                     )}
                 </div>
