@@ -50,7 +50,7 @@ export const useAutoRedeem = () => {
             const lastActivityEvent = activities[0]
             const rewardPoints =
                 lastActivityEvent.data.voucher.campaign_id ===
-                    CAMPAIGNS.HEB_CONTINUITY_ID &&
+                    CAMPAIGNS.HEB_LOYALTY_ID &&
                 lastActivityEvent.data.voucher.loyalty_card.balance === 0
 
             if (rewardPoints && currentLoyaltyPoints >= 300) {
@@ -75,7 +75,7 @@ export const useAutoRedeem = () => {
             const res = await redeemReward(
                 customerId,
                 autoRedeemReward?.id,
-                CAMPAIGNS.LOYALTY_PROGRAM
+                CAMPAIGNS.HEB_LOYALTY
             )
             if (res.status !== 200) {
                 return setAutoRedeemError('Redemption failed')

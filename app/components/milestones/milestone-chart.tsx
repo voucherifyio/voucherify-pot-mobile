@@ -23,7 +23,7 @@ const MilestoneChart: FC<MilestoneChartProps> = ({
     const [loading, setLoading] = useState(true)
 
     const listMemberRewards = async (customerId: string | null | undefined) => {
-        const res = await getMemberRewards(customerId, CAMPAIGNS.HEB_CONTINUITY)
+        const res = await getMemberRewards(customerId, CAMPAIGNS.HEB_LOYALTY)
         const { rewards } = await res.json()
         if (res.status !== 200) {
             return false

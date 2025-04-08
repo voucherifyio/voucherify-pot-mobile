@@ -22,7 +22,7 @@ interface GeneratedVouchersResponse extends VouchersResponse {
     loyalty_card?: { points: number; balance: number } | undefined
 }
 
-const loyaltyCampaigns = [CAMPAIGNS.HEB_CONTINUITY, CAMPAIGNS.HEB_LOYALTY]
+const loyaltyCampaigns = [CAMPAIGNS.HEB_LOYALTY]
 
 export const useLoyalty = ({
     customerId,
@@ -55,30 +55,26 @@ export const useLoyalty = ({
 
             setLoyaltyPoints(
                 loyaltyCampaigns?.find((campaign) =>
-                    [
-                        CAMPAIGNS.HEB_LOYALTY_ID,
-                        CAMPAIGNS.LOYALTY_PROGRAM_ID,
-                    ].includes(campaign.id as CAMPAIGNS)
+                    [CAMPAIGNS.HEB_LOYALTY_ID].includes(
+                        campaign.id as CAMPAIGNS
+                    )
                 )?.loyaltyPoints || 0
             )
 
             setRewardPoints(
                 loyaltyCampaigns?.find(
-                    (campaign) => campaign?.id === CAMPAIGNS.HEB_CONTINUITY_ID
+                    (campaign) => campaign?.id === CAMPAIGNS.HEB_LOYALTY_ID
                 )?.loyaltyPoints || 0
             )
         }
     }
 
     const updateLoyaltyPoints = async (res: WebhookResponse) => {
-        if (
-            res.data.voucher.campaign_id === CAMPAIGNS.LOYALTY_PROGRAM_ID ||
-            res.data.voucher.campaign_id === CAMPAIGNS.HEB_LOYALTY_ID
-        ) {
+        if (res.data.voucher.campaign_id === CAMPAIGNS.HEB_LOYALTY_ID) {
             setLoyaltyPoints(res.data.voucher.loyalty_card.balance)
         }
 
-        if (res.data.voucher.campaign_id === CAMPAIGNS.HEB_CONTINUITY_ID) {
+        if (res.data.voucher.campaign_id === CAMPAIGNS.HEB_LOYALTY_ID) {
             setRewardPoints(res.data.voucher.loyalty_card.balance)
         }
     }
@@ -142,10 +138,8 @@ export const useLoyalty = ({
                 .filter((campaign) => !!campaign)
                 .find(
                     (campaign) =>
-                        (campaign?.isActive &&
-                            campaign?.name === CAMPAIGNS.HEB_LOYALTY) ||
-                        (campaign?.isActive &&
-                            campaign.name === CAMPAIGNS.LOYALTY_PROGRAM)
+                        campaign?.isActive &&
+                        campaign.name === CAMPAIGNS.HEB_LOYALTY
                 )?.name
         )
 
