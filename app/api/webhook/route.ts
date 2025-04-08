@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import io from 'socket.io-client'
-const socket = io('	https://heb-loyalty-d0837c984775.herokuapp.com/')
+const socket = io('https://heb-loyalty-d0837c984775.herokuapp.com/')
 
 export async function POST(req: NextRequest) {
     try {
