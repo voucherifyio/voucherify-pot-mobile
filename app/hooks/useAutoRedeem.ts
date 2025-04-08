@@ -50,7 +50,7 @@ export const useAutoRedeem = () => {
             const lastActivityEvent = activities[0]
             const rewardPoints =
                 lastActivityEvent.data.voucher.campaign_id ===
-                    CAMPAIGNS.MILESTONE_REWARDS_PROGRAM_ID &&
+                    CAMPAIGNS.HEB_CONTINUITY_ID &&
                 lastActivityEvent.data.voucher.loyalty_card.balance === 0
 
             if (rewardPoints && currentLoyaltyPoints >= 300) {

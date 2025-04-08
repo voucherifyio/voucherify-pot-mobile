@@ -22,10 +22,7 @@ interface GeneratedVouchersResponse extends VouchersResponse {
     loyalty_card?: { points: number; balance: number } | undefined
 }
 
-const loyaltyCampaigns = [
-    CAMPAIGNS.MILESTONE_REWARDS_PROGRAM,
-    CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN,
-]
+const loyaltyCampaigns = [CAMPAIGNS.HEB_CONTINUITY, CAMPAIGNS.HEB_LOYALTY]
 
 export const useLoyalty = ({
     customerId,
@@ -59,7 +56,7 @@ export const useLoyalty = ({
             setLoyaltyPoints(
                 loyaltyCampaigns?.find((campaign) =>
                     [
-                        CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID,
+                        CAMPAIGNS.HEB_LOYALTY_ID,
                         CAMPAIGNS.LOYALTY_PROGRAM_ID,
                     ].includes(campaign.id as CAMPAIGNS)
                 )?.loyaltyPoints || 0
@@ -67,8 +64,7 @@ export const useLoyalty = ({
 
             setRewardPoints(
                 loyaltyCampaigns?.find(
-                    (campaign) =>
-                        campaign?.id === CAMPAIGNS.MILESTONE_REWARDS_PROGRAM_ID
+                    (campaign) => campaign?.id === CAMPAIGNS.HEB_CONTINUITY_ID
                 )?.loyaltyPoints || 0
             )
         }
@@ -77,16 +73,12 @@ export const useLoyalty = ({
     const updateLoyaltyPoints = async (res: WebhookResponse) => {
         if (
             res.data.voucher.campaign_id === CAMPAIGNS.LOYALTY_PROGRAM_ID ||
-            res.data.voucher.campaign_id ===
-                CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID
+            res.data.voucher.campaign_id === CAMPAIGNS.HEB_LOYALTY_ID
         ) {
             setLoyaltyPoints(res.data.voucher.loyalty_card.balance)
         }
 
-        if (
-            res.data.voucher.campaign_id ===
-            CAMPAIGNS.MILESTONE_REWARDS_PROGRAM_ID
-        ) {
+        if (res.data.voucher.campaign_id === CAMPAIGNS.HEB_CONTINUITY_ID) {
             setRewardPoints(res.data.voucher.loyalty_card.balance)
         }
     }
@@ -114,9 +106,7 @@ export const useLoyalty = ({
     const validateLoyaltyCampaigns = async (
         customerSourceId: string | null | undefined
     ): Promise<BasicLoyaltyCampaignsInfo[] | void> => {
-        const res2 = await getCampaign(
-            CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID
-        )
+        const res2 = await getCampaign(CAMPAIGNS.HEB_LOYALTY_ID)
 
         if (res2.status === 404) {
             return setLoyaltyError(
@@ -153,8 +143,7 @@ export const useLoyalty = ({
                 .find(
                     (campaign) =>
                         (campaign?.isActive &&
-                            campaign?.name ===
-                                CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN) ||
+                            campaign?.name === CAMPAIGNS.HEB_LOYALTY) ||
                         (campaign?.isActive &&
                             campaign.name === CAMPAIGNS.LOYALTY_PROGRAM)
                 )?.name

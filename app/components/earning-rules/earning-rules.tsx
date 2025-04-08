@@ -53,7 +53,7 @@ const EarningRules: React.FC<EarningRulesProps> = () => {
                 const campaignId =
                     loyaltyCampaignName === CAMPAIGNS.LOYALTY_PROGRAM
                         ? CAMPAIGNS.LOYALTY_PROGRAM_ID
-                        : CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN_ID
+                        : CAMPAIGNS.HEB_LOYALTY_ID
                 const res = await fetch(
                     `/api/voucherify/list-earning-rules?campaignId=${campaignId}`,
                     {

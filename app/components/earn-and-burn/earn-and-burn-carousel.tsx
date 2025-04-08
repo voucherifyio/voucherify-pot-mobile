@@ -23,7 +23,7 @@ const EarnAndBurnRewardsCarousel = () => {
         if (customerId) {
             const res = await getMemberRewards(
                 customerId,
-                CAMPAIGNS.LOYALTY_PROGRAM_EARN_AND_BURN
+                CAMPAIGNS.HEB_LOYALTY
             )
             const { rewards, error } = await res.json()
 

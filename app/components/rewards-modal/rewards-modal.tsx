@@ -179,7 +179,7 @@ const RewardsModal: FC<RewardsModalProps> = ({
                                             handleRedeemReward(
                                                 customer,
                                                 rewardId,
-                                                CAMPAIGNS.MILESTONE_REWARDS_PROGRAM
+                                                CAMPAIGNS.HEB_CONTINUITY
                                             )
                                         }
                                         style={{
