@@ -77,13 +77,13 @@ const Deals = () => {
     }
 
     if (conditionalDealsLoading || dealsLoading) {
-        return <Loading className='text-white' />
+        return <Loading className="text-white" />
     }
 
     return (
         <div className="pt-2 flex-1 flex flex-col">
             {error && <Toast toastText={error} toastType="error" />}
-            <ul className="my-2 justify-center flex text-[16px] font-bold text-center text-gray-500">
+            {/* <ul className="my-2 justify-center flex text-[16px] font-bold text-center text-gray-500">
                 <li>
                     <button
                         key={CurrentDeal.All}
@@ -112,14 +112,14 @@ const Deals = () => {
                         {CurrentDeal.WithinReach}
                     </button>
                 </li>
-            </ul>
+            </ul> */}
             {currentDealType === CurrentDeal.WithinReach && (
                 <>
                     {activeDeals.length > 0 ? (
                         activeDeals.map((deal) => (
                             <div
                                 key={deal.id}
-                                className="flex flex-col justify-end min-h-[80px] rounded-[8px] m-2 flex bg-white p-2 gap-4"
+                                className="flex flex-col justify-end min-h-[80px] rounded-[8px] m-2 bg-white p-2 gap-4"
                             >
                                 <h3 className="text-[16px] font-bold">
                                     {deal.campaign_name}
@@ -153,7 +153,7 @@ const Deals = () => {
                     )}
                 </>
             )}
-            {currentDealType === CurrentDeal.All && (
+            {/* {currentDealType === CurrentDeal.All && (
                 <>
                     {conditionalDeals.length === 0 &&
                         activeDeals.length === 0 && <EmptyDealsState />}
@@ -184,7 +184,7 @@ const Deals = () => {
                     {activeDeals.map((deal) => (
                         <div
                             key={deal.id}
-                            className="flex flex-col justify-end shadow-md min-h-[80px] rounded-xl m-2 flex bg-white text-blue-text w-[95%] p-2 gap-4"
+                            className="flex flex-col justify-end shadow-md min-h-[80px] rounded-xl m-2 bg-white text-blue-text w-[95%] p-2 gap-4"
                         >
                             <h3 className="text-[16px] font-bold">
                                 {deal.campaign_name}
@@ -214,7 +214,7 @@ const Deals = () => {
                         </div>
                     ))}
                 </>
-            )}
+            )} */}
         </div>
     )
 }

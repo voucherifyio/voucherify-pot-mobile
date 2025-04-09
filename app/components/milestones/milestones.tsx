@@ -3,10 +3,10 @@ import { useContext, useEffect, useState } from 'react'
 import Toast from '@/app/components/ui/atoms/toast'
 import { MobileAppContext } from '../app-context/app-context'
 import { PulseLoader } from 'react-spinners'
-import HomeImage from '@/public/images/volkswagen/home-image.png'
+import HomeImage from '@/public/images/v_background_dark.jpg'
 import Image from 'next/image'
 import { Progress } from '@chakra-ui/react'
-import { VW_COLOR } from '../../../enum/vw-colors'
+import { V_COLOR } from '../../../enum/v-colors'
 
 const toastStyles =
     'font-bold border border-gray-300 rounded-lg shadow-lg fixed top-[15%] left-[50%] -translate-x-2/4 flex items-center justify-center w-full max-w-xs p-4 bg-white z-50'
@@ -61,18 +61,33 @@ const Milestones = () => {
                     customStyles={toastStyles}
                 />
             )}
-            <div className='flex flex-col gap-4'>
-                <h1 className='font-extrabold text-[30px]'>VW Rewards</h1>
-                <Image src={HomeImage} alt='home-image' />
-                <div className='bg-gray-100 rounded-lg p-4'>
+            <div className="flex flex-col gap-4">
+                <h1 className="font-extrabold text-[30px]">Voucherify app</h1>
+                <Image src={HomeImage} alt="home-image" />
+                <div className="bg-gray-100 rounded-lg p-4">
                     {!customer ? (
                         <PulseLoader size={5} color="#173c9f" />
                     ) : isLoyaltyPointsCalculated ? (
                         <PulseLoader size={5} color="#173c9f" />
                     ) : (
-                        <div className='flex flex-col gap-2'>
-                            <p className='text-gray-700 font-medium'><span className='font-extrabold text-black text-xl'>{calculatedLoyaltyPoints.toLocaleString()}</span> points</p>
-                            <Progress value={calculatedLoyaltyPoints / 100} bg={VW_COLOR.GRAY} height='10px' borderRadius='50px' sx={{"& div[role='progressbar']": { backgroundColor: VW_COLOR.BLUE }}} />
+                        <div className="flex flex-col gap-2">
+                            <p className="text-gray-700 font-medium">
+                                <span className="font-extrabold text-black text-xl">
+                                    {calculatedLoyaltyPoints.toLocaleString()}
+                                </span>{' '}
+                                points
+                            </p>
+                            <Progress
+                                value={calculatedLoyaltyPoints / 100}
+                                bg={V_COLOR.GRAY}
+                                height="10px"
+                                borderRadius="50px"
+                                sx={{
+                                    "& div[role='progressbar']": {
+                                        backgroundColor: V_COLOR.BLUE,
+                                    },
+                                }}
+                            />
                         </div>
                     )}
                 </div>

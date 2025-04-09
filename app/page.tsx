@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import welcomeImage from '@/public/images/volkswagen/vw-hero-image.png'
+import welcomeImage from '@/public/images/login-page.jpeg'
 import Button from '@/app/components/ui/atoms/button'
 import Loading from '@/app/components/loading/loading'
 import { useEffect } from 'react'
@@ -21,9 +21,6 @@ export default function LoginPage() {
     const handleRegisterClick = () => {
         router.push('/register')
     }
-    const handleLoginClick = () => {
-        router.push('/login')
-    }
 
     if (status === 'loading') {
         return <Loading />
@@ -39,8 +36,8 @@ export default function LoginPage() {
             />
 
             <div className="flex-1 flex flex-col gap-4 max-h-60 w-full max-w-screen-sm text-center justify-center items-center">
-                <h1 className="text-black-text px-5 text-left text-xl font-bold leading-7 text-center">
-                    Enroll in VW Rewards
+                <h1 className="text-black-text px-5 text-xl font-bold leading-7 text-center">
+                    Welcome to Voucherify app
                 </h1>
                 <Button
                     buttonType="primary"

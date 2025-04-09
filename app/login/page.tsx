@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import Loading from '../components/loading/loading'
 import { MobileAppContext } from '../components/app-context/app-context'
 import Image from 'next/image'
-import loginImage from '@/public/images/volkswagen/loyalty-resource2.png'
+import loginImage from '@/public/images/v_background.png'
 
 export interface Inputs {
     phone: string
@@ -73,7 +73,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="items-center justify-center flex flex-col">
+        <div className="items-center justify-around flex flex-col flex-1">
             <Image
                 src={loginImage}
                 alt="Login page"

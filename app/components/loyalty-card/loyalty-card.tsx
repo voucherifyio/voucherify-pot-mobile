@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useLoyaltyCard } from '@/app/hooks/useLoyaltyCard'
-import LoyaltyCardImage from '@/public/images/volkswagen/loyalty-card-image.png'
+import LoyaltyCardImage from '@/public/images/v_background.png'
 
 interface LoyaltyCardProps {
     customerId: string

@@ -4,7 +4,7 @@ import Rewards from '@/app/components/rewards/rewards'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Loading from '../components/loading/loading'
-import { VW_COLOR } from '../../enum/vw-colors'
+import { V_COLOR } from '../../enum/v-colors'
 
 export default function RewardsPage() {
     const router = useRouter()
@@ -22,8 +22,11 @@ export default function RewardsPage() {
 
     if (status === 'authenticated') {
         return (
-            <div className="flex-1 flex flex-col" style={{ backgroundColor: VW_COLOR.DARK_BLUE }}>
-                <VoucherifyHeader headerText={'VW Rewards'} />
+            <div
+                className="flex-1 flex flex-col"
+                style={{ backgroundColor: V_COLOR.DARK_BLUE }}
+            >
+                <VoucherifyHeader headerText={'Active coupons'} />
                 <Rewards customerId={customerId} />
             </div>
         )

@@ -10,17 +10,17 @@ const LOYALTY_HARDCODED_RESOURCES = [
     {
         title: 'FAQs',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        image: '/images/volkswagen/loyalty-resource1.png'
+        image: '/images/v_background_logo.jpeg'
     },
     {
         title: 'Unlocking',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        image: '/images/volkswagen/loyalty-resource2.png'
+        image: '/images/v_background.png'
     },
     {
         title: 'Subscribe',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        image: '/images/volkswagen/home-image.png'
+        image: '/images/v_background_logo.jpeg'
     }
 ]
 
@@ -103,7 +103,7 @@ const EarningRules: React.FC<EarningRulesProps> = () => {
                     {LOYALTY_HARDCODED_RESOURCES.map(resource => (
                         <div className='min-w-[70%]'>
                             <div className='relative w-full h-[150px]'>
-                                <Image src={resource.image} alt='' fill objectFit='cover' className='rounded-t-[8px]' />
+                                <Image src={resource.image} alt='' fill className='rounded-t-[8px] object-cover' />
                             </div>
                             <div className='flex flex-col gap-2 bg-white p-4 rounded-b-[8px]'>
                                 <p className='font-bold'>{resource.title}</p>

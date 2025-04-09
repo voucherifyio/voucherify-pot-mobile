@@ -7,7 +7,7 @@ import LoyaltyCard from '@/app/components/loyalty-card/loyalty-card'
 import Loading from '@/app/components/loading/loading'
 import { useContext } from 'react'
 import { MobileAppContext } from '../components/app-context/app-context'
-import { VW_COLOR } from '../../enum/vw-colors'
+import { V_COLOR } from '../../enum/v-colors'
 
 export default function CardPage() {
     const router = useRouter()
@@ -26,7 +26,10 @@ export default function CardPage() {
 
     if (status === 'authenticated') {
         return (
-            <div className="flex-1" style={{ backgroundColor: VW_COLOR.DARK_BLUE }}>
+            <div
+                className="flex-1"
+                style={{ backgroundColor: V_COLOR.DARK_BLUE }}
+            >
                 <VoucherifyHeader headerText={'Loyalty card'} />
                 {customer ? (
                     <div className="p-4 w-full h-full">

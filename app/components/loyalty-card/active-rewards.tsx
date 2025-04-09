@@ -29,7 +29,7 @@ const ActiveRewards = () => {
             <header>
                 {activatedRewards.length > 0 && (
                     <h1 className="mb-4 text-[18px] font-bold text-white">
-                        Active rewards/coupons
+                        Active rewards or coupons
                     </h1>
                 )}
             </header>
@@ -38,7 +38,7 @@ const ActiveRewards = () => {
                     <div
                         key={reward.id}
                         onClick={() => handleExpandCoupon(reward.id)}
-                        className="flex flex-col shadow-md rounded-[8px] flex bg-white mt-4 text-blue-text w-full min-h-[92px] p-2"
+                        className="flex flex-col shadow-md rounded-[8px] bg-white mt-4 text-blue-text w-full min-h-[92px] p-2"
                     >
                         <h3 className="text-[16px] font-bold text-black">
                             {reward.campaign_name}
