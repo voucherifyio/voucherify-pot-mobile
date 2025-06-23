@@ -1,6 +1,6 @@
 'use client'
 import Button from '@/app/components/ui/atoms/button'
-import loginImage from '@/public/images/oreilly-rewards.jpeg'
+import loginImage from '@/public/images/oreilly-rewards2.png'
 import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'

@@ -33,6 +33,7 @@ export default function LoginPage() {
                 src={welcomeImage}
                 alt="Welcome page"
                 priority
+                
             />
 
             <div className="flex-1 flex flex-col gap-4 max-h-60 w-full max-w-screen-sm text-center justify-center items-center">
