@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useLoyaltyCard } from '@/app/hooks/useLoyaltyCard'
-import LoyaltyCardImage from '@/public/images/v_background.png'
+import LoyaltyCardImage from '@/public/images/oreilly-home.png'
 
 interface LoyaltyCardProps {
     customerId: string

@@ -2,11 +2,12 @@
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import welcomeImage from '@/public/images/login-page.jpeg'
+import welcomeImage from '@/public/images/oreilly-home.png'
 import Button from '@/app/components/ui/atoms/button'
 import Loading from '@/app/components/loading/loading'
 import { useEffect } from 'react'
 import Link from 'next/link'
+import { APP_DETAILS } from '../enum/app-details'
 
 export default function LoginPage() {
     const { status } = useSession()
@@ -32,12 +33,11 @@ export default function LoginPage() {
                 src={welcomeImage}
                 alt="Welcome page"
                 priority
-                className="object-cover object-right flex-1"
             />
 
             <div className="flex-1 flex flex-col gap-4 max-h-60 w-full max-w-screen-sm text-center justify-center items-center">
                 <h1 className="text-black-text px-5 text-xl font-bold leading-7 text-center">
-                    Welcome to Voucherify app
+                    {APP_DETAILS.login_welcome_title}
                 </h1>
                 <Button
                     buttonType="primary"

@@ -1,13 +1,13 @@
 'use client'
 import Button from '@/app/components/ui/atoms/button'
-import { useSession, signIn } from 'next-auth/react'
+import loginImage from '@/public/images/oreilly-rewards.jpeg'
+import { signIn, useSession } from 'next-auth/react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
-import Loading from '../components/loading/loading'
 import { MobileAppContext } from '../components/app-context/app-context'
-import Image from 'next/image'
-import loginImage from '@/public/images/v_background.png'
+import Loading from '../components/loading/loading'
 
 export interface Inputs {
     phone: string
@@ -78,7 +78,6 @@ export default function LoginPage() {
                 src={loginImage}
                 alt="Login page"
                 priority
-                style={{ width: '100%' }}
             />
             <div className="border-bottom-gray-200 my-8 flex w-full flex-col items-center justify-center">
                 <h1 className="text-xl font-extrabold">
