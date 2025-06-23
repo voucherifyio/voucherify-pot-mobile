@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import welcomeImage from '@/public/images/oreilly-home.png'
+import welcomeImage from '@/public/images/oreilly-rewards2.png'
 import Button from '@/app/components/ui/atoms/button'
 import Loading from '@/app/components/loading/loading'
 import { useEffect } from 'react'
