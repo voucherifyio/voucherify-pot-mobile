@@ -1,23 +1,22 @@
 import { getMemberRewards, redeemReward } from '@/app/apiEndpoints/apiEndpoints'
 import { CAMPAIGNS } from '@/enum/campaigns'
-import { useContext, useEffect, useState } from 'react'
-import { MobileAppContext } from '../app-context/app-context'
-import Loading from '../loading/loading'
-import {
-    LoyaltiesListMemberRewardsResponseBody,
-    RewardsAssignmentCampaignOrMaterialReward,
-    Reward,
-} from '@voucherify/sdk'
-import Button from '../ui/atoms/button'
-import Toast from '../ui/atoms/toast'
 import FirstImage from '@/public/images/v_background.png'
 import SecondaryImage from '@/public/images/v_background_logo.jpeg'
 import ThirdImage from '@/public/images/v_logo_2.png'
-import FourthImage from '@/public/images/volkswagen/loyalty-resource1.png'
+import {
+    LoyaltiesListMemberRewardsResponseBody,
+    Reward,
+    RewardsAssignmentCampaignOrMaterialReward,
+} from '@voucherify/sdk'
 import Image from 'next/image'
+import { useContext, useEffect, useState } from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
+import { MobileAppContext } from '../app-context/app-context'
+import Loading from '../loading/loading'
+import Button from '../ui/atoms/button'
+import Toast from '../ui/atoms/toast'
 
-const V_IMAGES = [FirstImage, SecondaryImage, ThirdImage, FourthImage]
+const V_IMAGES = [FirstImage, SecondaryImage, ThirdImage]
 
 const toastStyles =
     'font-bold border border-gray-300 rounded-lg shadow-lg fixed top-[15%] left-[50%] -translate-x-2/4 flex items-center justify-center w-full max-w-xs p-4 bg-white z-50'
@@ -139,7 +138,7 @@ const EarnAndBurnRewards = () => {
                                 src={V_IMAGES[index] || V_IMAGES[0]}
                                 alt="Reward image"
                                 fill
-                                style={{ objectFit: 'cover' }}
+                                style={{objectFit: 'contain'}}
                                 className="rounded-t-[8px]"
                             />
                         </div>
